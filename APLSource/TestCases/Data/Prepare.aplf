@@ -1,0 +1,4 @@
+ Prepare
+ T←⎕NEW ##.##.Tester2 ⎕THIS
+ T.codeCoverage←⎕NEW ##.##.CodeCoverage(,⊂'#.CodeCoverage')
+⍝Done

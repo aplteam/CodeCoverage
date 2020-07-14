@@ -1,0 +1,26 @@
+:Class ∆Script3
+⍝ Demonstrates that nested Classes are not supported
+    ∇ {r}←Run
+      :Access Public Shared
+      r←Sub1.SubTfns 100
+      r+←Sub2.SubSubTfns 100
+    ∇
+    :Class Sub1
+        ∇ r←SubTfns arg
+          :Access Public Shared
+          r←SubDfns 1+2+arg
+        ∇
+          SubDfns←{
+              1×2+⍵
+          }
+        :Class Sub2
+            ∇ r←SubSubTfns arg
+              :Access Public Shared
+              r←SubSubDfns 1+2+arg
+            ∇
+              SubSubDfns←{
+                  1×2+⍵
+              }
+        :EndClass
+    :EndClass
+:EndClass

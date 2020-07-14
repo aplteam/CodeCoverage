@@ -1,0 +1,175 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Coverage</title>
+<meta charset="utf-8"/>
+<style>
+@media screen{
+    html {background-color: #FFFFF0;}
+body {
+    font-size: 16px;
+    font-family : Verdana, "Bitstream Vera Sans", "DejaVu Sans", Tahoma, Geneva, Arial, Sans-serif;
+    margin: 1em;
+}
+th, td {padding: 5px 10px;}
+th {text-align: left;}
+h1, h2, h3, h4, h5, h6 {color: #424242;}
+h1 {font-size: 22px;}
+h2 {font-size: 18px; margin-top: 2em; margin-bottom:0.3em;}
+tbody tr:nth-child(even) {background-color: #F0F0F0;}
+tbody tr:nth-child(odd) {background-color: #FAFAFA;}
+th {background-color: #E6E6E6;color: #424242;}
+table {border: silver 1px solid; font-size: 14px;font-family: APLFont, monospace;}
+code , code a {font-size: 14px; font-family: APLFont, monospace;}
+code.header {
+    font-size: 16px; 
+    font-family: APLFont, monospace; 
+    margin: 1.5em 0.5em 0 0.5em; 
+    padding:0;
+    display: block;
+}
+div.code-block {
+    border: 1px silver dashed;
+    background-color: #F2F2F2;
+    display: block;
+    margin: 0.5em 0.5em 0.5em 0.5em;
+    padding: 0.5em;
+}
+div.code-block code {display: block; white-space: pre-wrap; margin:0; padding:0; word-wrap: break-word;}
+.emphasize { font-weight: 800;}
+ul li, ol li {margin: 0.7em 0.2em;}
+.float-right {float:right;}
+.no-underline {    text-decoration :none;}
+.top-links {font-size:20px; padding-left: 0.6em;}
+.align-right {text-align: right;}
+#footer hr {margin-top:1.5em;}
+#footer p {margin-top:5px; padding-top:0; font-size: 9px;}
+@font-face {
+        font-family: "APLFont";
+    src:
+        local("APL385 Unicode"),
+        url("https://misc.aplteam.com/apl385.ttf") format("truetype");
+}}
+@media print{@page {size: portrait}
+@page {
+    margin: 1cm 1cm 1cm 1.75cm;
+    @bottom-right {
+        content: counter(page) " / " counter(pages);
+  }
+}
+body {
+    font: 12pt "Times New Roman", Times, serif;
+    line-height: 1.2;
+     /* CSS3 filter, at the moment Webkit only. Prefix it for future implementations */
+    -webkit-filter: grayscale(100%);
+    filter: grayscale(100%); /* future-proof */
+}
+h1 {font-size: 18pt;}
+h2 {font-size: 16pt; margin-top: 10pt; margin-bottom: 3pt;}
+th, td {padding: 2pt 3pt;}
+th {text-align: left;background-color: #DBDBDB;}
+tbody tr:nth-child(odd) {background-color: #EDEDED;}
+table {
+    color-adjust: exact !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    font-size: 8pt;
+    font-family: APLFont, monospace;
+}
+div.keep-together {break-inside: avoid; break-before:auto;}
+table {border: silver 1pt solid;}
+code , code a {font-size: 8pt; font-family: APLFont, monospace;}
+code.header {
+    font-size: 8pt;
+    font-family: APLFont, monospace;
+    margin: 7pt 3pt 0 10pt;
+    padding:0;
+    display: block;
+}
+div.code-block {
+    border: 1pt silver dashed;
+    background-color: #F2F2F2;
+    display: block;
+    margin: 4pt 4pt 4pt 4pt;
+    padding: 4pt;
+}
+div.code-block code {display: block; white-space: pre-wrap; margin:0; padding:0; word-wrap: break-word;}
+.emphasize { font-weight: 800;}
+a {text-decoration: none;color: black;}
+ul li, ol li {margin: 8pt 3pt;}
+.no-print {display:none;}
+.align-right {text-align: right;}
+#footer hr {margin-top:1.5em;}
+#footer p {margin-top:5pt; padding-top:0; font-size: 6pt;}
+@font-face {
+        font-family: "APLFont";
+    src:
+        local("APL385 Unicode"),
+        url("https://misc.aplteam.com/apl385.ttf") format("truetype");
+}}
+</style>
+</head>
+<body>
+<h1 id="top">Coverage Report</h1>
+<p>Watched: 191 fns/opr within <code>#.MarkAPL.MarkAPL</code></p>
+<p>Overall 94% of the testable code is  covered.</p>
+<p>(Testable: comment lines, empty lines, all <code>:End</code>* lines etc. are all ignored)</p>
+<p>155 of the fns/opr are 100% covered.</p>
+<p>8 are not covered at all:</p>
+<table>
+<tbody>
+<tr><td>#.MarkAPL.MarkAPL.ProcessATX_HeaderLink</td></tr>
+<tr><td>#.MarkAPL.MarkAPL.EscapeSpecialCharsOutsideCode</td></tr>
+<tr><td>#.MarkAPL.MarkAPL.DeleteTrailingWhiteSpace</td></tr>
+<tr><td>#.MarkAPL.MarkAPL.IsGlued</td></tr>
+<tr><td>#.MarkAPL.MarkAPL.IdentifyBulletedList</td></tr>
+<tr><td>#.MarkAPL.MarkAPL.IdentifyOrderedList</td></tr>
+<tr><td>#.MarkAPL.MarkAPL.IdentifyList__</td></tr>
+<tr><td>#.MarkAPL.MarkAPL.IsStyleBlockStart</td></tr>
+</tbody>
+</table>
+<div id="partly-covered" class="keep-together">
+<p>28 are partly covered:</p>
+<table>
+<thead>
+<tr><th style="text-align:left;">Function/Operator</th><th style="text-align:left;">Lines not executed</th><th style="text-align:left;">Coverage</th><th style="text-align:right;">≢</th></tr>
+</thead>
+<tbody>
+<tr><td>#.MarkAPL.MarkAPL.EstablishDefaultHomeFolder</td><td>11←≢7-17</td><td>35%</td><td class="align-right">17</td></tr>
+<tr><td>#.MarkAPL.MarkAPL.SetTitle</td><td>3,4,5</td><td>40%</td><td class="align-right">5</td></tr>
+<tr><td>#.MarkAPL.MarkAPL.ReplaceQTC_byBlank</td><td>3,4</td><td>50%</td><td class="align-right">4</td></tr>
+<tr><td>#.MarkAPL.MarkAPL.RemoveLeanpubEncoding</td><td>2</td><td>50%</td><td class="align-right">2</td></tr>
+<tr><td>#.MarkAPL.MarkAPL.WhereAreCodeBlocks</td><td>11←≢16-19,21-22,24-26,28,31</td><td>52%</td><td class="align-right">23</td></tr>
+<tr><td>#.MarkAPL.MarkAPL.LookForEmbeddedParm</td><td>5←≢7-11</td><td>55%</td><td class="align-right">11</td></tr>
+<tr><td>#.MarkAPL.MarkAPL.Reference</td><td>12,13,15</td><td>57%</td><td class="align-right">7</td></tr>
+<tr><td>#.MarkAPL.MarkAPL.Help</td><td>12,13,15</td><td>57%</td><td class="align-right">7</td></tr>
+<tr><td>#.MarkAPL.MarkAPL.MaskFunctionCall</td><td>5,6,7</td><td>57%</td><td class="align-right">7</td></tr>
+<tr><td>#.MarkAPL.MarkAPL.AddBookmarkClassName</td><td>3</td><td>67%</td><td class="align-right">3</td></tr>
+<tr><td>#.MarkAPL.MarkAPL.CompileHelp</td><td>5←≢10,13,17,20,27</td><td>74%</td><td class="align-right">19</td></tr>
+<tr><td>#.MarkAPL.MarkAPL.CollectItemPara</td><td>12,13</td><td>75%</td><td class="align-right">8</td></tr>
+<tr><td>#.MarkAPL.MarkAPL.ProcessHtmlBlock_ScriptStylePre</td><td>4←≢17-20</td><td>76%</td><td class="align-right">17</td></tr>
+<tr><td>#.MarkAPL.MarkAPL.ExecExternalFns</td><td>5←≢8,20,30-31,34</td><td>79%</td><td class="align-right">24</td></tr>
+<tr><td>#.MarkAPL.MarkAPL.ScanForBlockQuotes</td><td>14,15,16</td><td>80%</td><td class="align-right">15</td></tr>
+<tr><td>#.MarkAPL.MarkAPL.ProcessEmeddedHTML</td><td>11,12</td><td>80%</td><td class="align-right">10</td></tr>
+<tr><td>#.MarkAPL.MarkAPL.EscapeSpecialChars</td><td>11</td><td>80%</td><td class="align-right">5</td></tr>
+<tr><td>#.MarkAPL.MarkAPL.BuildColumnHeader</td><td>6</td><td>83%</td><td class="align-right">6</td></tr>
+<tr><td>#.MarkAPL.MarkAPL.CopyTo</td><td>4</td><td>86%</td><td class="align-right">7</td></tr>
+<tr><td>#.MarkAPL.MarkAPL.Markdown2HTML</td><td>15</td><td>92%</td><td class="align-right">12</td></tr>
+<tr><td>#.MarkAPL.MarkAPL.ProcessParagraph</td><td>11</td><td>92%</td><td class="align-right">13</td></tr>
+<tr><td>#.MarkAPL.MarkAPL.InjectCssIntoHtml</td><td>9</td><td>94%</td><td class="align-right">17</td></tr>
+<tr><td>#.MarkAPL.MarkAPL.Init</td><td>14</td><td>95%</td><td class="align-right">19</td></tr>
+<tr><td>#.MarkAPL.MarkAPL.ProcessTable_</td><td>30,67,68</td><td>95%</td><td class="align-right">55</td></tr>
+<tr><td>#.MarkAPL.MarkAPL.ProcessEmbeddedParms_</td><td>20</td><td>95%</td><td class="align-right">20</td></tr>
+<tr><td>#.MarkAPL.MarkAPL.GetBookMarkNameFromCaption</td><td>23</td><td>95%</td><td class="align-right">21</td></tr>
+<tr><td>#.MarkAPL.MarkAPL.ProcessTableWithoutColTitles</td><td>10</td><td>96%</td><td class="align-right">25</td></tr>
+<tr><td>#.MarkAPL.MarkAPL.ProcessList</td><td>4←≢12,83,87,186</td><td>97%</td><td class="align-right">144</td></tr>
+</tbody>
+</table>
+</div>
+<div id="footer">
+<hr>
+<p>Created by "CodeCoverage" version 0.5.0.5 from 2020-07-14</p>
+</div>
+</body>
+</html>

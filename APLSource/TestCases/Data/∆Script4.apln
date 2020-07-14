@@ -1,0 +1,25 @@
+:Namespace ∆Script4
+⍝ Demonstrates that nested namespaces are not supported
+    ∇ {r}←Run
+      r←Sub1.SubTfns 100
+      r+←Sub1.SubDfns 100
+      r+←Sub1.Sub2.SubSubTfns 100
+      r+←Sub1.Sub2.SubSubDfns 100
+    ∇
+    :Namespace Sub1
+        ∇ r←SubTfns arg
+          r←1+2+arg
+        ∇
+          SubDfns←{
+              1×2+⍵
+          }
+        :Namespace Sub2
+            ∇ r←SubSubTfns arg
+              r←1+2+arg
+            ∇
+              SubSubDfns←{
+                  1×2+⍵
+              }
+        :EndNamespace
+    :EndNamespace
+:EndNamespace

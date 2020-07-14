@@ -1,0 +1,13 @@
+ R←Test_001(stopFlag batchFlag);⎕TRAP
+⍝ Pro-forma test case: just runs all sorts of functions
+ ⎕TRAP←(999 'C' '∘∘∘ ⍝ Deliberate error')(0 'N')
+ R←T._Failed
+
+ ∆FnsOpr_001 ⍬
+ ∆FnsOpr_002 ⍬
+⍝ ∆FnsOpr_003 ⍬    ⍝TODO⍝ Currently this is not handled properly due to ⎕PROFILE missing out on this
+ ∆FnsOpr_004 ⍬
+ ∆FnsOpr_005 ⍬
+
+ R←T._OK
+⍝Done

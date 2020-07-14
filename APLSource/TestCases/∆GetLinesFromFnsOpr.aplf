@@ -1,0 +1,12 @@
+ ∆GetLinesFromFnsOpr←{
+⍝ Every function/operation carries a comment in line 1 that lists all lines that can be executed,
+⍝ followed by a list of line numbers that are expected to be executed, separated by a `⋄`.
+⍝ If there is nothing listed after the ⋄ is treated as if the two lists are identical.
+     lines←2⊃⎕NR ⍵
+     ~'⋄'∊lines:∘∘∘ ⍝ Huuh?! Diamond is missing
+     (could did)←'⋄'(≠⊆⊢)lines
+     could←⊃(//)⎕VFI could~'⍝'
+     0=≡did~' ':.
+     did←⊃(//)⎕VFI did
+     could did
+ }

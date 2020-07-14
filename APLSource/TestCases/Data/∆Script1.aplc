@@ -1,0 +1,37 @@
+:Class ∆Script1
+    ∇ {r}←Run
+    ⍝ 3 4 5 6 7 ⋄ 
+    :Access Public Shared 
+      r←⍬
+      Hello
+      MyDfns1 100
+      MyDfns2 ⍬
+      Hello2
+    ∇
+    ∇ {r}←Hello     
+    ⍝ 2 3 5 ⋄ 2 3
+      :If 1
+          r←'World'
+      :Else
+          r←'Galaxy'
+      :EndIf
+    ∇
+      MyDfns1←{  
+      ⍝ 2 3 4 5 ⋄ 2 3 4 5
+          0=⍵:shy←'Done'
+          a←1
+          b←2
+          ∇ ⍵-1
+      }
+      MyDfns2←{
+      ⍝ 2 ⋄ 2
+          1:shy←'World'
+      }
+        ∇ {r}←Hello2;myDfns2
+    ⍝ 2 3 4 5 ⋄ 
+      myDfns2←{
+          1:shy←+/⍳⍵
+      }
+      r←myDfns2 10
+    ∇
+:EndClass

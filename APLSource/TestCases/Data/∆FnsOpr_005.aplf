@@ -1,0 +1,8 @@
+ ∆FnsOpr_005 dummy;a;b;c;d;e;f
+⍝ 2 3 4 5 ⋄
+ :If 1
+     a←1
+     b←2
+     c←3
+ :EndIf
+⍝Done

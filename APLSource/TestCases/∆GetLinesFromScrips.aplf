@@ -1,0 +1,12 @@
+ ∆GetLinesFromScrips←{
+     name←⍵~' '
+     body←↓180⌶name
+     0=≢body:⍬ ⍬            ⍝ A localyzed dfn
+     lines←2⊃body
+     ~'⋄'∊lines:∘∘∘         ⍝ Huuh?! Diamond is missing
+     (could did)←'⋄'(≠⊆⊢)lines
+     could←⊃(//)⎕VFI could~'⍝'
+     0=≢did~' ':could could
+     did←⊃(//)⎕VFI did
+     could did
+ }

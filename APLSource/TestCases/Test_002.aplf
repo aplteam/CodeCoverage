@@ -1,0 +1,35 @@
+ R←Test_002(stopFlag batchFlag);⎕TRAP;htmlFilename;tno;result;toc;b;row;name;could;did
+⍝ Just runs all sorts of functions and then checks the coverage results
+ ⎕TRAP←(999 'C' '∘∘∘ ⍝ Deliberate error')(0 'N')
+ R←T._Failed
+
+ Data.Prepare
+ Data.T.codeCoverage.filename←(739⌶0),'/CodeCoverage_',(⊃⎕SI),'.dcf'
+ {}Data.T.RunThese'Test_002'
+ {}Data.T.RunThese'Test_002'
+ htmlFilename←##.CodeCoverage.ProcessDataAndCreateReport Data.T.codeCoverage.filename
+ tno←Data.T.codeCoverage.filename ⎕FTIE 0
+ →T.GoToTidyUp 13≠2⊃⎕FSIZE tno                ⍝ First 10 are reserved, 11+12 hold data (two times!)
+
+ result←⎕FREAD tno,10
+ toc←↑result[;1]~¨' '
+ b←∨/'∆Script1'⍷toc
+ (toc result)←b∘⌿¨toc result
+ :For row :In ⍳≢toc
+     name←' '~⍨toc[row;]
+     :If '#.CodeCoverage.TestCases.Data.∆Script1.Hello2'≡name
+         ⍝TODO⍝ To be ignored for the time being because ⎕PROFILE cannot deal with names local dfns inside tfns in any meaningful way
+     :Else
+         (could did)←∆GetLinesFromScrips name
+         →T.GoToTidyUp did could≢result[row;2 4]
+     :EndIf
+ :EndFor
+
+ R←T._OK
+
+∆TidyUp:
+ ⎕FUNTIE tno
+ ⎕NDELETE Data.T.codeCoverage.filename,'.dcf'
+ ⎕NDELETE Data.T.codeCoverage.filename,'.html'
+ Data.⎕EX'T'
+⍝Done

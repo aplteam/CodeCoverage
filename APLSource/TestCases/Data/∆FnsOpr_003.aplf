@@ -1,0 +1,10 @@
+ {r}←∆FnsOpr_003 dummy;a;b;c;MyDfn
+⍝ 2 3 4 5 6 8 ⋄
+ MyDfn_3←{
+     a←1
+     b←2
+     c←3
+     +/,a,b,c,⍵
+ }
+ r←MyDfn_3 1 2 3
+⍝Done
