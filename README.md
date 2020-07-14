@@ -30,3 +30,18 @@ Notes
 
 * The application was executed twice, therefore the component file carries 12 components. The first 10 are reserved for internal purposes, the collected data is saved in the components 11 and 12, while the aggregated data is saved in component number 10.
 
+A real-life example:
+
+![Example](example.png "Example")
+
+Notes:
+
+* The fact that there are 8 functions not covered at all will be of interest in any case:
+
+  * If this is due to running test cases then it means that those 8 functions are not covered at all.
+  
+  * If it is the result of running the code intensively those 8 functions might be obsolete
+  
+* Ideally test cases should cover 100% of the code, but that might not be feasable. However, a code coverage of less than 50% seems to be unacceptable for functions that have a considerable number of "executable" lines.
+
+* Note that lines that are empty or carry nothing but a comment line but also elements of control structures like `:Else` and all flavours of `:End` do not count since they will never be executed in a senseful way.
