@@ -42,6 +42,6 @@ Notes:
   
   * If it is the result of running the code intensively then it might be a good idea to check those 8 functions for being obsolete.
   
-* Ideally test cases should cover 100% of the code, but that might not be feasable. However, a code coverage of less than 50% seems to be unacceptable for functions that have a considerable number of "executable" lines.
+* Ideally test cases should cover 100% of the code, but that might not be feasible. However, a code coverage of less than 50% seems to be unacceptable for functions that have a considerable number of "executable" lines.
 
 * Note that lines that are empty or carry nothing but a comment line but also elements of control structures like `:Else` and all flavours of `:End` do not count as "executable".
