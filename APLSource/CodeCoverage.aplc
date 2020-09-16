@@ -49,11 +49,15 @@
 
     ∇ r←Version
       :Access Public Shared
-      r←'CodeCoverage' '0.6.0.11' '2020-09-15'
+      r←'CodeCoverage' '0.6.1.13' '2020-09-16'
     ∇
 
     ∇ History
       :Access Public Shared
+    ⍝ * 0.6.1 from 2020-09-16
+    ⍝   * Some minor bug fixes:
+    ⍝     * In case the directory supposed to hold the report does not exist `CodeCoverage` now attenpts to create it.
+    ⍝     * Creating the HTML report crashed under some circumstances (empty array).
     ⍝ * 0.6.0 from 2020-09-04
     ⍝   * This version requires at least version 18.0 of Dyalog
     ⍝   * Property Getters and Setters are now reported (lifted restriction)
@@ -227,7 +231,7 @@
               html,←⊂'<tbody>'
               buff2←((≢buff),3)⍴0
               buff[;2]←buff[;4]~¨buff[;2]   ⍝ From "executed" to "not executed"
-              buff2[;1]←{4>≢⍵:⊃{⍺,',',⍵}/⍕¨⍵ ⋄ (⍕≢⍵),'←≢',Shorten ⍵}¨buff[;2]
+              buff2[;1]←{4>≢⍵:{0=≢⍵:⍵ ⋄ ⊃{⍺,',',⍵}/⍵}⍕¨⍵ ⋄ (⍕≢⍵),'←≢',Shorten ⍵}¨buff[;2]
               buff2[;2]←⍕¨buff[;3]
               buff2[;3]←⍕¨≢¨buff[;4]
               :If verbose
@@ -342,6 +346,7 @@
           details ⎕FAPPEND tno
           ⎕FUNTIE tno
       :Else
+          3 ⎕MKDIR 1⊃⎕NPARTS filename
           tno←filename ⎕FCREATE 0
           d←''
           d,←⊂'Documentation regarding the contents of this file'
