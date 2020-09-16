@@ -1,0 +1,28 @@
+:Namespace Foo
+    ∇ r←MyTfns1 y;MyDfns1
+      MyDfns1←{
+          a←1
+          ⍵+a
+          b←3
+          ⍵+a+b
+      }
+      MyDfns2←{
+          b←20
+          ⍵+b
+          c←30
+          ⍵+b×c
+      }
+      r←MyDfns1 y
+      r←MyDfns2 r
+      r←MyDfns3 r
+    ∇
+    ∇ r←Run
+      r←MyTfns1 100
+    ∇
+      MyDfns3←{
+          c←100
+          ⍵+c
+          d←300
+          ⍵+c×d
+      }
+:EndNamespace

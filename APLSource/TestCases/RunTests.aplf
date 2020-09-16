@@ -1,0 +1,5 @@
+ RunTests;htmlFilename
+ Prepare
+ T.Run 1
+ htmlFilename←##.CodeCoverage.ProcessDataAndCreateReport T.codeCoverage.filename
+ ##.APLTreeUtils2.GoToWebPage htmlFilename

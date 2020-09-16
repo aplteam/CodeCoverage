@@ -1,0 +1,28 @@
+ R←Test_030(stopFlag batchFlag);⎕TRAP;htmlFilename;html;ref;C;body1;body2
+⍝ Check on nested Clases
+ ⎕TRAP←(999 'C' '∘∘∘ ⍝ Deliberate error')(0 'N')
+
+ R←T.custom_1
+ :Return
+
+ R←T._Failed
+
+ #.⎕SHADOW'TEMP'
+ 'TEMP'#.⎕NS''
+
+ body1←,¨':Class Foo' '∇r←Hello' ':Access Public Shared' 'r←''Hello world''' '∇' ':EndClass'
+ body2←,¨':Class Goo' '∇r←Hello' ':Access Public Shared' 'r←''Hello galaxy''' '∇',body1,⊂':EndClass'
+ ref←#.TEMP.⎕FIX body2
+
+ C←⎕NEW ##.CodeCoverage(,⊂'#.TEMP')
+
+ C.Start ⍬
+ {}#.TEMP.Goo.Hello
+ {}#.TEMP.Goo.Foo.Hello
+ C.Stop ⍬
+ {}C.Finalyze ⍬
+ →T.PassesIf 2=≢C.data
+ ∘∘∘ ⍝TODO⍝
+
+ R←T._OK
+⍝Done

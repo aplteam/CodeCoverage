@@ -37,7 +37,7 @@
 ⍝ `CodeCoverage.ProcessDataAndCreateReport`. Now the canonical representations of all functions and operators that are
 ⍝ only partly covered will become part of the report. The lines that weren't executed are highlighted (bold) and carry
 ⍝ a right-pointing arrow to the left.\\
-⍝ ## Restrictins and flaws
+⍝ ## Restrictions and flaws
 ⍝ * For the time being nested namespaces/classes are not processed. This restriction might be lifted in a future release.
 ⍝ * Named dfns that are kept local inside a traditional function are not processed correctly. This is a consequence of a
 ⍝   flaw of `⎕PROFILE`. Without changing `⎕PROFILE` this cannot be overcome.\\
@@ -45,15 +45,19 @@
 ⍝ Home page: <https://github.com/aplteam/CodeCoverage>\\
 ⍝ Kai Jaeger ⋄ APL Team Ltd
 
-    ⎕io←1 ⋄⎕ml 3
+    ⎕IO←1 ⋄ ⎕ML←1
 
     ∇ r←Version
       :Access Public Shared
-      r←'CodeCoverage' '0.5.0.6' '2020-07-14'
+      r←'CodeCoverage' '0.6.0.11' '2020-09-15'
     ∇
 
     ∇ History
       :Access Public Shared
+    ⍝ * 0.6.0 from 2020-09-04
+    ⍝   * This version requires at least version 18.0 of Dyalog
+    ⍝   * Property Getters and Setters are now reported (lifted restriction)
+    ⍝   * Bug fix: `ignore` did not work as expected on ordinary namespaces.
     ⍝ * 0.5.0 from 2020-07-14
     ∇
 
@@ -64,8 +68,12 @@
       :Implements Constructor
       :Access Public
       _ignore←''
+      :If ~(⊃watch_)∊'#⎕'
+      :AndIf 0<(⊃1↓⎕RSI).⎕NC watch_
+          watch_←(⊃1↓⎕NSI),'.',watch_
+      :EndIf
       watch←watch_
-      _filename←(739⌶0),'/CodeCoverage-',' '~⍨⍕⎕ts 
+      _filename←(739⌶0),'/CodeCoverage-',' '~⍨⍕⎕TS
       _data←0 2⍴''
     ∇
 
@@ -78,8 +86,10 @@
     :EndProperty
 
     :Property ignore
-    ⍝ Either empty or a comma-separated list of fully qualified function, operator class and namespace names that should
-    ⍝ be ignored when the coverage report is compiled.
+    ⍝ Either empty or a comma-separated list of fully qualified function, operator class and namespace names
+    ⍝ that should be ignored when the coverage report is compiled.\\
+    ⍝ Note that in case it is an ordinary namespace this means that all objects in that namespace are ignored,
+    ⍝ incluuding all sub-namespaces.
     :Access Public Instance
         ∇ r←Get
           r←','(≠⊆⊢),_ignore
@@ -111,7 +121,7 @@
           'Must be character vector'⎕SIGNAL 11/⍨' '≠1↑0⍴v
           ('Has invalid characters',b/v)⎕SIGNAL 11/⍨∨/b←~v∊APL_Chars,',⎕#.'
           v2←','(≠⊆⊢),v
-          :If ∨/~b←0<⎕NC⊃v2
+          :If ∨/~b←0<⎕NC↑v2
               11 ⎕SIGNAL⍨'Unknown names: ',⊃{⍺,',',⍵}/(~b)/v2
           :EndIf
           _watch←v2
@@ -186,48 +196,54 @@
       html,←⊂'</head>'
       html,←⊂'<body>'
       html,←⊂'<h1 id="top">Coverage Report</h1>'
-      tally←≢data[;4]
-      caption←⊃,/{⍺,', ',⍵}/watched
-      html,←⊂'<p>Watched: ',(⍕tally),' fns/opr within <code>',caption,'</code></p>'
-      html,←⊂'<p>Overall ',(⍕⌊0.5+100×÷/+⌿≢¨data[;2 4]),'% of the testable code is  covered.</p>'
-      html,←⊂'<p>(Testable: comment lines, empty lines, all <code>:End</code>* lines etc. are all ignored)</p>'
-      html,←⊂'<p>',(⍕data[;3]+.=100),' of the fns/opr are 100% covered.</p>'
-      :If 0<+/b←data[;3]=0
-          html,←⊂'<p>',(⍕+/b),' are not covered at all:</p>'
-          html,←⊂'<table>'
-          html,←⊂'<tbody>'
-          html,←{'<tr><td>',⍵,'</td></tr>'}¨b/data[;1]
-          html,←⊂'</tbody>'
-          html,←⊂'</table>'
-      :EndIf
-      :If 0<+/b←~data[;3]∊0 100
-          buff←{⍵[⍋⍵[;3];]}b⌿data
-          html,←⊂'<div id="partly-covered" class="keep-together">'
-          html,←⊂'<p>',(⍕+/b),' are partly covered:</p>'
-          html,←⊂'<table>'
-          html,←⊂'<thead>'                 
-          align←'left' 'left' 'left' 'right'
-          html,←⊂{'<tr>',⍵,'</tr>'}⊃,/align{'<th style="text-align:',⍺,';">',⍵,'</th>'}¨'Function/Operator' 'Lines not executed' 'Coverage' '≢'
-          html,←⊂'</thead>'
-          html,←⊂'<tbody>'
-          buff2←((≢buff),3)⍴0
-          buff[;2]←buff[;4]~¨buff[;2]   ⍝ From "executed" to "not executed"
-          buff2[;1]←{4>≢⍵:⊃{⍺,',',⍵}/⍕¨⍵ ⋄ (⍕≢⍵),'←≢',Shorten ⍵}¨buff[;2]
-          buff2[;2]←⍕¨buff[;3]
-          buff2[;3]←⍕¨≢¨buff[;4]
-          :If verbose
-              linkAndName←buff[;1]{'<a href="#listing_',⍵,'" title="Link to listing">',⍺,'</a>'}∘⍕¨⍳≢buff
-              buff3←linkAndName{'<td>',⍺,'</td><td>',(1⊃⍵),'</td><td>',(2⊃⍵),'%</td><td class="align-right">',(3⊃⍵),'</td>'}¨↓buff2
-          :Else
-              buff3←buff[;1]{'<td>',⍺,'</td><td>',(1⊃⍵),'</td><td>',(2⊃⍵),'%</td><td class="align-right">',(3⊃⍵),'</td>'}¨↓buff2
+      :If 0=≢data
+          html,←⊂'<p>Nothing to report at all</p>'
+      :Else
+          tally←≢data[;4]
+          caption←⊃,/{⍺,', ',⍵}/watched
+          html,←⊂'<p>Watched: ',(⍕tally),' fns/opr within <code>',caption,'</code></p>'
+          :If 0<≢∊data[;2 4]
+              html,←⊂'<p>Overall ',(⍕⌊0.5+100×÷/+⌿≢¨data[;2 4]),'% of the testable code is  covered.</p>'
+              html,←⊂'<p>(Comment lines, empty lines, all <code>:End</code>* lines etc. are all ignored)</p>'
           :EndIf
-          html,←{'<tr>',⍵,'</tr>'}¨buff3
-          html,←⊂'</tbody>'
-          html,←⊂'</table>'
-          html,←⊂'</div>'
-          :If verbose
-              html,←⊂'<h2>Listings</h2>'
-              html,←CreateListingForFnsAndOpr buff
+          html,←⊂'<p>',(⍕data[;3]+.=100),' of the fns/opr are 100% covered.</p>'
+          :If 0<+/b←data[;3]=0
+              html,←⊂'<p>',(⍕+/b),' are not covered at all:</p>'
+              html,←⊂'<table>'
+              html,←⊂'<tbody>'
+              html,←{'<tr><td>',⍵,'</td></tr>'}¨b/data[;1]
+              html,←⊂'</tbody>'
+              html,←⊂'</table>'
+          :EndIf
+          :If 0<+/b←~data[;3]∊0 100
+              buff←{⍵[⍋⍵[;3];]}b⌿data
+              html,←⊂'<div id="partly-covered" class="keep-together">'
+              html,←⊂'<p>',(⍕+/b),' are partly covered:</p>'
+              html,←⊂'<table>'
+              html,←⊂'<thead>'
+              align←'left' 'left' 'left' 'right'
+              html,←⊂{'<tr>',⍵,'</tr>'}⊃,/align{'<th style="text-align:',⍺,';">',⍵,'</th>'}¨'Function/Operator' 'Lines not executed' 'Coverage' '≢'
+              html,←⊂'</thead>'
+              html,←⊂'<tbody>'
+              buff2←((≢buff),3)⍴0
+              buff[;2]←buff[;4]~¨buff[;2]   ⍝ From "executed" to "not executed"
+              buff2[;1]←{4>≢⍵:⊃{⍺,',',⍵}/⍕¨⍵ ⋄ (⍕≢⍵),'←≢',Shorten ⍵}¨buff[;2]
+              buff2[;2]←⍕¨buff[;3]
+              buff2[;3]←⍕¨≢¨buff[;4]
+              :If verbose
+                  linkAndName←buff[;1]{'<a href="#listing_',⍵,'" title="Link to listing">',⍺,'</a>'}∘⍕¨⍳≢buff
+                  buff3←linkAndName{'<td>',⍺,'</td><td>',(1⊃⍵),'</td><td>',(2⊃⍵),'%</td><td class="align-right">',(3⊃⍵),'</td>'}¨↓buff2
+              :Else
+                  buff3←buff[;1]{'<td>',⍺,'</td><td>',(1⊃⍵),'</td><td>',(2⊃⍵),'%</td><td class="align-right">',(3⊃⍵),'</td>'}¨↓buff2
+              :EndIf
+              html,←{'<tr>',⍵,'</tr>'}¨buff3
+              html,←⊂'</tbody>'
+              html,←⊂'</table>'
+              html,←⊂'</div>'
+              :If verbose
+                  html,←⊂'<h2>Listings</h2>'
+                  html,←CreateListingForFnsAndOpr buff
+              :EndIf
           :EndIf
       :EndIf
       html,←⊂'<div id="footer">'
@@ -244,25 +260,27 @@
      ⍝ Takes the name of a component file that was created by calling `Start`, `Stop` and `Finalyze`.\\
      ⍝ The components are read, aggregated and massaged and finally saved in the tenth component,
      ⍝ but the aggregated data is also returned as a shy result together with what has been watched.
-     :Access Public Shared
+      :Access Public Shared
       dcfFilename←(⊃,/2↑⎕NPARTS filename),'.dcf'
       'File not found'⎕SIGNAL 11/⍨0=⎕NEXISTS dcfFilename
       tno←dcfFilename ⎕FSTIE 0
       watched←⎕FREAD tno,2
-      data←tno{⎕FREAD ⍺,⍵}¨10↓⍳-/⌽2↑⎕FSIZE tno
-      watch←⎕FREAD tno 2
-      ignore←⎕FREAD tno 3
-      data←⊃⍪/data
-      data[;2]←(data[;2]∊¨data[;4])/¨data[;2]
-      details←data[;1]{(⊃⍺)(∪⊃,/⍵)}⌸data[;2]
-      where←data[;1]⍳details[;1]
-      details,←data[where;3 4]
-      details←(~details[;1]∊ignore)⌿details
-      b←details[;3]≠100
-      :If ∨/b
-          (b/details[;3])←⌊0.5+100×÷/≢¨b⌿details[;2 4]         ⍝ Recalculate percentage
+      details←watch←⍬
+      :If 0<≢∊data←tno{⎕FREAD ⍺,⍵}¨10↓⍳-/⌽2↑⎕FSIZE tno
+          watch←⎕FREAD tno 2
+          ignore←⎕FREAD tno 3
+          data←⊃⍪/data
+          data[;2]←(data[;2]∊¨data[;4])/¨data[;2]
+          details←data[;1]{(⊃⍺)(∪⊃,/⍵)}⌸data[;2]
+          where←data[;1]⍳details[;1]
+          details,←data[where;3 4]
+          details(RemoveToBeIgnored)←ignore
+          b←details[;3]≠100
+          :If ∨/b
+              (b/details[;3])←⌊0.5+100×÷/≢¨b⌿details[;2 4]         ⍝ Recalculate percentage
+          :EndIf
+          details ⎕FREPLACE tno 10
       :EndIf
-      details ⎕FREPLACE tno 10
       ⎕FUNTIE tno
     ∇
 
@@ -276,9 +294,9 @@
     ⍝ you can move the DCF file to another platform and run the code under the supervision of `CodeCoverage`
     ⍝ again, for example.
       :Access Public Instance
+      r←⍬
       _data←_data[;1]{(⊃⍺)(∪⊃,/⍵)}⌸_data[;2]
       names←CollectDataForCoverageReport _watch
-      _data←(_data[;1]∊names)⌿_data                             ⍝ Remove setters and getters (not yet supported, if ever)
       details←0 4⍴⍬
       regExPattern←'^ *:else$' '^ *:section$'                   ⍝ Lines that contain just these patterns...
       regExPattern,←'^ *:access ' '^ *:field ' '^ *:attribute'  ⍝ ... or these are to be ignored.
@@ -294,12 +312,16 @@
           :Else
               linesCovered←⍬
           :EndIf
-          body←{⍵↓⍨-+/∧\' '=⌽⍵}¨↓180⌶i⊃names
+          :If 0=≢body←{⍵↓⍨-+/∧\' '=⌽⍵}¨↓180⌶i⊃names             ⍝ True for localyzed dfns
+            ⍝ ---------- TODO
+            ⍝     ∘∘∘ ⍝TODO⍝ We cannot get the body of that dfn with ⎕CR or 180⌶, so we need to take other measures.
+            ⍝ ----------
+          :EndIf
           body←'''[^'']*'''⎕R''⍠('Greedy' 0)⊣body               ⍝ Remove text
           body←'⍝.*$'⎕R''⍠('Greedy' 0)⊣body                     ⍝ Remove comments
           lines←¯1+⍳≢body
           :If '}'=¯1↑⊃¯1↑body                                   ⍝ Is it possibly a dfn? (⎕NC does only work on stuff that's not part of a class!)
-          :AndIf ∨/(({⍵↑⍨1+-{⍵⍳'.'}⌽⍵}name),'←{')⍷⊃body         ⍝ First line carries <name>←{   - then it must be a dfn
+          :AndIf ∨/(({⍵↑⍨1+-{⍵⍳'.'}⌽⍵}name),'←{')⍷1⊃body        ⍝ First line carries <name>←{   - then it must be a dfn
           :AndIf (,'}')≡¯1↑' '~⍨⊃¯1↑body
               (body lines)←(0=≢{⍵↓⍨⍵⍳'{'}⊃body)↓¨body lines     ⍝ Drop first line if it is nothing but <name>←{
               (body lines)←(-(,'}')≡' '~⍨⊃¯1↑body)↓¨body lines  ⍝ Drop last line if it is nothing but a closing "`}`
@@ -345,7 +367,7 @@
           details ⎕FAPPEND tno
           ⎕FUNTIE tno
       :EndIf
-      r←⍬
+      r←filename
       ⍝Done
     ∇
 
@@ -537,17 +559,19 @@
       :EndFor
     ∇
 
-    ∇ r←NamesInScript ref;body;options;b;tfns;dfns;b2
+    ∇ r←NamesInScript ref;body;options;b;tfns;dfns;b2;bodies
       :Access Public Shared
-    ⍝ Takes a ref poiting to a class or interface script and returns the names of all functions and operators
+    ⍝ Takes a ref pointing to a class or interface script and returns the names of all functions and operators
     ⍝ within that script.\\
     ⍝ Has two limitations:
     ⍝ * Cannot process nested classes and nested namespaces.
     ⍝ * Might well mistake a variable name as the name of a dfn.\\
+      r←''
       body←⎕SRC ref
       body←'''[^'']*'''⎕R''⊣body                                     ⍝ Get rid of everything between quotes
       body←'⍝.*$'⎕R''⊣body                                           ⍝ Get rid of comments
       options←('IC' 1)('Greedy' 0)('DotAll' 1)('Mode' 'D')
+      r,←options GeterAndSetterNames body                            ⍝ Extract the names of all getters and setters (if any)
       body←':Property .*:EndProperty'⎕R''⍠options⊣body               ⍝ Remove Properties (because they carry `∇`!)
       body←¯1↓1↓(~body∧.=¨' ')/body                                  ⍝ Remove first, last and all empty lines
       body←'^ {5,}∇.*$'⎕R''⊣body                                     ⍝ Remove recursive ∇ calls that stand on their own
@@ -556,8 +580,8 @@
       body↓¨⍨←{+/∧\' '=⍵}¨body                                       ⍝ Drop all leading spaces
       b←'∇'=⊃¨body                                                   ⍝ All lines that start with a nabla
       tfns←b/body                                                    ⍝ Trad fns headers
-      tfns←1↓¨tfns                                                   ⍝ Trad fns headers
-      tfns←((≢tfns)⍴1 0)/tfns                                        ⍝ Reove every second line: those are the closing ones
+      tfns←1↓¨tfns                                                   ⍝ Remove the nablas
+      tfns←((≢tfns)⍴1 0)/tfns                                        ⍝ Remove every second line: those are the closing ones
       tfns←{'←'∊⍵:⍵↓⍨⍵⍳'←' ⋄ ⍵}¨tfns                                 ⍝ Remove all explicit results
       tfns←{'{'∊⍵:⍵↓⍨⍵⍳'}' ⋄ ⍵}¨tfns                                 ⍝ Remove optional left argument
       tfns←{⍵↓⍨+/∧\' '=⍵}¨tfns                                       ⍝ Remove all leading spaces
@@ -568,17 +592,55 @@
       :EndIf
       tfns←'\([^)]+\)'⎕R' foo'⊣tfns                                  ⍝ Replace anything betwen () by ` foo` = impersonate a simple ⍵
       tfns←{2=' '+.=⍵:⍵↓⍨⍵⍳' ' ⋄ ⍵}¨tfns                             ⍝ Remove left arguments
-      r←{⍵↑⍨¯1+⌊/⍵⍳' ;'}¨tfns                                        ⍝ Name of all trad fns
+      r,←{⍵↑⍨¯1+⌊/⍵⍳' ;'}¨tfns                                       ⍝ Name of all trad fns
+      :If 0<≢bodies←'∇[^∇]*∇'⎕S{⍵.Match}⍠options⊣body                ⍝ Every trad fn must be investigated for any local dfns.
+      :AndIf 0<≢bodies←{(⎕UCS 10)~¨⍨(~(⎕UCS 13 10)⍷⍵)⊆⍵}¨bodies      ⍝ Split them one-by-one
+          r,←{0=≢⍵:⍵ ⋄ ⊃,/⍵}EstablishDfns¨bodies                     ⍝ All dfns defined within tradfns
+      :EndIf
       body←'∇[^∇]*∇'⎕R''⍠options⊣body                                ⍝ Wipe out all trad fns
       body←(0<≢¨body~¨' ')/body                                      ⍝ No empty lines
-      dfns←(∨/¨'←{'∘⍷¨body)/body                                     ⍝ Only lines that carry ←{ will survive
-      dfns←(0=≢¨1↓¨⊃¨{'\}(.*$)'⎕S{⍵.Match}⊣⍵}¨dfns)/dfns             ⍝ Get rid of one-line unnamed dfns
-      dfns←{⍵↑⍨¯1+⍵⍳'←'}¨dfns                                        ⍝ Assignments survive
-      dfns←(¯1≠⊃∘⎕NC¨dfns)/dfns                                      ⍝ Get rid of what is an invalid name (those are variable assignments)
-      dfns~¨←' '                                                     ⍝ Remove all spaces
-      r,←∪dfns                                                       ⍝ Those might well be variable assignment, therefore ∪!
+      ⍝ --- Next two lines are future stuff
+      ⍝ dfns←EstablishDfns body                                      ⍝ Extract the dfns (and dops of course)
+      ⍝ r,←∪dfns                                                     ⍝ Those might well be variable assignment, therefore ∪!
     ∇
 
     IsScripted←{16::0 ⋄ 1⊣⎕SRC ⍵}
+
+      EstablishDfns←{
+      ⍝ In case ⍺ is 1 just the names of all dfns (dops) found in ⍵ are returned.
+      ⍝ In case ⍺ is 0 only names that are localized are returned.
+          ⍺←1
+          body←⍵
+          dfns←(∨/¨'←{'∘⍷¨body)/body                                 ⍝ Only lines that carry ←{ will survive
+          0=≢dfns:''
+          dfns←(0=≢¨1↓¨⊃¨{'\}(.*$)'⎕S{⍵.Match}⊣⍵}¨dfns)/dfns         ⍝ Get rid of one-line unnamed dfns
+          0=≢dfns:''
+          dfns←{⍵↑⍨¯1+⍵⍳'←'}¨dfns                                    ⍝ Assignments survive
+          dfns←(¯1≠⊃∘⎕NC¨dfns)/dfns                                  ⍝ Get rid of what is an invalid name (those are variable assignments)
+          0=≢dfns:''
+          dfns~¨←' '                                                 ⍝ Remove all spaces
+          ⍺:dfns
+          ∘∘∘ ⍝TODO⍝
+      }
+
+    ∇ r←options GeterAndSetterNames body;bool
+      r←''
+      body←1↓⊃,/(⎕UCS 10),¨body
+      :If ∨/bool←':property'⍷⎕C body
+          r,←⊃,/body∘{'set_' 'get_',¨⊂(1+≢':propert')↓{⍵↑⍨¯1+⍵⍳⎕UCS 10}⍵↓⍺}¨{⍵/⍳≢⍵}bool
+      :EndIf
+    ∇
+
+    ∇ data←data RemoveToBeIgnored ignore;bool
+      ⍝ `ignore` is a nested vector with nanes. In case such a name identifies any APL object it is removed.\\
+      ⍝ However, if an ordinary namespace is part of `ignore` then it won't appear in `data`.
+      ⍝ Therefore we identify container names in a second step and remove everything that belongs to such a container.
+      ⍝ That means it works recursively.
+      :If 0<≢ignore
+      :AndIf 0<≢data←(~data[;1]∊ignore)⌿data
+          bool←9=⊃∘⎕NC¨ignore
+          data←(⊃∧/data∘{⍵∘≢¨(≢⍵)↑¨⍺[;1]}¨((bool/ignore),¨'.'))⌿data
+      :EndIf
+    ∇
 
 :EndClass

@@ -1,0 +1,35 @@
+ R←Test_010(stopFlag batchFlag);⎕TRAP;htmlFilename;html;body;ref;C;filename
+⍝ Check on setter and getter functions
+ ⎕TRAP←(999 'C' '∘∘∘ ⍝ Deliberate error')(0 'N')
+
+ R←T._Failed
+
+ filename←(739⌶0),'/CodeCoverage_Tests_',⊃⎕SI
+
+ #.⎕SHADOW'TEMP'
+ 'TEMP'#.⎕NS''
+
+ body←,¨':Class Foo' '_Goo←⍬' ':Property Goo' ':Access Public Shared' '∇r←get' 'r←_Goo' '→0' 'a←1' '∇' '∇set arg' '_Goo←arg.NewValue' '→0' 'a←1' '∇' ':EndProperty' ':EndClass'
+ ref←#.TEMP.⎕FIX body
+
+ C←⎕NEW ##.CodeCoverage(,⊂'#.TEMP')
+ C.filename←filename
+ C.Start ⍬
+ ref.Goo←'Hello world'
+ {}ref.Goo
+ C.Stop ⍬
+ {}C.Finalyze ⍬
+ →T.GoToTidyUp 2≠≢C.data
+
+ {}1 ##.CodeCoverage.ProcessDataAndCreateReport C.filename
+ html←⊃⎕NGET C.filename,'.html'
+ →T.GoToTidyUp 0=+/'>→[3] '⍷html
+ →T.GoToTidyUp 2≠≢'>→\[[0-9]+] '⎕S 0⊣html
+
+ R←T._OK
+
+∆TidyUp:
+ 1 ⎕NDELETE C.filename,'.dcf'
+ 1 ⎕NDELETE C.filename,'.html'
+ Data.⎕EX'T'
+⍝Done

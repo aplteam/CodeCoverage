@@ -1,0 +1,36 @@
+ R←Test_020(stopFlag batchFlag);⎕TRAP;htmlFilename;html;ref;C;body1;body2
+⍝ Check on nested namespaces
+ ⎕TRAP←(999 'C' '∘∘∘ ⍝ Deliberate error')(0 'N')
+
+ R←T.custom_1
+ :Return
+
+ R←T._Failed
+
+ #.⎕SHADOW'TEMP'
+ 'TEMP'#.⎕NS''
+
+ body1←':Namespace Foo' '∇r←Hello' 'r←''Hello world''' '→0' 'a←1' '∇' ':EndNamespace'
+ body2←':Namespace Goo' '∇r←Hello' 'r←''Hello galaxy''' '→0' 'a←1' '∇',body1,⊂':EndNamespace'
+ ref←#.TEMP.⎕FIX body2
+
+ C←⎕NEW ##.CodeCoverage(,⊂'#.TEMP')
+
+ C.Start ⍬
+ {}#.TEMP.Goo.Hello
+ {}#.TEMP.Goo.Foo.Hello
+ C.Stop ⍬
+ {}C.Finalyze ⍬
+ →T.PassesIf 2=≢C.data
+ {}1 ##.CodeCoverage.ProcessDataAndCreateReport C.filename
+ html←⊃⎕NGET C.filename,'.html'
+ →T.GoToTidyUp 0=+/'>→[3] '⍷html
+ →T.GoToTidyUp 2≠≢'>→\[[0-9]+] '⎕S 0⊣html
+
+ R←T._OK
+
+∆TidyUp:
+ 1 ⎕NDELETE C.filename,'.dcf'
+ 1 ⎕NDELETE C.filename,'.html'
+ Data.⎕EX'T'
+⍝Done

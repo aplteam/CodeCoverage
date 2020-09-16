@@ -1,0 +1,26 @@
+ R←Test_005(stopFlag batchFlag);⎕TRAP;htmlFilename;html;TEMP;C
+⍝ Checks what happens if nothing is to report at all
+ ⎕TRAP←(999 'C' '∘∘∘ ⍝ Deliberate error')(0 'N')
+
+ R←T._Failed
+
+ Data.Prepare
+ #.⎕SHADOW'TEMP'
+ 'TEMP'#.⎕NS''
+ #.TEMP.⎕FX'r←Hello' '⍝'
+
+ C←⎕NEW ##.CodeCoverage(,⊂'#.TEMP')
+ C.Start ⍬
+ #.TEMP.Hello
+ C.Stop ⍬
+ {}C.Finalyze ⍬
+ →T.GoToTidyUp 1≠≢C.data
+ {}##.CodeCoverage.ProcessDataAndCreateReport C.filename
+
+ R←T._OK
+
+∆TidyUp:
+ ⎕NDELETE C.filename,'.dcf'
+ ⎕NDELETE C.filename,'.html'
+ Data.⎕EX'T'
+⍝Done

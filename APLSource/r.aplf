@@ -1,5 +1,6 @@
  r;ps
  T←⎕NEW Tester2 TestCases
+ T.custom_1←'Not ready yet'
  T.CloseGUI
  ps←T.CreateParms ⍬
  ps.debugFlag←1
