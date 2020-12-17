@@ -3,7 +3,7 @@
 
   We might be able to solve the obstacle by recursive calls of the analyzing function.
   
-* The problem with locally defines dfns (dops), no matter whether they are kept local or 
+* The problem with locally defined dfns (dops), no matter whether they are kept local or 
   not, needs addressing as well.
   
   I've started adressing the problem: see namespace `Foo` and function `test`.

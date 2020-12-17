@@ -18,7 +18,7 @@
  ref.Goo←'Hello world'
  {}ref.Goo
  C.Stop ⍬
- {}C.Finalyze ⍬
+ {}C.Finalise ⍬
  →T.GoToTidyUp 2≠≢C.data
 
  {}1 ##.CodeCoverage.ProcessDataAndCreateReport C.filename

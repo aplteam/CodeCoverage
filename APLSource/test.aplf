@@ -3,6 +3,6 @@
  C.Start ⍬
  {}{Foo.Run}¨⍳999
  C.Stop ⍬
- C.Finalyze ⍬
+ C.Finalise ⍬
  ⎕←1 C.ProcessDataAndCreateReport C.filename
 ⍝Done

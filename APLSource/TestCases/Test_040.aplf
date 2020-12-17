@@ -1,0 +1,27 @@
+ R←Test_040(stopFlag batchFlag);⎕TRAP;C;html
+⍝ Check on a function operand of an operator
+ ⎕TRAP←(999 'C' '∘∘∘ ⍝ Deliberate error')(0 'N')
+
+ R←T._Failed
+
+ #.⎕SHADOW'TEMP'
+ 'TEMP'#.⎕NS''
+
+ #.TEMP.⎕FX'r←(TheFunction OP) array' 'r←TheFunction array' 'r←,r'
+ #.TEMP.⎕FX'r←Plus arg' 'r←+/arg' 'r←,r'
+ #.TEMP.⎕FX'r←Run' 'r←(Plus OP)100?999' 'r←,r'
+
+ C←⎕NEW ##.CodeCoverage(,⊂'#.TEMP')
+
+ C.Start ⍬
+ {}#.TEMP.Run
+ C.Stop ⍬
+ {}C.Finalise ⍬
+ C.ProcessDataAndCreateReport C.filename
+ html←⊃⎕NGET C.filename,'.html'
+ ⎕NDELETE C.filename,'.html'
+ ⎕NDELETE C.filename,'.dcf'
+ →T.PassesIf 1=+/'<p>3 of the fns/opr are 100% covered.</p>'⍷∊html
+
+ R←T._OK
+⍝Done

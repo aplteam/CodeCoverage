@@ -1,5 +1,5 @@
  R←Test_030(stopFlag batchFlag);⎕TRAP;htmlFilename;html;ref;C;body1;body2
-⍝ Check on nested Clases
+⍝ Check on nested Classes
  ⎕TRAP←(999 'C' '∘∘∘ ⍝ Deliberate error')(0 'N')
 
  R←T.custom_1
@@ -20,7 +20,7 @@
  {}#.TEMP.Goo.Hello
  {}#.TEMP.Goo.Foo.Hello
  C.Stop ⍬
- {}C.Finalyze ⍬
+ {}C.Finalise ⍬
  →T.PassesIf 2=≢C.data
  ∘∘∘ ⍝TODO⍝
 

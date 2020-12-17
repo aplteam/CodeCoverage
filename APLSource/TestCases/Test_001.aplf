@@ -1,4 +1,4 @@
- R←Test_001(stopFlag batchFlag);⎕TRAP;htmlFilename;tno;result;toc;b;row;name;could;did
+ R←Test_001(stopFlag batchFlag);⎕TRAP;htmlFilename;tno;result;toc;b;row;name;could;did;buff
 ⍝ Just runs all sorts of functions and then checks the coverage results
  ⎕TRAP←(999 'C' '∘∘∘ ⍝ Deliberate error')(0 'N')
  R←T._Failed
@@ -9,7 +9,7 @@
  {}Data.T.RunThese'Test_001'                  ⍝ ... to aggregate the data
  htmlFilename←##.CodeCoverage.ProcessDataAndCreateReport Data.T.codeCoverage.filename
  tno←Data.T.codeCoverage.filename ⎕FTIE 0
- →T.GoToTidyUp 13≠2⊃⎕FSIZE tno                ⍝ First 10 are reserved, 11+12 hold data (two times!)
+ →T.GoToTidyUp 13≠2⊃⎕FSIZE tno                ⍝ First 10 are reserved, 11+12 hold data (we called the test suite twice!)
 
  result←⎕FREAD tno,10
  toc←↑result[;1]
@@ -24,12 +24,15 @@
          →T.GoToTidyUp did could≢result[row;2 4]
      :EndIf
  :EndFor
+ buff←⎕FREAD tno 4
+ →T.GoToTidyUp 2≠⍴⍴buff
+ →T.GoToTidyUp 2≠≢buff
 
  R←T._OK
 
 ∆TidyUp:
  ⎕FUNTIE tno
- ⎕NDELETE Data.T.codeCoverage.filename,'.dcf'
- ⎕NDELETE Data.T.codeCoverage.filename,'.html'
+ 1 ⎕NDELETE Data.T.codeCoverage.filename,'.dcf'
+ 1 ⎕NDELETE Data.T.codeCoverage.filename,'.html'
  Data.⎕EX'T'
 ⍝Done

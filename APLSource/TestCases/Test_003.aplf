@@ -1,5 +1,5 @@
  R←Test_003(stopFlag batchFlag);⎕TRAP;htmlFilename;tno;result;toc;b;row;name;could;did
-⍝ Calles ProcessData and CreateReport rather than ProcessDataAndCreateReport
+⍝ Calls ProcessData and CreateReport rather than ProcessDataAndCreateReport
  ⎕TRAP←(999 'C' '∘∘∘ ⍝ Deliberate error')(0 'N')
  R←T._Failed
 

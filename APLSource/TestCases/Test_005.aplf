@@ -1,5 +1,5 @@
  R←Test_005(stopFlag batchFlag);⎕TRAP;htmlFilename;html;TEMP;C
-⍝ Checks what happens if nothing is to report at all
+⍝ Checks what happens if nothing is reported at all
  ⎕TRAP←(999 'C' '∘∘∘ ⍝ Deliberate error')(0 'N')
 
  R←T._Failed
@@ -13,7 +13,7 @@
  C.Start ⍬
  #.TEMP.Hello
  C.Stop ⍬
- {}C.Finalyze ⍬
+ {}C.Finalise ⍬
  →T.GoToTidyUp 1≠≢C.data
  {}##.CodeCoverage.ProcessDataAndCreateReport C.filename
 

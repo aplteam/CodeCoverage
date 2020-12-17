@@ -13,7 +13,7 @@
  C.Start ⍬
  #.TEMP.Hello
  C.Stop ⍬
- {}C.Finalyze ⍬
+ {}C.Finalise ⍬
  →T.GoToTidyUp 1≠≢C.data
  {}1 ##.CodeCoverage.ProcessDataAndCreateReport C.filename
  html←⊃⎕NGET C.filename,'.html'
