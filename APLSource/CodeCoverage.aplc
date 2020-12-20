@@ -50,11 +50,13 @@
 
     ∇ r←Version
       :Access Public Shared
-      r←'CodeCoverage' '0.7.0.36' '2020-12-17'
+      r←'CodeCoverage' '0.7.1.37' '2020-12-20'
     ∇
 
     ∇ History
       :Access Public Shared
+    ⍝ * 0.7.1 from 2020-12-20
+    ⍝   * Bug fix: `NamesInScript` might crash on an {each}-operation on an empty vector
     ⍝ * 0.7.0 from 2020-12-17
     ⍝   * For every test run a row is appended onto component number xx. It conains three pieces of information:
     ⍝     1. Version of Dyalog and which OS
@@ -635,8 +637,9 @@
           (b/tfns)←{{⍵↑⍨¯1+⍵⍳')'}⍵↓⍨⍵⍳' '}¨b/tfns                    ⍝ Extract the operator names
       :EndIf
       tfns←'\([^)]+\)'⎕R' foo'⊣tfns                                  ⍝ Replace anything betwen () by ` foo` = impersonate a simple ⍵
-      tfns←{2=' '+.=⍵:⍵↓⍨⍵⍳' ' ⋄ ⍵}¨tfns                             ⍝ Remove left arguments
-      r,←{⍵↑⍨¯1+⌊/⍵⍳' ;'}¨tfns                                       ⍝ Name of all trad fns
+      :If 0<≢tfns←{2=' '+.=⍵:⍵↓⍨⍵⍳' ' ⋄ ⍵}¨tfns                      ⍝ Remove left arguments
+          r,←{⍵↑⍨¯1+⌊/⍵⍳' ;'}¨tfns                                   ⍝ Name of all trad fns
+      :EndIf
       :If 0<≢bodies←'∇[^∇]*∇'⎕S{⍵.Match}⍠options⊣body                ⍝ Every trad fn must be investigated for any local dfns.
       :AndIf 0<≢bodies←{(⎕UCS 10)~¨⍨(~(⎕UCS 13 10)⍷⍵)⊆⍵}¨bodies      ⍝ Split them one-by-one
           r,←{0=≢⍵:⍵ ⋄ ⊃,/⍵}EstablishDfns¨bodies                     ⍝ All dfns defined within tradfns
