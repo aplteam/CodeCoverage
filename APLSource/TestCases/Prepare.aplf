@@ -1,5 +1,5 @@
  Prepare;testPath;testFilename;ask;answer
- T←⎕NEW ##.Tester2 ⎕THIS
+ T←⎕NEW Tester2 ⎕THIS
  T.custom_1←'Not ready yet'
  testPath←(⊃1 ⎕NPARTS''),'TestResults'
  testFilename←testPath,'/CodeCoverage'
