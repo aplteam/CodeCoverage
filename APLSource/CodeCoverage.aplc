@@ -50,7 +50,7 @@
 
     ∇ r←Version
       :Access Public Shared
-      r←'CodeCoverage' '0.7.1.37' '2020-12-20'
+      r←'CodeCoverage' '0.7.1.38' '2020-12-20'
     ∇
 
     ∇ History
