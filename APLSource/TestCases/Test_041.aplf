@@ -1,0 +1,28 @@
+ R←Test_041(stopFlag batchFlag);⎕TRAP;htmlFilename;tno;result;toc;could;did;T2
+⍝ Make sure that a field is not reported as "not executed" - was once a bug
+ ⎕TRAP←(999 'C' '∘∘∘ ⍝ Deliberate error')(0 'N')
+ R←T._Failed
+
+ #.⎕SHADOW'TEMP'
+ 'TEMP'#.⎕NS(⍕⎕THIS),'.ClassWithField'
+ #.TEMP.⎕FX'r←Test_01 y' '#.TEMP.ClassWithField.Hello' 'r←0'
+ T2←⎕NEW Tester2 #.TEMP
+ T2.codeCoverage←⎕NEW ##.CodeCoverage(,⊂'#.TEMP')
+ T2.codeCoverage.filename←(739⌶0),'/CodeCoverage_',(⊃⎕SI),'.dcf'
+ T2.RunThese'Test_01'
+ htmlFilename←##.CodeCoverage.ProcessDataAndCreateReport T2.codeCoverage.filename
+ tno←T2.codeCoverage.filename ⎕FTIE 0
+ →T.GoToTidyUp 11≠2⊃⎕FSIZE tno                ⍝ First 9 are reserved, 11+12 hold data (we called the test suite once)
+
+ result←⎕FREAD tno,10
+ toc←↑result[;1]
+ →T.PassesIf'#.TEMP.Test_01' '#.TEMP.ClassWithField.Hello'≡' '~⍨¨↓toc
+ →T.PassesIf 2 100≡∊result[2;2 3]
+
+ R←T._OK
+
+∆TidyUp:
+ ⎕FUNTIE tno
+ 1 ⎕NDELETE T2.codeCoverage.filename,'.dcf'
+ 1 ⎕NDELETE T2.codeCoverage.filename,'.html'
+⍝Done

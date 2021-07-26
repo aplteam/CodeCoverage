@@ -9,7 +9,7 @@
  {}Data.T.RunThese'Test_001'                  ⍝ ... to aggregate the data
  htmlFilename←##.CodeCoverage.ProcessDataAndCreateReport Data.T.codeCoverage.filename
  tno←Data.T.codeCoverage.filename ⎕FTIE 0
- →T.GoToTidyUp 13≠2⊃⎕FSIZE tno                ⍝ First 10 are reserved, 11+12 hold data (we called the test suite twice!)
+ →T.GoToTidyUp 12≠2⊃⎕FSIZE tno                ⍝ First 9 are reserved, 11+12 hold data (we called the test suite twice!)
 
  result←⎕FREAD tno,10
  toc←↑result[;1]

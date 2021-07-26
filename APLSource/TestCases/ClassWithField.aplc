@@ -1,0 +1,9 @@
+:Class ClassWithField
+
+    :field public shared PI←3.14
+
+    ∇ r←Hello
+      :Access Public Shared
+      r←'World'
+    ∇
+:EndClass
