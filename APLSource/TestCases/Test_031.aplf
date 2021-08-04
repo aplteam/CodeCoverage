@@ -1,0 +1,29 @@
+ R←Test_031(stopFlag batchFlag);⎕TRAP;body;ref;C;htmlFilename;html
+⍝ Check on the "Info" field
+ ⎕TRAP←(999 'C' '∘∘∘ ⍝ Deliberate error')(0 'N')
+
+ R←T._Failed
+
+ #.⎕SHADOW'TEMP'
+ 'TEMP'#.⎕NS''
+
+ body←,¨':Class Foo' '∇r←Hello' ':Access Public Shared' 'r←''Hello world''' '→0' 'r←''Hello Galaxy''' '∇' ':EndClass'
+ ref←#.TEMP.⎕FIX body
+
+ ##.CodeCoverage.Info←'>>>Additonal & information<<<'
+ C←⎕NEW ##.CodeCoverage(,⊂'#.TEMP')
+
+ C.Start ⍬
+ {}#.TEMP.Foo.Hello
+ C.Stop ⍬
+ {}C.Finalise ⍬
+ htmlFilename←1 C.ProcessDataAndCreateReport C.filename
+ html←⊃⎕NGET htmlFilename
+ →T.GoToTidyUp~∨/'<p class="info">&gt;&gt;&gt;Additonal &amp; information&lt;&lt;&lt;</p>'⍷html
+
+ R←T._OK
+
+∆TidyUp:
+ ##.CodeCoverage.Info←''
+ ⎕NDELETE htmlFilename
+⍝Done

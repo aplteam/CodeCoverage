@@ -49,7 +49,9 @@ ul li, ol li {margin: 0.7em 0.2em;}
     src:
         local("APL385 Unicode"),
         url("https://misc.aplteam.com/apl385.ttf") format("truetype");
-}}
+}
+.info {border: 1px silver dashed; background-color: #F2F2F2;margin: 0.5em; padding: 0.5em;}
+}
 @media print{@page {size: portrait}
 @page {
     margin: 1cm 1cm 1cm 1.75cm;
@@ -106,24 +108,31 @@ ul li, ol li {margin: 8pt 3pt;}
     src:
         local("APL385 Unicode"),
         url("https://misc.aplteam.com/apl385.ttf") format("truetype");
-}}
+}
+.info {border: 1px silver dashed; background-color: #F2F2F2;margin: 8px; padding: 8px;}
+}
 </style>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css"/>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/fixedheader/3.1.9/css/fixedHeader.dataTables.min.css"/>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/fixedheader/3.1.9/js/dataTables.fixedHeader.min.js"></script>
 </head>
 <body>
 <h1 id="top">Coverage Report</h1>
-<p>Watched: 28 fns/opr within <code>#.CodeCoverage.CodeCoverage</code></p>
-<p>The test test suite was execute once:</p>
+<p>Watched: 29 fns/opr within <code>#.CodeCoverage.CodeCoverage</code></p>
+<p>The test suite was executed once:</p>
 <table>
 <thead>
 <tr><th>Executed at</th><th>APLVersion</th><th>Memory (MB)</th></tr>
-<thead>
-</tbody>
-<tr><td>2021-07-26 11:21:49</td><td>Windows-64 ⋄ 18.0.40684.0 ⋄ W ⋄ Development</td><td>117</td></tr>
+</thead>
+<tbody>
+<tr><td>2021-08-04 21:08:27</td><td>Windows-64 ⋄ 18.0.44178.0 ⋄ W ⋄ Development</td><td>2.037</td></tr>
 </tbody>
 </table>
-<p>Overall 0% of the testable code is  covered.</p>
+<p>Overall 0% of the testable code is covered.</p>
 <p>(Comment lines, empty lines, all <code>:End</code>* lines etc. are ignored)</p>
-<p>2 of the fns/opr are 100% covered.</p>
+<p>3 of the fns/opr are 100% covered.</p>
 <p>25 are not covered at all:</p>
 <table>
 <tbody>
@@ -135,7 +144,6 @@ ul li, ol li {margin: 8pt 3pt;}
 <tr><td>#.CodeCoverage.CodeCoverage.set_filename</td></tr>
 <tr><td>#.CodeCoverage.CodeCoverage.get_filename</td></tr>
 <tr><td>#.CodeCoverage.CodeCoverage.Version</td></tr>
-<tr><td>#.CodeCoverage.CodeCoverage.History</td></tr>
 <tr><td>#.CodeCoverage.CodeCoverage.make1</td></tr>
 <tr><td>#.CodeCoverage.CodeCoverage.ProcessDataAndCreateReport</td></tr>
 <tr><td>#.CodeCoverage.CodeCoverage.CreateReport</td></tr>
@@ -152,6 +160,7 @@ ul li, ol li {margin: 8pt 3pt;}
 <tr><td>#.CodeCoverage.CodeCoverage.RemoveToBeIgnored</td></tr>
 <tr><td>#.CodeCoverage.CodeCoverage.FormatDateTime</td></tr>
 <tr><td>#.CodeCoverage.CodeCoverage.CollectInformation</td></tr>
+<tr><td>#.CodeCoverage.CodeCoverage.ExchangeHtmlSpecialChars</td></tr>
 </tbody>
 </table>
 <div id="partly-covered" class="keep-together">
@@ -167,7 +176,7 @@ ul li, ol li {margin: 8pt 3pt;}
 </div>
 <div id="footer">
 <hr>
-<p>Created by "CodeCoverage" version 0.7.3+41 from 2021-05-??</p>
+<p>Created by "CodeCoverage" version 0.8.0-bata-3+44 from 2021-08-05</p>
 </div>
 </body>
 </html>

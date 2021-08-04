@@ -10,7 +10,7 @@
  ##.CodeCoverage.ProcessData Data.T.codeCoverage.filename
  htmlFilename←##.CodeCoverage.CreateReport Data.T.codeCoverage.filename
  tno←Data.T.codeCoverage.filename ⎕FTIE 0
- →T.GoToTidyUp 12≠2⊃⎕FSIZE tno                ⍝ First 9 are reserved, 11+12 hold data (two times!)
+ →T.GoToTidyUp 12≠2⊃⎕FSIZE tno                ⍝ First 9 are reserved, 10+11 hold data (two times!)
 
  result←⎕FREAD tno,10
  toc←↑result[;1]~¨' '

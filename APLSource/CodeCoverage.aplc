@@ -47,14 +47,24 @@
 ⍝ Kai Jaeger ⋄ APL Team Ltd
 
     ⎕IO←1 ⋄ ⎕ML←1
+    :Field Public Shared Info←''   ⍝ Stricly speaking this should not be shared, but then CodeCoverage should not run in multiple instances anyway
 
     ∇ r←Version
       :Access Public Shared
-      r←'CodeCoverage' '0.7.3+42' '2021-05-26'
+      r←'CodeCoverage' '0.8.0-bata-3+44' '2021-08-05'
     ∇
 
     ∇ History
       :Access Public Shared
+    ⍝ * 0.8.0 from 2021-05-27
+    ⍝   * In the extended report the coverage percentage is now shown for each function
+    ⍝   * Field `Info` added. If not empty the text is added to the HTML right after the <h1>
+    ⍝   * Bug fixes:
+    ⍝     * ⎕SE in mixed case and lowercase lead to wrong reports
+    ⍝     * Typo in message fixed
+    ⍝     * "&" was transformed into "&amp" (missing ";")
+    ⍝     * <thead> was not closed
+    ⍝     * <tbody> was closed twice, but never opened
     ⍝ * 0.7.3 from 2021-05-26
     ⍝   * Bug fix: single report failed on a new file due to cnfusion about number of reserved components: 9 rather than 10.
     ⍝   * Test cases added
@@ -91,10 +101,12 @@
       :Access Public
       _ignore←''
       :If ~(⊃watch_)∊'#⎕'
+      :AndIf 0<≢1↓⎕RSI
       :AndIf 0<(⊃1↓⎕RSI).⎕NC watch_
           watch_←(⊃1↓⎕NSI),'.',watch_
       :EndIf
-      watch←watch_
+      ⎕SIGNAL/{0∧.≠⍵:''⍬ ⋄ ('Not found: ',watch_)6}⎕NC watch_
+      watch←'⎕se'⎕R'⎕SE'⍠('IC' 1)⊣watch_
       _filename←(739⌶0),'/CodeCoverage-',' '~⍨⍕⎕TS
       _data←0 2⍴''
     ∇
@@ -216,9 +228,17 @@
       html,←GetScreenCss
       html,←GetPrintCss
       html,←⊂'</style>'
+      html,←⊂'<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css"/>'
+      html,←⊂'<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/fixedheader/3.1.9/css/fixedHeader.dataTables.min.css"/>'
+      html,←⊂'<script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.min.js"></script>'
+      html,←⊂'<script type="text/javascript" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>'
+      html,←⊂'<script type="text/javascript" src="https://cdn.datatables.net/fixedheader/3.1.9/js/dataTables.fixedHeader.min.js"></script>'
       html,←⊂'</head>'
       html,←⊂'<body>'
       html,←⊂'<h1 id="top">Coverage Report</h1>'
+      :If 0<≢Info
+          html,←⊂'<p class="info">',(ExchangeHtmlSpecialChars Info),'</p>'
+      :EndIf
       :If 0=≢data
           html,←⊂'<p>Nothing to report at all</p>'
       :Else
@@ -226,20 +246,20 @@
           caption←⊃,/{⍺,', ',⍵}/watched
           html,←⊂'<p>Watched: ',(⍕tally),' fns/opr within <code>',caption,'</code></p>'
           :If 1=≢runs
-              html,←⊂'<p>The test test suite was execute once:</p>'
+              html,←⊂'<p>The test suite was executed once:</p>'
           :Else
-              html,←⊂'<p>The test test suite was executed ',(⍕≢runs),' times:</p>'
+              html,←⊂'<p>The test suite was executed ',(⍕≢runs),' times:</p>'
           :EndIf
           html,←⊂'<table>'
           html,←⊂'<thead>'
           html,←⊂{'<tr>',(⊃,/{'<th>',⍵,'</th>'}¨⍵),'</tr>'}'Executed at' 'APLVersion' 'Memory (MB)'
-          html,←⊂'<thead>'
-          html,←⊂'</tbody>'
+          html,←⊂'</thead>'
+          html,←⊂'<tbody>'
           html,←{'<tr>',(⊃,/{'<td>',⍵,'</td>'}¨⍵),'</tr>'}¨↓runs
           html,←⊂'</tbody>'
           html,←⊂'</table>'
           :If 0<≢∊data[;2 4]
-              html,←⊂'<p>Overall ',(⍕⌊0.5+100×÷/+⌿≢¨data[;2 4]),'% of the testable code is  covered.</p>'
+              html,←⊂'<p>Overall ',(⍕⌊0.5+100×÷/+⌿≢¨data[;2 4]),'% of the testable code is covered.</p>'
               html,←⊂'<p>(Comment lines, empty lines, all <code>:End</code>* lines etc. are ignored)</p>'
           :EndIf
           html,←⊂'<p>',(⍕data[;3]+.=100),' of the fns/opr are 100% covered.</p>'
@@ -442,14 +462,14 @@
 
 ⍝ ------------------------ Private stuff
 
-    ∇ html←CreateListingForFnsAndOpr partlyCovered;name;lines;body;width;html2;all;testable;where;buff;i;links
+    ∇ html←CreateListingForFnsAndOpr partlyCovered;name;lines;body;width;html2;all;testable;where;buff;i;links;percent
       html←''
       links←'<a class="float-right no-print no-underline top-links" href="#top" title="Go to the top of the document">↟</a>'
       links,←'<a  class="float-right no-print no-underline top-links" href="#partly-covered" title="Go to the beginning of ''Partly-covered''">↑</a>'
       :For i :In ⍳≢partlyCovered
-          (name lines testable)←partlyCovered[i;1 2 4]
+          (name lines percent testable)←partlyCovered[i;1 2 3 4]
           body←{⍵↓⍨-+/∧\' '=⌽⍵}¨↓180⌶name
-          body←(,¨'&<>')⎕R'\&amp' '\&lt;' '\&gt;'⊣body
+          body←ExchangeHtmlSpecialChars body
           (1⊃body)←{⍵↑⍨¯1+⌊/⍵⍳'⍝;'}1⊃body
           width←≢⍕≢body
           html2←((⊂(width-1)⍴' '),(width+4){⍺↑' [',(⍕⍵),']'}¨¯1↓⍳≢body),¨body,¨⊂'</code>'
@@ -459,7 +479,7 @@
           html2←buff,¨html2
           (1⊃html2)←'<div class="code-block">',1⊃html2
           html2,←⊂'</div>'
-          html2←(⊂'<code class="header" id="listing_',(⍕i),'">',name,links,'</code>'),html2
+          html2←(⊂'<code class="header" id="listing_',(⍕i),'">',name,(' &mdash; ',(⍕percent),'%'),links,'</code>'),html2
           html,←html2
       :EndFor
     ∇
@@ -520,7 +540,9 @@
       r,←⊂'    src:'
       r,←⊂'        local("APL385 Unicode"),'
       r,←⊂'        url("https://misc.aplteam.com/apl385.ttf") format("truetype");'
-      r,←⊂'}}'
+      r,←⊂'}'
+      r,←⊂'.info {border: 1px silver dashed; background-color: #F2F2F2;margin: 0.5em; padding: 0.5em;}'
+      r,←⊂'}'
     ∇
 
     ∇ r←GetPrintCss
@@ -581,7 +603,9 @@
       r,←⊂'    src:'
       r,←⊂'        local("APL385 Unicode"),'
       r,←⊂'        url("https://misc.aplteam.com/apl385.ttf") format("truetype");'
-      r,←⊂'}}'
+      r,←⊂'}'
+      r,←⊂'.info {border: 1px silver dashed; background-color: #F2F2F2;margin: 8px; padding: 8px;}'
+      r,←⊂'}'
     ∇
 
     ∇ names←CollectDataForCoverageReport watch;this;ref;list;isScripted;this2;ref2
@@ -705,6 +729,10 @@
       ts←FormatDateTime ⎕TS
       version←⊃{⍺,' ⋄ ',⍵}/# ⎕WG'APLVersion'
       r←1 3⍴ts version(' '~⍨,'K0G⊂ZZZ.ZZZ.ZZZ.ZZZ.ZZ9⊃'⎕FMT⌊⎕WA÷1024×1024) ⍝ MBs
+    ∇
+    ∇ txt←ExchangeHtmlSpecialChars txt
+    ⍝ < => &lt; ⋄ > => &gt; ⋄ & => &amp;
+      txt←(,¨'&<>')⎕R'\&amp;' '\&lt;' '\&gt;'⊣txt
     ∇
 
 :EndClass

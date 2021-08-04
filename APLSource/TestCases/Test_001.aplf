@@ -9,7 +9,7 @@
  {}Data.T.RunThese'Test_001'                  ⍝ ... to aggregate the data
  htmlFilename←##.CodeCoverage.ProcessDataAndCreateReport Data.T.codeCoverage.filename
  tno←Data.T.codeCoverage.filename ⎕FTIE 0
- →T.GoToTidyUp 12≠2⊃⎕FSIZE tno                ⍝ First 9 are reserved, 11+12 hold data (we called the test suite twice!)
+ →T.GoToTidyUp 12≠2⊃⎕FSIZE tno                ⍝ First 9 are reserved, 10+11 hold data (we called the test suite twice!)
 
  result←⎕FREAD tno,10
  toc←↑result[;1]
@@ -17,7 +17,7 @@
  (toc result)←b∘⌿¨toc result
  :For row :In ⍳≢toc
      name←toc[row;]
-     :If '#.CodeCoverage.TestCases.Data.∆FnsOpr_003               '≡name
+     :If '#.CodeCoverage.TestCases.Data.∆FnsOpr_003'≡name~' '
          ⍝TODO⍝ To be ignored for the time being because ⎕PROFILE cannot deal with names local dfns inside tfns in any meaningful way
      :Else
          (could did)←∆GetLinesFromFnsOpr name
