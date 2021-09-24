@@ -48,14 +48,17 @@
 
     ⎕IO←1 ⋄ ⎕ML←1
     :Field Public Shared Info←''   ⍝ Stricly speaking this should not be shared, but then CodeCoverage should not run in multiple instances anyway
-
+  :field public shared InitiaSelection←3  ⍝ select default active button
     ∇ r←Version
       :Access Public Shared
-      r←'CodeCoverage' '0.8.0-bata-3+44' '2021-08-05'
+      r←'CodeCoverage' '0.8.1-beta-3+45' '2021-09-25'
     ∇
 
     ∇ History
       :Access Public Shared
+    ⍝ * 0.8.1 from 2021-09-25
+    ⍝   * the table on coverage reports on ALL fns (including 0% and 100%). Dedicated buttons allow selection of a category.
+    ⍝     a search field helps to navigate the table. re-ordering (click a col-header) is also supported.
     ⍝ * 0.8.0 from 2021-05-27
     ⍝   * In the extended report the coverage percentage is now shown for each function
     ⍝   * Field `Info` added. If not empty the text is added to the HTML right after the <h1>
@@ -228,11 +231,9 @@
       html,←GetScreenCss
       html,←GetPrintCss
       html,←⊂'</style>'
-      html,←⊂'<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css"/>'
-      html,←⊂'<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/fixedheader/3.1.9/css/fixedHeader.dataTables.min.css"/>'
-      html,←⊂'<script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.min.js"></script>'
-      html,←⊂'<script type="text/javascript" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>'
-      html,←⊂'<script type="text/javascript" src="https://cdn.datatables.net/fixedheader/3.1.9/js/dataTables.fixedHeader.min.js"></script>'
+      ⍝ Download package with all needed components from DataTables CDN
+      html,←⊂'<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/jq-3.6.0/dt-1.11.2/b-2.0.0/b-print-2.0.0/fh-3.1.9/r-2.2.9/datatables.min.css"/>'
+      html,←⊂'<script type="text/javascript" src="https://cdn.datatables.net/v/dt/jq-3.6.0/dt-1.11.2/b-2.0.0/b-print-2.0.0/fh-3.1.9/r-2.2.9/datatables.min.js"></script>'
       html,←⊂'</head>'
       html,←⊂'<body>'
       html,←⊂'<h1 id="top">Coverage Report</h1>'
@@ -262,50 +263,138 @@
               html,←⊂'<p>Overall ',(⍕⌊0.5+100×÷/+⌿≢¨data[;2 4]),'% of the testable code is covered.</p>'
               html,←⊂'<p>(Comment lines, empty lines, all <code>:End</code>* lines etc. are ignored)</p>'
           :EndIf
-          html,←⊂'<p>',(⍕data[;3]+.=100),' of the fns/opr are 100% covered.</p>'
-          :If 0<+/b←data[;3]=0
-              html,←⊂'<p>',(⍕+/b),' are not covered at all:</p>'
-              html,←⊂'<table>'
-              html,←⊂'<tbody>'
-              html,←{'<tr><td>',⍵,'</td></tr>'}¨b/data[;1]
-              html,←⊂'</tbody>'
-              html,←⊂'</table>'
+          ⍝ html,←⊂'<p>',(⍕data[;3]+.=100),' of the fns/opr are 100% covered.</p>'
+          ⍝ :If 0<+/b←data[;3]=0
+          ⍝     html,←⊂'<p>',(⍕+/b),' are not covered at all:</p>'
+          ⍝     html,←⊂'<table>'
+          ⍝     html,←⊂'<tbody>'
+          ⍝     html,←{'<tr><td>',⍵,'</td></tr>'}¨b/data[;1]
+          ⍝     html,←⊂'</tbody>'
+          ⍝     html,←⊂'</table>'
+          ⍝ :EndIf
+          ⍝:If 0<+/b←~data[;3]∊0 100
+          b←~data[;3]∊0 100
+          buff←{⍵[⍋⍵[;3];]}data
+          html,←⊂'<div id="partly-covered" class="keep-together">'
+          ⍝ html,←⊂'<p>',(⍕+/b),' are partly covered:</p>'
+          html,←⊂'<table id="percent">'
+          html,←⊂'<thead>'
+          align←'left' 'left' 'left' 'right'
+          html,←⊂{'<tr>',⍵,'</tr>'}⊃,/align{'<th style="text-align:',⍺,';">',⍵,'</th>'}¨'Function/Operator' 'Lines not executed' 'Coverage' '≢'
+          html,←⊂'</thead>'
+          html,←⊂'<tbody>'
+          buff2←((≢buff),3)⍴0
+          buff[;2]←buff[;4]⍝~¨buff[;2]   ⍝ From "executed" to "not executed"
+          buff2[;1]←{4>≢⍵:{0=≢⍵:⍵ ⋄ ⊃{⍺,', ',⍵}/⍵}⍕¨⍵ ⋄ (⍕≢⍵),'←≢',Shorten ⍵}¨buff[;2]
+          buff2[;2]←buff[;3]
+          buff2[;3]←⍕¨≢¨buff[;4]
+          :If verbose
+              linkAndName←buff[;1]{'<a href="#listing_',⍵,'" title="Link to listing">',⍺,'</a>'}∘⍕¨⍳≢buff
+              buff3←linkAndName{'<td>',⍺,'</td><td>',(1⊃⍵),'</td><td>',(⍕2⊃⍵),'</td><td>',(3⊃⍵),'</td>'}¨↓buff2
+          :Else
+              buff3←buff[;1]{'<td>',⍺,'</td><td>',(1⊃⍵),'</td><td>',(⍕2⊃⍵),'</td><td>',(3⊃⍵),'</td>'}¨↓buff2
           :EndIf
-          :If 0<+/b←~data[;3]∊0 100
-              buff←{⍵[⍋⍵[;3];]}b⌿data
-              html,←⊂'<div id="partly-covered" class="keep-together">'
-              html,←⊂'<p>',(⍕+/b),' are partly covered:</p>'
-              html,←⊂'<table>'
-              html,←⊂'<thead>'
-              align←'left' 'left' 'left' 'right'
-              html,←⊂{'<tr>',⍵,'</tr>'}⊃,/align{'<th style="text-align:',⍺,';">',⍵,'</th>'}¨'Function/Operator' 'Lines not executed' 'Coverage' '≢'
-              html,←⊂'</thead>'
-              html,←⊂'<tbody>'
-              buff2←((≢buff),3)⍴0
-              buff[;2]←buff[;4]~¨buff[;2]   ⍝ From "executed" to "not executed"
-              buff2[;1]←{4>≢⍵:{0=≢⍵:⍵ ⋄ ⊃{⍺,',',⍵}/⍵}⍕¨⍵ ⋄ (⍕≢⍵),'←≢',Shorten ⍵}¨buff[;2]
-              buff2[;2]←⍕¨buff[;3]
-              buff2[;3]←⍕¨≢¨buff[;4]
-              :If verbose
-                  linkAndName←buff[;1]{'<a href="#listing_',⍵,'" title="Link to listing">',⍺,'</a>'}∘⍕¨⍳≢buff
-                  buff3←linkAndName{'<td>',⍺,'</td><td>',(1⊃⍵),'</td><td>',(2⊃⍵),'%</td><td class="align-right">',(3⊃⍵),'</td>'}¨↓buff2
-              :Else
-                  buff3←buff[;1]{'<td>',⍺,'</td><td>',(1⊃⍵),'</td><td>',(2⊃⍵),'%</td><td class="align-right">',(3⊃⍵),'</td>'}¨↓buff2
-              :EndIf
-              html,←{'<tr>',⍵,'</tr>'}¨buff3
-              html,←⊂'</tbody>'
-              html,←⊂'</table>'
-              html,←⊂'</div>'
-              :If verbose
-                  html,←⊂'<h2>Listings</h2>'
-                  html,←CreateListingForFnsAndOpr buff
-              :EndIf
+          html,←(↓buff2){
+              '<tr',({
+                  ⍵=3:''
+                  ' class="',(⍵⊃'unc'  'fullyC'),'overed"'
+              }0  100⍳2⊃⍺),'>',⍵,'</tr>'
+          }¨buff3
+          html,←⊂'</tbody>'
+          html,←⊂'</table>'
+          html,←⊂'</div>'
+          :If verbose
+              html,←⊂'<h2>Listings</h2>'
+              html,←CreateListingForFnsAndOpr buff
           :EndIf
+          ⍝:EndIf
       :EndIf
       html,←⊂'<div id="footer">'
       html,←⊂'<hr>'
       html,←⊂'<p>Created by "CodeCoverage" version ',(2⊃Version),' from ',(3⊃Version),'</p>'
       html,←⊂'</div>'
+      html,←⊂'<script>'
+      html,←⊂'$(document).ready(function() {'
+      html,←⊂'    var oTable;'
+      html,←⊂'    oTable = $("#percent").DataTable( {'
+      html,←⊂'        paging:   false,'
+      html,←⊂'        ordering: true,'
+      html,←⊂'        info:     true,'
+      html,←⊂'        fixedHeader: true,'
+      html,←⊂'        order: [2,"desc"],'
+      html,←⊂'        dom: "Bft",'
+      html,←⊂'        buttons: ['
+      html,←⊂'        {'
+      html,←⊂'            text: "All (',(⍕≢buff2),')",'
+      html,←⊂'            titleAttr: "all",'
+      html,←⊂'            className: "active",'
+      html,←⊂'            action: function ( e, dt, node, config ) {'
+      html,←⊂'                var text = this.text();'
+      html,←⊂'                var search = ".";'
+      html,←⊂'                oTable.column(2)'
+      html,←⊂'                    .search(search,true,false,false)'
+      html,←⊂'                    .draw();'
+      html,←⊂'                $(".dt-buttons button").removeClass("active");'
+      html,←⊂'                this.active( true );'
+      html,←⊂'            }'
+      html,←⊂'        },'
+      html,←⊂'        {'
+      html,←⊂'            text: "Uncovered(',(⍕+/buff2[;2]=0),')",'    ⍝ MB: diese Zähler müsstest Du beim Schreiben der Datei einfügen!
+      html,←⊂'            titleAttr: "0%",'
+      html,←⊂'            action: function ( e, dt, node, config ) {'
+      html,←⊂'                var text = this.text();'
+      html,←⊂'                var search = "^0%";'
+      html,←⊂'                oTable.column(2)'
+      html,←⊂'                    .search(search,true,false,false)'
+      html,←⊂'                    .draw();'
+      html,←⊂'                $(".dt-buttons button").removeClass("active");'
+      html,←⊂'                this.active( true );'
+      html,←⊂'            }'
+      html,←⊂'        },'
+      html,←⊂'        {'
+      html,←⊂'            text: "Fully covered(',(⍕+/buff2[;2]=100),')",'    ⍝ MB: diese Zähler müsstest Du beim Schreiben der Datei einfügen!
+      html,←⊂'            titleAttr: "100%",'
+      html,←⊂'            action: function ( e, dt, node, config ) {'
+      html,←⊂'                var text = this.text();'
+      html,←⊂'                var search = "100%";'
+      html,←⊂'                oTable.column(2)'
+      html,←⊂'                    .search(search,true,false,false)'
+      html,←⊂'                    .draw();'
+      html,←⊂'                $(".dt-buttons button").removeClass("active");'
+      html,←⊂'                this.active( true );'
+      html,←⊂'            }'
+      html,←⊂'        },'
+      html,←⊂'        {'
+      html,←⊂'            text: "Partly covered(',(⍕+/~buff2[;2]∊0 100),')",'  ⍝ MB: diese Zähler müsstest Du beim Schreiben der Datei einfügen
+      html,←⊂'            titleAttr: "50%",'
+      html,←⊂'            action: function ( e, dt, node, config ) {'
+      html,←⊂'                var text = this.text();'
+      html,←⊂'                var search = "^(?!(0%|100%)).*";'
+      html,←⊂'                oTable.column(2)'
+      html,←⊂'                    .search(search,true,false,false)'
+      html,←⊂'                    .draw();'
+      html,←⊂'                $(".dt-buttons button").removeClass("active");'
+      html,←⊂'                this.active( true );'
+      html,←⊂'            }'
+      html,←⊂'        }'
+      html,←⊂'    ],'
+      html,←⊂' '
+      html,←⊂'        columnDefs: ['
+      html,←⊂'            {className: "align-right", targets: [2,3]'
+      html,←⊂'            },'
+      html,←⊂'            {'
+      html,←⊂'                render: function ( data, type, row, meta ) {'
+      html,←⊂'                            return data+"%" ;        '
+      html,←⊂'                        },'
+      html,←⊂'                targets: 2'
+      html,←⊂'            }'
+      html,←⊂'        ]             '
+      html,←⊂'    } );'
+      html,←⊂'    oTable.button(',(⍕InitiaSelection),').trigger();'
+      html,←⊂''
+      html,←⊂'} );    '
+      html,←⊂'</script>'
+      html,←⊂''
       html,←⊂'</body>'
       html,←⊂'</html>'
       filename←(⊃,/2↑⎕NPARTS filename),'.html'
