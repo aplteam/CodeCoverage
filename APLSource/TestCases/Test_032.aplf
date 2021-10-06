@@ -1,0 +1,25 @@
+ R←Test_032(stopFlag batchFlag);⎕TRAP;ref;C;htmlFilename;html
+⍝ Check on a single-line dfn
+ ⎕TRAP←(999 'C' '∘∘∘ ⍝ Deliberate error')(0 'N')
+
+ R←T._Failed
+
+ #.⎕SHADOW'TEMP'
+ 'TEMP'#.⎕NS''
+ #.TEMP.myFns←{+/⍵}
+
+ C←⎕NEW ##.CodeCoverage(,⊂'#.TEMP')
+ C.Start ⍬
+ {}#.TEMP.myFns⍳9
+ C.Stop ⍬
+ {}C.Finalise ⍬
+ htmlFilename←1 C.ProcessDataAndCreateReport C.filename
+ html←⊃⎕NGET htmlFilename
+ →T.GoToTidyUp~∨/'1 of the fns/opr are 100% covered.'⍷html
+
+ R←T._OK
+
+∆TidyUp:
+ ##.CodeCoverage.Info←''
+ ⎕NDELETE htmlFilename
+⍝Done

@@ -15,20 +15,20 @@ The following gives an example, assuming that there is an application in `#.Foo`
       C.Start ⍬
       #.Foo.Run ⍬
       C.Stop ⍬
-      C.Finalyze ⍬
+      C.Finalyse ⍬
       ⎕←#.CodeCoverage.ProcessDataAndCreateReport  C.filename
 ./Foo-Coverage.html      
       C.Start ⍬
       #.Foo.Run ⍬
       C.Stop ⍬
-      C.Finalyze ⍬
+      C.Finalyse ⍬
       ⎕←1 #.CodeCoverage.ProcessDataAndCreateReport C.filename      
 ./Foo-Coverage.html      
 ```
 
 Notes
 
-* On the second call to `#.CodeCoverage.ProcessDataAndCreateReport` a left argument `1` was provided. This tells the function to add the body (canonical representations) of all functions and operators that carry lines that have not been executed. The lines that have not been executed are highlighted (bold) and carry a right-pointing array to their left.
+* On the second call to `#.CodeCoverage.ProcessDataAndCreateReport` a left argument `1` was provided. This tells the function to add the body (canonical representations) of all functions and operators that carry lines that have not been executed. The lines that have not been executed are highlighted (bold) and carry a right-pointing arrow to their left.
 
 * The application was executed twice, therefore the component file carries 12 components. The first 10 are reserved for internal purposes, the collected data is saved in the components 11 and 12, while the aggregated data will be saved in component number 10 once the data is aggregated by a call to the `Finalise` method.
 

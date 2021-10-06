@@ -1,5 +1,5 @@
  R←Test_006(stopFlag batchFlag);⎕TRAP;htmlFilename;TEMP;C;html
-⍝ Checks what if single line got executed
+⍝ Checks what happens if a single line got executed
  ⎕TRAP←(999 'C' '∘∘∘ ⍝ Deliberate error')(0 'N')
 
  R←T._Failed
@@ -11,7 +11,7 @@
 
  C←⎕NEW ##.CodeCoverage(,⊂'#.TEMP')
  C.Start ⍬
- #.TEMP.Hello
+ {}#.TEMP.Hello
  C.Stop ⍬
  {}C.Finalise ⍬
  →T.GoToTidyUp 1≠≢C.data

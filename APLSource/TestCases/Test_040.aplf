@@ -17,7 +17,7 @@
  {}#.TEMP.Run
  C.Stop ⍬
  {}C.Finalise ⍬
- C.ProcessDataAndCreateReport C.filename
+ {}C.ProcessDataAndCreateReport C.filename
  html←⊃⎕NGET C.filename,'.html'
  ⎕NDELETE C.filename,'.html'
  ⎕NDELETE C.filename,'.dcf'

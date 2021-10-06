@@ -1,5 +1,4 @@
-/.acre/
-/change_history/
-/Dist/
-/aplcore
-/TestResults/
+./change_history/
+./Dist/
+aplcore
+./TestResults/

@@ -1,0 +1,25 @@
+ R←Test_033(stopFlag batchFlag);⎕TRAP;ref;C;htmlFilename;html
+⍝ Check on a multi-line dfn defined and called within a tfn
+ ⎕TRAP←(999 'C' '∘∘∘ ⍝ Deliberate error')(0 'N')
+
+ R←T._Failed
+
+ #.⎕SHADOW'TEMP'
+ 'TEMP'#.⎕NS''
+ #.TEMP.⎕FX'r←test;myFns' 'a←1' 'b←2' '→r←0' 'r←{' '+/⍵' '}⍳9' 'r←2×r'
+
+ C←⎕NEW ##.CodeCoverage(,⊂'#.TEMP')
+ C.Start ⍬
+ {}#.TEMP.test
+ C.Stop ⍬
+ {}C.Finalise ⍬
+ htmlFilename←1 C.ProcessDataAndCreateReport C.filename
+ html←⊃⎕NGET htmlFilename
+ →T.GoToTidyUp~∧/∨/¨'→[4]' '→[5]' '→[7]'⍷¨⊂html
+ →T.GoToTidyUp~∧/~∨/¨({'→[',(⍕⍵),']'}¨(⍳7)~4 5 7)⍷¨⊂html
+
+ R←T._OK
+
+∆TidyUp:
+ ⎕NDELETE htmlFilename
+⍝Done

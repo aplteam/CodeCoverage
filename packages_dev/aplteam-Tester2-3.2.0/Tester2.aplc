@@ -22,35 +22,25 @@
 
     ∇ r←Version
       :Access Public shared
-      r←'Tester2' '3.1.2+93' '2021-03-08'
+      r←'Tester2' '3.2.0+103' '2021-10-06'
     ∇
 
     ∇ History
-      :Access Public shared 
-      ⍝ * 3.1.2 ⋄ 2021-03-08
-      ⍝   * Bug fix: in case a test suite was quit by sending `QuitEvent`, a generic `Cleanup` function was executed
-      ⍝     but on group-specific one, if there is any due.
-      ⍝ * 3.1.1 ⋄ 2021-03-01
-      ⍝   * Package config corrected
-      ⍝ * 3.1.0 ⋄ 2021-01-31
-      ⍝   * `RenameTestFnsTo` enhanced
-      ⍝   * Bug fix in `GetTestTemplate`
-      ⍝   * Internal changes:
-      ⍝     * Referencing APLTreeUtils2 changed
-      ⍝     * Call to APLTreeUtils2.Uppercase|Lowercase replaced by calls to ⎕C
-      ⍝   * Documentation improved
-      ⍝ * 3.0.1 ⋄ 2020-11-28
-      ⍝   * `GetRefToAPLTreeUtils` removed
-      ⍝   * Bug fix: invalid calls to `dtb` removed by calls to `A.DTB`.
-      ⍝   * Documentation improved
-      ⍝ * 3.0.0 ⋄ 2020-09-20
-      ⍝   * BREAKING CHANGES:
-      ⍝     * At least Dyalog 18.0 is required
-      ⍝     * The class `APLTreeUtils2` is required
-      ⍝   * `RunThese` now allows the specification of several groups (comma-separated), even with "~"
-      ⍝   * Internal changes
-      ⍝     * Uses now `⎕ML←1`
-      ⍝     * Does not `:Include APLTreeUtils` anymore (but requires `APLTreeUtils2` as a sibling)
+      :Access Public shared
+      ⍝ * 3.2.0 ⋄ 2021-10-01
+      ⍝   * `Tester2` now informs `Link` in case an APL object was changed (`RenameTestFnsTo`) under the condition 
+      ⍝     that it is at least Link 3.0 that is managing the code.
+      ⍝   * New constant `NoCiderTests` introduced.
+      ⍝   * The test case that is executed next is now printed to the session BEFORE its execution. Same for the GUI.
+      ⍝     As a consequence the order of the items of a single test call needed to change, but the same information
+      ⍝     is provided as before anyway.
+      ⍝   * Bug fixes
+      ⍝     * The flagging of test cases that are inactive for one reason or another was inconsistant. Those are
+      ⍝       now always flagged with a lamp symbol (⍝).
+      ⍝     * `ListTestFunctions` does not show the lamp symbol anymore.
+      ⍝     * `RenameTestFnsTo` printed to the session rather than returning the messages as result.
+      ⍝     * `CodeCoverage.Finalyze` (which has been marked as deprecated for quite a while) got replaced by 
+      ⍝       `CodeCoverage.Finalise`, finally fixing the typo.
       ⍝\\
       ⍝ For a full history (including older versions) see <https://github.com/aplteam/Tester2/releases>
     ∇
@@ -66,9 +56,10 @@
     :Field Public Instance Readonly _LinuxOrWindowsOnly←¯16
     :Field Public Instance Readonly _MacOrWindowsOnly←¯17
     :Field Public Instance Readonly _NoAcreTests←¯18
-    :Field Public Instance Readonly _NotApplicable←¯19
-    :Field Public Instance Readonly _NotImplemented←¯20
-    :Field Public Instance Readonly _IncompatibleVersion←21
+    :Field Public Instance Readonly _NoCiderTests←¯19
+    :Field Public Instance Readonly _NotApplicable←¯20
+    :Field Public Instance Readonly _NotImplemented←¯21
+    :Field Public Instance Readonly _IncompatibleVersion←¯22
 
     :Field Public Instance ReadOnly QuitEvent←993
     :Field Public Instance ReadOnly PassEvent←994
@@ -259,6 +250,10 @@
       _codeCoverage←''
       :If 0<≢parent←'AcreConfig'{⍵∊# ⎕SE:'' ⋄ 0<⍵.⎕NC ⍺:⍵ ⋄ ⍺ ∇ ⍵.##}_ref
           _IniFolder←parent.AcreConfig.ProjectFolder
+      :ElseIf 9=_ref.⎕NC'CiderConfig'
+          _IniFolder←_ref.CiderConfig.HOME
+      :ElseIf 9=_ref.##.⎕NC'CiderConfig'
+          _IniFolder←_ref.##.CiderConfig.HOME
       :Else
           _IniFolder←''
       :EndIf
@@ -471,15 +466,15 @@
       _INI←⍬                    ⍝ Flatten any leftovers
       :If 0<ps.⎕NC'list'        ⍝ Then no test cases got executed, probably because `Initial` failed.
           (rc2 log)←ReportTestResults ps
-          :If rc≠2
+          :If rc2≠2
               rc←rc2
           :EndIf
           _ref.TestCasesExecutedAt←A.FormatDateTime ⎕TS
           ShowLog'Time of execution recorded on variable ',(⍕_ref),'.TestCasesExecutedAt as: ',_ref.TestCasesExecutedAt
       :EndIf
-      {}ExecuteCleanup⍣(0<≢ps.list)⊣_ref ps
+      {}ExecuteCleanup _ref ps
       :If 0<≢_codeCoverage
-          :If 0=≢res←_codeCoverage.Finalyze 1
+          :If 0=≢res←_codeCoverage.Finalise 1
               ⎕←'Coverage report: nothing to report'
           :Else
               ShowLog'Coverage report: ',res
@@ -719,8 +714,11 @@
                   ps.ref2Gui.∆n.Info.Text←'PAUSING'
                   {0=⍵.ref2Gui.∆n.PauseBtn.State:shy←1 ⋄ _←⎕DL 0.3 ⋄ ∇ ⍵}ps
               :EndIf
+              ¯1 ShowLog(length2↑(length↑testFns),' (',(cw 0⍕i),'/',max,')')
+              i AddToGui(length2↑(length↑'  ',testFns),' (',(cw 0⍕i),'/',max,')')
               (continueFlag i noOf)←HandleInitialize(ref ps currentGroup i noOf)
               :If continueFlag
+                  HandleCleanup ref ps currentGroup i
                   :Continue
               :EndIf
               rc←ExecuteTestFunction ref ps testNo testFns
@@ -738,7 +736,7 @@
               :If 0>rc
                   ps.returnCodes,←rc
               :EndIf
-              ps AddReturCodeToGrid rc i
+              ps AddReturnCodeToGrid rc i
               comment←2↓ref GetFirstCommentLine testFns
               desc←(⎕PW-length2){⍺<≢⍵:'...',⍨⍵↑⍨⍺-4 ⋄ ⍵}⍣(~ps.guiFlag)⊢comment
               :If rc∊0 1
@@ -746,7 +744,7 @@
               :Else
                   marker←'⍝'
               :EndIf
-              ShowLog(length2↑(length↑marker,' ',testFns),' (',(cw 0⍕i),'/',max,')'),' ⍝ ',desc
+              ¯2 ShowLog marker,' ',desc
               i AddToGui(length2↑(length↑marker,' ',testFns),' (',(cw 0⍕i),'/',max,')'),' ⍝ ',desc
               :If ~rc∊_OK,_Failed
               :AndIf ps.guiFlag
@@ -759,21 +757,21 @@
                   :EndIf
               :EndIf
           :Case QuitEvent
-              HandleCleanup ref ps currentGroup i 
+              HandleCleanup ref ps currentGroup i
               ⎕SIGNAL QuitEvent
           :Else
               ps.errCounter+←1
               ps.totalCounter+←1
-              comment←ref GetFirstCommentLine testFns
+              comment←2↓ref GetFirstCommentLine testFns
               desc←(⎕PW-length2){⍺<≢⍵:'...',⍨⍵↑⍨⍺-4 ⋄ ⍵}⍣(~ps.guiFlag)⊢comment
               marker←'#'
-              ShowLog(length2↑(length↑marker,' ',testFns),' (',(cw 0⍕i),'/',max,')'),' ⍝ ',desc
+              ¯2 ShowLog marker' ',desc
               i AddToGui(length2↑(length↑marker,' ',testFns),' (',(cw 0⍕i),'/',max,')'),' ⍝ ',desc
               :If ps.guiFlag
                   ps.ref2Gui.∆n.Grid.Values[i;4]←⊂'{Broken}'
               :EndIf
           :EndTrap
-           HandleCleanup ref ps currentGroup i 
+          HandleCleanup ref ps currentGroup i
           {}⎕WA  ⍝ Enforce a memory compaction in order to get rid of any rubbish.
           :If ps.guiFlag
           :AndIf 0=ps.ref2Gui.∆n.∆Closed
@@ -808,37 +806,40 @@
       log,←⊂'  ',(⍕ps.errCounter),' test case',((1≠+/ps.errCounter)/'s'),' broken',(0<ps.errCounter)/' (flagged with "#")'
       :If 0≠≢ps.returnCodes
           :If _NoBatchTest∊ps.returnCodes
-              log,←⊂'  ',(⍕_NoBatchTest+.=ps.returnCodes),' test cases not executed because they are not "batchable" (flagged with "-")'
+              log,←⊂'  ',(⍕_NoBatchTest+.=ps.returnCodes),' test cases not executed because they are not "batchable" (flagged with "⍝")'
           :EndIf
           :If _Inactive∊ps.returnCodes
               log,←⊂'  ',(⍕_Inactive+.=ps.returnCodes),' test cases not executed because they were inactive (flagged with "⍝")'
           :EndIf
           :If _WindowsOnly∊ps.returnCodes
-              log,←⊂'  ',(⍕_WindowsOnly+.=ps.returnCodes),' test cases not executed because they can only run under Window (flagged with "-")'
+              log,←⊂'  ',(⍕_WindowsOnly+.=ps.returnCodes),' test cases not executed because they can only run under Window (flagged with "⍝")'
           :EndIf
           :If _LinuxOnly∊ps.returnCodes
-              log,←⊂'  ',(⍕_LinuxOnly+.=ps.returnCodes),' test cases not executed because they can only run under Linux (flagged with "-")'
+              log,←⊂'  ',(⍕_LinuxOnly+.=ps.returnCodes),' test cases not executed because they can only run under Linux (flagged with "⍝")'
           :EndIf
           :If _MacOnly∊ps.returnCodes
-              log,←⊂'  ',(⍕_MacOnly+.=ps.returnCodes),' test cases not executed because they can only run under Mac OS (flagged with "-")'
+              log,←⊂'  ',(⍕_MacOnly+.=ps.returnCodes),' test cases not executed because they can only run under Mac OS (flagged with "⍝")'
           :EndIf
           :If _LinuxOrMacOnly∊ps.returnCodes
-              log,←⊂'  ',(⍕_LinuxOrMacOnly+.=ps.returnCodes),' test cases not executed because they can only run under Linux or Mac OS (flagged with "-")'
+              log,←⊂'  ',(⍕_LinuxOrMacOnly+.=ps.returnCodes),' test cases not executed because they can only run under Linux or Mac OS (flagged with "⍝")'
           :EndIf
           :If _LinuxOrWindowsOnly∊ps.returnCodes
-              log,←⊂'  ',(⍕_LinuxOrWindowsOnly+.=ps.returnCodes),' test cases not executed because they can only run under Linux or Windows (flagged with leading "-")'
+              log,←⊂'  ',(⍕_LinuxOrWindowsOnly+.=ps.returnCodes),' test cases not executed because they can only run under Linux or Windows (flagged with "⍝")'
           :EndIf
           :If _MacOrWindowsOnly∊ps.returnCodes
-              log,←⊂'  ',(⍕_MacOrWindowsOnly+.=ps.returnCodes),' test cases not executed because they can only run under Mac OS or Windows (flagged with leading "-")'
+              log,←⊂'  ',(⍕_MacOrWindowsOnly+.=ps.returnCodes),' test cases not executed because they can only run under Mac OS or Windows (flagged with "⍝")'
           :EndIf
           :If _NoAcreTests∊ps.returnCodes
-              log,←⊂'  ',(⍕_NoAcreTests+.=ps.returnCodes),' test cases not executed because they are acre-related (flagged with leading "-")'
+              log,←⊂'  ',(⍕_NoAcreTests+.=ps.returnCodes),' test cases not executed because they are acre-related (flagged with "⍝")'
+          :EndIf
+          :If _NoCiderTests∊ps.returnCodes
+              log,←⊂'  ',(⍕_NoCiderTests+.=ps.returnCodes),' test cases not executed because they are Cider-related (flagged with "⍝")'
           :EndIf
           :If _NotApplicable∊ps.returnCodes
-              log,←⊂'  ',(⍕_NotApplicable+.=ps.returnCodes),' test cases not executed because they were not applicable (flagged with leading "-")'
+              log,←⊂'  ',(⍕_NotApplicable+.=ps.returnCodes),' test cases not executed because they were not applicable (flagged with "⍝")'
           :EndIf
           :If 0<noOf←+/ps.returnCodes∊ListCustomNumbers
-              log,←⊂'  ',(⍕noOf),' test cases not executed because of custom checks (flagged with leading "-")'
+              log,←⊂'  ',(⍕noOf),' test cases not executed because of custom checks (flagged with "⍝")'
           :EndIf
       :EndIf
       ShowLog log
@@ -1259,7 +1260,7 @@
           :If 0≠≢numbers
               r2←((({⊃∘⊃∘(//)∘⎕VFI ⍵↑⍨-(-1)+'_'⍳⍨⌽⍵}¨r2))∊numbers)⌿r2
           :EndIf
-          buff←_ref GetFirstCommentLine¨r2
+          buff←1↓¨_ref GetFirstCommentLine¨r2
           buff←A.DLB buff
           r2←r2,[1.5]buff
           r2←r2[⍋↑⎕C r2[;1];]
@@ -1346,7 +1347,7 @@
     ∇
 
     ∇ {r}←oldName RenameTestFnsTo newName;body;rc;header;comment;res;name;right;left;delFilanme;list;this;no;buff;val;f1;f2
-     ⍝ Renames a test function or a group of test functions and tells acre.\\
+     ⍝ Renames a test function or a group of test functions and tells acre and Link.\\
      ⍝ `oldName` and `newName` **must not** contain a dot.\\
      ⍝ Examples:
      ⍝ ```
@@ -1436,12 +1437,12 @@
       :If ' '≠1↑0⍴rc←_ref.⎕FX↑body
           . ⍝ something went wrong
       :EndIf
-      NotifyAcreAndDeleteOldVersion oldName newName
+      NotifyAcreAndLinkAndDeleteOldVersion oldName newName
      
      ∆Go:
       _ref.⎕EX oldName
       :If (⊃⎕SI)≢⊃1↓⎕SI
-          ⎕←'***Done'
+          r←'***Done'
       :EndIf
     ∇
 
@@ -1557,7 +1558,7 @@
           ps
       }
 
-      AddReturCodeToGrid←{
+      AddReturnCodeToGrid←{
           0=ps.guiFlag:shy←⍬
           ps←⍺
           (rc row)←⍵
@@ -1627,28 +1628,30 @@
 
     Remove∆Test_←{'Test_'{l←≢⍺ ⋄ 0=l×←⍺≡l↑⍵:⍵ ⋄ l↓⍵}⍵}
 
-    ∇ {r}←NotifyAcreAndDeleteOldVersion(oldName newName);delFilanme;rc
+    ∇ {r}←NotifyAcreAndLinkAndDeleteOldVersion(oldName newName);delFilanme;rc
       r←⍬
-      :If 0=⎕SE.⎕NC'acre'
-          _ref.⎕EX oldName
-      :Else
-          (oldName newName)←{(⍕_ref),'.',⍵}¨oldName newName
-          :If 3=⎕SE.acre.⎕NC'Version'
-              delFilanme←((-≢'.change')↓⊃⎕SE.acre.Changefile newName),'.delete'
-              :Trap 22
-                  :If 0=≢rc←⎕SE.acre.SetChanged newName
-                      ⎕←'acre was told about the introduction of a new test fns but it was not interested.'
-                  :EndIf
-              :Else
-                  :Return ⍝ Not an acre project
-              :EndTrap
-              :If 0=≢rc←⎕SE.acre.Erase oldName
-                  ⎕←'acre was told about the deletion of a test fns but it was not interested.'
-              :EndIf
-              :If ⎕NEXISTS delFilanme
-                  ⎕NDELETE delFilanme
+      :If 0<⎕SE.⎕NC'acre'
+          :Trap 22
+              rc←⎕SE.acre.SetChanged newName
+          :Else
+              ∘∘∘ ⍝ Huh?! What's up?
+          :EndTrap
+          :If 0<≢rc
+              ⎕SE.acre.Erase oldName
+              :Return
+          :EndIf
+      :EndIf
+      :If 3≤{⊃(//)⎕VFI ⍵↑⍨¯1+⍵⍳'.'}⎕SE.Link.Version
+          rc←⎕SE.Link.Add(⍕_ref),'.',newName
+          →('Not in a linked namespace: '{⍺≡(≢⍺)↑⍵}rc)/0
+          :If 'Added: '{⍺≡(≢⍺)↑⍵}rc
+              rc←⎕SE.Link.Expunge(⍕_ref),'.',oldName
+              :If ~rc
+                  ∘∘∘ ⍝ Huh?! What's up?
               :EndIf
           :EndIf
+      :Else
+          ⎕←'Incompatible version of Link detected; we need 3.0.0 or better'
       :EndIf
     ∇
 
