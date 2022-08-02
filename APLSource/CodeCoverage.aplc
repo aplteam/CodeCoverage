@@ -52,7 +52,7 @@
 
     ∇ r←Version
       :Access Public Shared
-      r←'CodeCoverage' '0.9.1+46' '2021-10-29'
+      r←'CodeCoverage' '0.9.1+47' '2021-10-29'
     ∇
 
     ∇ History
