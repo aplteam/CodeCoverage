@@ -1,10 +1,14 @@
 # The class `CodeCoverage`
 
-## Introduction
+## Overview
 
 This class offers methods to watch certain parts of the workspace for being executed, probably as part of executing
 a test framework like [https://github.com/aplteam/Tester2](`Tester2` "Link to Tester2 on GitHub"), although checking
 on code coverage by just running an application can make sense as well, in particular with legacy code.
+
+**Note:** `CodeCoverage` releases are published as [Tatin](https://tatin.dev "Link to the principal Tatin Registry") packages, see there.
+
+## Introduction
 
 The following gives an example, assuming that there is an application in `#.Foo` we are interested in:
 
