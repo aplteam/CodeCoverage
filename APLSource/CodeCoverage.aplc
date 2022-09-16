@@ -292,6 +292,7 @@
           html,←⊂'</tbody>'
           html,←⊂'</table>'
           html,←⊂'</div>'
+          html,←AddJavaScript buff
           :If verbose
               html,←⊂'<h2>Listings</h2>'
               html,←CreateListingForFnsAndOpr data
@@ -301,7 +302,6 @@
       html,←⊂'<hr>'
       html,←⊂'<p>Created by "CodeCoverage" version ',(2⊃Version),' from ',(3⊃Version),'</p>'
       html,←⊂'</div>'
-      html,←AddJavaScript buff
       html,←⊂''
       html,←⊂'</body>'
       html,←⊂'</html>'
@@ -311,6 +311,7 @@
 
     ∇ html←AddJavaScript data
       html←''
+      →(0=≢data)/0
       html,←⊂'<script>'
       html,←⊂'$(document).ready(function() {'
       html,←⊂'    var oTable;'
