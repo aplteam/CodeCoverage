@@ -1,4 +1,4 @@
-:Class CodeCoverage
+﻿:Class CodeCoverage
 ⍝ # The class `CodeCoverage`
 ⍝ This class offers methods to watch certain parts of the workspace for being executed, probably as part of executing
 ⍝ a test framework like [https://github.com/aplteam/Tester2](`Tester2` "Link to Tester2 on GitHub"), although checking
@@ -495,6 +495,7 @@
       ⍝ Execute `⎕PROFILE'start' 'coverage'`
       :Access Public Instance
       r←⍬
+      ⎕PROFILE'clear'   
       ⎕PROFILE'start' 'coverage'
     ∇
 
