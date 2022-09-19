@@ -19,13 +19,13 @@ The following gives an example, assuming that there is an application in `#.Foo`
       C.Start ⍬
       #.Foo.Run ⍬
       C.Stop ⍬
-      C.Finalyse ⍬
+      C.Finalise ⍬
       ⎕←#.CodeCoverage.ProcessDataAndCreateReport  C.filename
 ./Foo-Coverage.html      
       C.Start ⍬
       #.Foo.Run ⍬
       C.Stop ⍬
-      C.Finalyse ⍬
+      C.Finalise ⍬
       ⎕←1 #.CodeCoverage.ProcessDataAndCreateReport C.filename      
 ./Foo-Coverage.html      
 ```
