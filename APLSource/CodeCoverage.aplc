@@ -1,4 +1,4 @@
-:Class CodeCoverage
+﻿:Class CodeCoverage
 ⍝ # The class `CodeCoverage`
 ⍝ This class offers methods to watch certain parts of the workspace for being executed, probably as part of executing
 ⍝ a test framework like [https://github.com/aplteam/Tester2](`Tester2` "Link to Tester2 on GitHub"), although checking
@@ -292,6 +292,7 @@
           html,←⊂'</tbody>'
           html,←⊂'</table>'
           html,←⊂'</div>'
+          html,←AddJavaScript buff
           :If verbose
               html,←⊂'<h2>Listings</h2>'
               html,←CreateListingForFnsAndOpr data
@@ -301,7 +302,6 @@
       html,←⊂'<hr>'
       html,←⊂'<p>Created by "CodeCoverage" version ',(2⊃Version),' from ',(3⊃Version),'</p>'
       html,←⊂'</div>'
-      html,←AddJavaScript buff
       html,←⊂''
       html,←⊂'</body>'
       html,←⊂'</html>'
@@ -311,6 +311,7 @@
 
     ∇ html←AddJavaScript data
       html←''
+      →(0=≢data)/0
       html,←⊂'<script>'
       html,←⊂'$(document).ready(function() {'
       html,←⊂'    var oTable;'
@@ -494,6 +495,7 @@
       ⍝ Execute `⎕PROFILE'start' 'coverage'`
       :Access Public Instance
       r←⍬
+      ⎕PROFILE'clear'   
       ⎕PROFILE'start' 'coverage'
     ∇
 
