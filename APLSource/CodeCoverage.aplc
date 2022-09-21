@@ -1,4 +1,4 @@
-﻿:Class CodeCoverage
+:Class CodeCoverage
 ⍝ # The class `CodeCoverage`
 ⍝ This class offers methods to watch certain parts of the workspace for being executed, probably as part of executing
 ⍝ a test framework like [https://github.com/aplteam/Tester2](`Tester2` "Link to Tester2 on GitHub"), although checking
@@ -99,7 +99,7 @@
     ⍝ * 0.5.0 from 2020-07-14
     ∇
 
-    :Field Public Shared Readonly APL_Chars←'ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyzÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝßàáâãäåæçèéêëìíîïðñòóôõöøùúûüþ0123456789∆⍙ⒶⒷⒸⒹⒺⒻⒼⒽⒾⒿⓀⓁⓂⓃⓄⓅⓆⓇⓈⓉⓊⓋⓌⓍⓎⓏ'
+     :Field Public Shared Readonly APL_Chars←'ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyzÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝßàáâãäåæçèéêëìíîïðñòóôõöøùúûüþ0123456789∆⍙',⎕ucs (80=⎕dr' ')/9397+⍳26
 
     ∇ make1(watch_)
       :Access Public Instance
