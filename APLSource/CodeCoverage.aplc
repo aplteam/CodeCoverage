@@ -323,6 +323,15 @@
 ⍝     html,←⊂'        order: [2,"desc"],'
       html,←⊂'        order: [2,"asc"],'
       html,←⊂'        dom: "Bft",'
+      html,←⊂'        drawCallback: function( settings ) {'
+      html,←⊂'             var api = this.api();'
+      html,←⊂'             $(''.header[id^="listing_"]'').next().addBack().css("display","none");'  ⍝ hide all lines
+      html,←⊂'             api.rows( {page:"current"} ).data().each(function(data){'
+      html,←⊂'              id = data[0];'
+      html,←⊂'              id = id.match(/"(\#.*?)"/);'
+      html,←⊂'              if (id){$(id[1]).next().addBack().css("display","block");}'  ⍝ show header and following code
+      html,←⊂'             })'
+      html,←⊂'        },      '
       html,←⊂'        buttons: ['
       html,←AddJavaScriptButton('Partly covered' '50%'(+/~data[;2]∊0 100)'^(?!(0%|100%)).*')
       html,←AddJavaScriptButton('Uncovered' '0%'(+/data[;2]=0)'^0%')
@@ -385,7 +394,8 @@
           details,←data[where;3 4]
           details(RemoveToBeIgnored)←ignore
           b←details[;3]≠100
-          :If ∨/b
+          :If 0<≢b
+          :AndIf ∨/b
               (b/details[;3])←100⌊⌊0.5+100×÷/≢¨b⌿details[;2 4]         ⍝ Recalculate percentage
           :EndIf
           details ⎕FREPLACE tno 10
@@ -467,7 +477,7 @@
           d,←⊂'* The third component holds the names of functions and operators to be ignored.'
           d,←⊂'* The fourth component holds a matrix with as many rows as test runs have been performed:'
           d,←⊂'  [;1] Timestamp ("YYYY-MM-DD hh:mm:ss")'
-          d,←⊂'  [;2] The result of the "APLVersion" property'
+          d,←⊂'  [;2] The result of the "APLVersion" property + info about the edition'
           d,←⊂'  [;3] ⎕WA in KB'
           d,←⊂'* Components five to nine are reserved'
           d,←⊂'* The tenth one is originally empty. when "ProcessData" or "ProcessDataAndCreateReport"'
@@ -495,7 +505,7 @@
       ⍝ Execute `⎕PROFILE'start' 'coverage'`
       :Access Public Instance
       r←⍬
-      ⎕PROFILE'clear'   
+      ⎕PROFILE'clear'
       ⎕PROFILE'start' 'coverage'
     ∇
 
@@ -513,25 +523,30 @@
 
     ∇ html←CreateListingForFnsAndOpr partlyCovered;name;lines;body;width;html2;all;testable;where;buff;i;links;percent
       html←''
-      links←'<a class="float-right no-print no-underline top-links" href="#top" title="Go to the top of the document">↟</a>'
+      links←'<a class="float-right no-print no-underline top-links" href="#top" title="Go to the top of the document">&#8607;</a>'
       links,←'<a  class="float-right no-print no-underline top-links" href="#partly-covered" title="Go to the beginning of ''Partly-covered''">↑</a>'
       :For i :In ⍳≢partlyCovered
           (name lines percent testable)←partlyCovered[i;1 2 3 4]
-          body←{⍵↓⍨-+/∧\' '=⌽⍵}¨↓180⌶name
-          body←ExchangeHtmlSpecialChars body
-          (1⊃body)←{⍵↑⍨¯1+⌊/⍵⍳'⍝;'}1⊃body
-          width←≢⍕≢body
-          html2←((⊂(width-1)⍴' '),(width+4){⍺↑' [',(⍕⍵),']'}¨¯1↓⍳≢body),¨body,¨⊂'</code>'
-          :If 0<≢lines
-              (⊃¨html2[lines+1])←'→'   ⍝TODO⍝ Check!
+          :If 0<≢body←{⍵↓⍨-+/∧\' '=⌽⍵}¨↓180⌶name
+              body←ExchangeHtmlSpecialChars body
+              (1⊃body)←{⍵↑⍨¯1+⌊/⍵⍳'⍝;'}1⊃body
+              width←≢⍕≢body
+              html2←((⊂(width-1)⍴' '),(width+4){⍺↑' [',(⍕⍵),']'}¨¯1↓⍳≢body),¨body,¨⊂'</code>'
+              :If 0<≢lines
+                  (⊃¨html2[lines+1])←'→'   ⍝TODO⍝ Check!
+              :EndIf
+              buff←(≢body)⍴⊂'<code>'
+              buff[lines+1]←⊂'<code class="emphasize">'
+              html2←buff,¨html2
+              (1⊃html2)←'<div class="code-block">',1⊃html2
+              html2,←⊂'</div>'
+              html2←(⊂'<code class="header" id="listing_',(⍕i),'">',name,(' &mdash; ',(⍕percent),'%'),links,'</code>'),html2
+              html,←html2
+          :Else
+              html2←⊂'<div class="code-block missing">Could not get canonical representation.</div>'
+              html2←(⊂'<code class="header" id="listing_',(⍕i),'">',name,(' &mdash; ',(⍕percent),'%'),links,'</code>'),html2
+              html,←html2
           :EndIf
-          buff←(≢body)⍴⊂'<code>'
-          buff[lines+1]←⊂'<code class="emphasize">'
-          html2←buff,¨html2
-          (1⊃html2)←'<div class="code-block">',1⊃html2
-          html2,←⊂'</div>'
-          html2←(⊂'<code class="header" id="listing_',(⍕i),'">',name,(' &mdash; ',(⍕percent),'%'),links,'</code>'),html2
-          html,←html2
       :EndFor
     ∇
 
@@ -576,6 +591,9 @@
       r,←⊂'    display: block;'
       r,←⊂'    margin: 0.5em 0.5em 0.5em 0.5em;'
       r,←⊂'    padding: 0.5em;'
+      r,←⊂'}'
+      r,←⊂'div.code-block.missing {'
+      r,←⊂'    background-color: #fa605254;'
       r,←⊂'}'
       r,←⊂'div.code-block code {display: block; white-space: pre-wrap; margin:0; padding:0; word-wrap: break-word;}'
       r,←⊂'.emphasize { font-weight: 800;}'
