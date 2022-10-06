@@ -1,8 +1,0 @@
- test
- C←⎕NEW #.CodeCoverage.CodeCoverage(,⊂'Foo')
- C.Start ⍬
- {}{Foo.Run}¨⍳999
- C.Stop ⍬
- C.Finalise ⍬
- ⎕←1 C.ProcessDataAndCreateReport C.filename
-⍝Done
