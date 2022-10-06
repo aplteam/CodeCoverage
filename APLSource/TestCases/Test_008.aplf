@@ -1,0 +1,28 @@
+ R←Test_008(stopFlag batchFlag);⎕TRAP;htmlFilename;TEMP;C;html
+⍝ "Stop" is not called yet "Finalise" should still work fine
+ ⎕TRAP←(999 'C' '∘∘∘ ⍝ Deliberate error')(0 'N')
+
+ R←T._Failed
+
+ Data.Prepare
+ #.⎕SHADOW'TEMP'
+ 'TEMP'#.⎕NS''
+ #.TEMP.⎕FX'r←Hello' 'r←''Hello world''' '→0' 'a←1'
+
+ C←⎕NEW ##.CodeCoverage(,⊂'#.TEMP')
+ C.Start ⍬
+ {}#.TEMP.Hello
+ {}C.Finalise ⍬
+ →T.GoToTidyUp 1≠≢C.data
+ {}1 ##.CodeCoverage.ProcessDataAndCreateReport C.filename
+ html←⊃⎕NGET C.filename,'.html'
+ →T.GoToTidyUp 0=+/'>→[3] '⍷html
+ →T.GoToTidyUp 1≠≢'>→\[[0-9]+] '⎕S 0⊣html
+
+ R←T._OK
+
+∆TidyUp:
+ ⎕NDELETE C.filename,'.dcf'
+ ⎕NDELETE C.filename,'.html'
+ Data.⎕EX'T'
+⍝Done
