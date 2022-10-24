@@ -60,6 +60,8 @@
     ⍝ * 0.9.4 from 2022-10-06
     ⍝   * reports which edition of the interpreter a test was run on
     ⍝   * precaution  against code changing while accumulating test results (a warning is shown in the session if differences were found)
+    ⍝   * runs under classic
+    ⍝   * when filtering the table, the listings below the table are updated to only show code of functions matching the filter
     ⍝ * 0.9.3 from 2022-10-06
     ⍝   When Finalise was called without calling Stop the result appeared to be wrong. Is now called implicitly by Finalise
     ⍝ * 0.9.2 from 2022-09-19
