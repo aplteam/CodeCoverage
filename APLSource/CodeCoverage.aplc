@@ -44,7 +44,7 @@
 ⍝   flaw of `⎕PROFILE`. Without changing `⎕PROFILE` this cannot be overcome.\\
 ⍝ This class is part of the APLTree Open Source project.\\
 ⍝ Home page: <https://github.com/aplteam/CodeCoverage>\\
-⍝ Kai Jaeger ⋄ APL Team Ltd
+⍝ Kai Jaeger
 
     ⎕IO←1 ⋄ ⎕ML←1
 
@@ -52,13 +52,19 @@
 
     ∇ r←Version
       :Access Public Shared
-      r←'CodeCoverage' '0.9.3+50' '2022-10-06'
+      r←'CodeCoverage' '0.9.4+50' '2022-11-28'
     ∇
 
     ∇ History
       :Access Public Shared
-    ⍝ * 0.9.3 from 2022-10-06
-    ⍝   When Finalise was called without calling Stop the result appeared to be wrong. Is now called implicitly by Finalise
+    ⍝ * 0.9.4 from 2022-10-06
+    ⍝   * reports which edition of the interpreter a test was run on
+    ⍝   * precaution  against code changing while accumulating test results (a warning is shown in the session if differences were found)
+    ⍝   * runs under classic
+    ⍝   * when filtering the table, the listings below the table are updated to only show code of functions matching the filter
+    ⍝ * 0.9.3 from 2022-11-28
+    ⍝   * When Finalise was called without calling Stop the result appeared to be wrong. Is now called implicitly by Finalise
+    ⍝   * Destructor added that executes `⎕PROFILE 'clear'`
     ⍝ * 0.9.2 from 2022-09-19
     ⍝   * Couple of bug fixes
     ⍝     * Typo fixed (Finalyse => Finalise)
@@ -106,7 +112,7 @@
     ⍝ * 0.5.0 from 2020-07-14
     ∇
 
-    :Field Public Shared Readonly APL_Chars←'ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyzÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝßàáâãäåæçèéêëìíîïðñòóôõöøùúûüþ0123456789∆⍙ⒶⒷⒸⒹⒺⒻⒼⒽⒾⒿⓀⓁⓂⓃⓄⓅⓆⓇⓈⓉⓊⓋⓌⓍⓎⓏ'
+    :Field Public Shared Readonly APL_Chars←'ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyzÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝßàáâãäåæçèéêëìíîïðñòóôõöøùúûüþ0123456789∆⍙',⎕ucs (80=⎕dr' ')/9397+⍳26
 
     ∇ make1(watch_)
       :Access Public Instance
@@ -122,6 +128,11 @@
       watch←'⎕se'⎕R'⎕SE'⍠('IC' 1)⊣watch_
       _filename←(739⌶0),'/CodeCoverage-',' '~⍨⍕⎕TS
       _data←0 2⍴''
+    ∇
+
+    ∇ Close
+      :Implements destructor
+      ⎕PROFILE'clear'  
     ∇
 
     :Property data
@@ -330,6 +341,15 @@
 ⍝     html,←⊂'        order: [2,"desc"],'
       html,←⊂'        order: [2,"asc"],'
       html,←⊂'        dom: "Bft",'
+      html,←⊂'        drawCallback: function( settings ) {'
+      html,←⊂'             var api = this.api();'
+      html,←⊂'             $(''.header[id^="listing_"]'').next().addBack().css("display","none");'  ⍝ hide all lines
+      html,←⊂'             api.rows( {page:"current"} ).data().each(function(data){'
+      html,←⊂'              id = data[0];'
+      html,←⊂'              id = id.match(/"(\#.*?)"/);'
+      html,←⊂'              if (id){$(id[1]).next().addBack().css("display","block");}'  ⍝ show header and following code
+      html,←⊂'             })'
+      html,←⊂'        },      '
       html,←⊂'        buttons: ['
       html,←AddJavaScriptButton('Partly covered' '50%'(+/~data[;2]∊0 100)'^(?!(0%|100%)).*')
       html,←AddJavaScriptButton('Uncovered' '0%'(+/data[;2]=0)'^0%')
@@ -421,6 +441,16 @@
       regExPattern,←⊂'^ *:implements'
       regExPattern,←⊂'^ *:signature'
       regExPattern,←⊂'^ *:section'
+      filename←(⊃,/2↑⎕NPARTS _filename),'.dcf'
+      crF←(∊2↑⎕NPARTS filename),'-CR.dcf'             ⍝ this file has the CRs of everything we watched
+      :If crX←⎕NEXISTS crF
+          crT←crF ⎕FTIE 0
+          crN←⎕FREAD crT,1                                        ⍝ the list of names for which we have CRs in component 1+index
+      :Else
+          crT←crF ⎕FCREATE 0
+          crN←⍬
+          ⍬ ⎕FAPPEND crT
+      :EndIf
      
       :For i :In ⍳≢names
           name←i⊃names
@@ -429,12 +459,29 @@
           :Else
               linesCovered←⍬
           :EndIf
-          :If {~3 4∊⍨10×⍵-⌊⍵}⎕NC names[i]                           ⍝ Ignore derived functions and derived operators
-          :AndIf 2≠|≡buff←180⌶i⊃names                               ⍝ For weird staff (like function operands of an operator) we need to check
-              :If 0=≢body←{⍵↓⍨-+/∧\' '=⌽⍵}¨↓buff                    ⍝ True for localyzed dfns
+     
+          :If {~3 4∊⍨10×⍵-⌊⍵}⎕NC⊆name                               ⍝ Ignore derived functions and derived operators
+          :AndIf 2≠|≡buff←180⌶name                                  ⍝ For weird staff (like function operands of an operator) we need to check
+              :If 0=≢body←{⍵↓⍨-+/∧\' '=⌽⍵}¨↓buff                    ⍝ True for localized dfns
             ⍝ ---------- TODO
             ⍝     ∘∘∘ ⍝TODO⍝ We cannot get the body of that dfn with ⎕CR or 180⌶, so we need to take other measures.
             ⍝ ----------
+              :EndIf
+              :If crX
+                  :If (⊂name)∊crN
+                      :If ~body CompareCR bodyC←⎕FREAD crT,1+crN⍳⊂name
+                          fileM←(∊2↑⎕NPARTS _filename),'_mismatches'
+                          t∆←{0::⍵ ⎕FCREATE 0 ⋄ ⍵ ⎕FTIE 0}fileM
+                          (body bodyC)⎕FAPPEND t∆
+                          ⎕FUNTIE t∆
+                          ⎕←'Current definition of function "',name,'" does not match the one we captured earlier - do not trust the results'
+                      :EndIf
+                  :Else
+                      ⎕←'Found new function "',name,'" that was not captured in previous runs - do not trust the results!'
+                  :EndIf
+              :Else
+                  crN,←⊂name
+                  body ⎕FAPPEND crT
               :EndIf
               body←'''[^'']*'''⎕R''⍠('Greedy' 0)⊣body               ⍝ Remove text
               body←'⍝.*$'⎕R''⍠('Greedy' 0)⊣body                     ⍝ Remove comments
@@ -455,7 +502,10 @@
           :EndIf
       :EndFor
       details←('.'≠⊃¨¯1↑¨details[;1])⌿details
-      filename←(⊃,/2↑⎕NPARTS _filename),'.dcf'
+      :If ~crX
+          crN ⎕FREPLACE crT,1
+      :EndIf
+      ⎕FUNTIE crT
       :If ⎕NEXISTS filename
           tno←filename ⎕FSTIE 0
           (∪watch,⎕FREAD tno 2)⎕FREPLACE tno 2
@@ -475,7 +525,7 @@
           d,←⊂'* The third component holds the names of functions and operators to be ignored.'
           d,←⊂'* The fourth component holds a matrix with as many rows as test runs have been performed:'
           d,←⊂'  [;1] Timestamp ("YYYY-MM-DD hh:mm:ss")'
-          d,←⊂'  [;2] The result of the "APLVersion" property'
+          d,←⊂'  [;2] The result of the "APLVersion" property + info about the edition'
           d,←⊂'  [;3] ⎕WA in KB'
           d,←⊂'* Components five to nine are reserved'
           d,←⊂'* The tenth one is originally empty. when "ProcessData" or "ProcessDataAndCreateReport"'
@@ -521,28 +571,53 @@
 
 ⍝ ------------------------ Private stuff
 
-    ∇ html←CreateListingForFnsAndOpr partlyCovered;name;lines;body;width;html2;all;testable;where;buff;i;links;percent
+    ∇ html←CreateListingForFnsAndOpr partlyCovered;name;lines;body;width;html2;all;testable;where;buff;i;links;percent;crT;crN;crF
       html←''
-      links←'<a class="float-right no-print no-underline top-links" href="#top" title="Go to the top of the document">↟</a>'
+      links←'<a class="float-right no-print no-underline top-links" href="#top" title="Go to the top of the document">&#8607;</a>'
       links,←'<a  class="float-right no-print no-underline top-links" href="#partly-covered" title="Go to the beginning of ''Partly-covered''">↑</a>'
+      crF←(⊃,/2↑⎕NPARTS filename),'-CR.dcf'             ⍝ this file has the CRs of everything we watched
+      :If ~⎕NEXISTS crF
+          ⎕←'Did not find file "',crF,'" with CRs collected by fn "Finalize" - will try to work without it'
+          crT←0
+      :Else
+          crT←crF ⎕FTIE 0
+          crN←⎕FREAD crT,1
+          ⎕←'tied ',crF,' for listings'
+      :EndIf
       :For i :In ⍳≢partlyCovered
           (name lines percent testable)←partlyCovered[i;1 2 3 4]
-          body←{⍵↓⍨-+/∧\' '=⌽⍵}¨↓180⌶name
-          body←ExchangeHtmlSpecialChars body
-          (1⊃body)←{⍵↑⍨¯1+⌊/⍵⍳'⍝;'}1⊃body
-          width←≢⍕≢body
-          html2←((⊂(width-1)⍴' '),(width+4){⍺↑' [',(⍕⍵),']'}¨¯1↓⍳≢body),¨body,¨⊂'</code>'
-          :If 0<≢lines
-              (⊃¨html2[lines+1])←'→'   ⍝TODO⍝ Check!
+          :If (crT=0)∨~(⊂name)∊crN
+              body←{⍵↓⍨-+/∧\' '=⌽⍵}¨↓180⌶name
+          :Else
+              :If ~crT∊⎕FNUMS
+                  body←⍬
+              :Else
+                  body←⎕FREAD crT,1+crN⍳⊂name
+              :EndIf
           :EndIf
-          buff←(≢body)⍴⊂'<code>'
-          buff[lines+1]←⊂'<code class="emphasize">'
-          html2←buff,¨html2
-          (1⊃html2)←'<div class="code-block">',1⊃html2
-          html2,←⊂'</div>'
-          html2←(⊂'<code class="header" id="listing_',(⍕i),'">',name,(' &mdash; ',(⍕percent),'%'),links,'</code>'),html2
-          html,←html2
+     
+          :If 0<≢body
+              body←ExchangeHtmlSpecialChars body
+              (1⊃body)←{⍵↑⍨¯1+⌊/⍵⍳'⍝;'}1⊃body
+              width←≢⍕≢body
+              html2←((⊂(width-1)⍴' '),(width+4){⍺↑' [',(⍕⍵),']'}¨¯1↓⍳≢body),¨body,¨⊂'</code>'
+              :If 0<≢lines
+                  (⊃¨html2[lines+1])←'→'   ⍝TODO⍝ Check!
+              :EndIf
+              buff←(≢body)⍴⊂'<code>'
+              buff[lines+1]←⊂'<code class="emphasize">'
+              html2←buff,¨html2
+              (1⊃html2)←'<div class="code-block">',1⊃html2
+              html2,←⊂'</div>'
+              html2←(⊂'<code class="header" id="listing_',(⍕i),'">',name,(' &mdash; ',(⍕percent),'%'),links,'</code>'),html2
+              html,←html2
+          :Else
+              html2←⊂'<div class="code-block missing">Could not get canonical representation.</div>'
+              html2←(⊂'<code class="header" id="listing_',(⍕i),'">',name,(' &mdash; ',(⍕percent),'%'),links,'</code>'),html2
+              html,←html2
+          :EndIf
       :EndFor
+      ⎕FUNTIE crT
     ∇
 
       Shorten←{
@@ -586,6 +661,9 @@
       r,←⊂'    display: block;'
       r,←⊂'    margin: 0.5em 0.5em 0.5em 0.5em;'
       r,←⊂'    padding: 0.5em;'
+      r,←⊂'}'
+      r,←⊂'div.code-block.missing {'
+      r,←⊂'    background-color: #fa605254;'
       r,←⊂'}'
       r,←⊂'div.code-block code {display: block; white-space: pre-wrap; margin:0; padding:0; word-wrap: break-word;}'
       r,←⊂'.emphasize { font-weight: 800;}'
@@ -789,11 +867,54 @@
     ⍝ Collects information about the current test run.
       ts←FormatDateTime ⎕TS
       version←⊃{⍺,' ⋄ ',⍵}/# ⎕WG'APLVersion'
+      version,←' ⋄ ','Classic' 'Unicode'⊃⍨1+80=⎕DR' '
       r←1 3⍴ts version(' '~⍨,'K0G⊂ZZZ.ZZZ.ZZZ.ZZZ.ZZ9⊃'⎕FMT⌊⎕WA÷1024×1024) ⍝ MBs
     ∇
     ∇ txt←ExchangeHtmlSpecialChars txt
     ⍝ < => &lt; ⋄ > => &gt; ⋄ & => &amp;
       txt←(,¨'&<>')⎕R'\&amp;' '\&lt;' '\&gt;'⊣txt
     ∇
+
+    ∇ z←a CompareCR b;args;i;m;l
+      ⍝ compare two CRs taking into account that some symbols are replaced with ⎕Uxxxx when loaded into classic
+      ⍝ z=1: match, 0: did not match
+      ⍝--> this means that the final run which creates the report must be run on a Unicode interpreter, otherwise
+      ⍝    it will crash with errors because it can't deal with these characters...
+      :If {0::1 ⋄ 0⊣⎕UCS ⍵}8838  ⍝ do not even attempt to execute this on Classic!
+          z←1
+          →0
+      :EndIf
+      :If a≠⍥≢b   ⍝ no of lines must match
+          z←0
+          →0
+      :Else
+          args←{1=≡⍵:↓⍵ ⋄ ⍵}¨a b
+          :For i :In ⍳2
+              :For m :In ('(⎕u\d*)'⎕S 2⍠'IC' 1)i⊃args
+                  :If m≢0
+                      l←(⎕IO+m)⊃i⊃args
+                      l←('⎕u(\d*.)'⎕R{{(⎕UCS dec ¯1↓⍵),(' '≢⍥,¯1↑⍵)/¯1↑⍵}2↓⍵.Match}⍠'IC' 1)l
+                      ((⎕IO+m)⊃i⊃args)←l
+                  :EndIf
+              :EndFor
+          :EndFor
+          z←≡/args
+      :EndIf
+    ∇
+
+      ⍝ from dfns
+      dec←{⎕IO ⎕ML←0 1                                ⍝ Decimal from hexadecimal
+          ⍺←0                                         ⍝ unsigned by default.
+          1<⍴⍴⍵:⍺∘∇⍤1⊢⍵                               ⍝ vector-wise:
+          0=≢⍵:0                                      ⍝ dec'' → 0.
+          1≠≡,⍵:⍺ ∇¨⍵                                 ⍝ simple-array-wise:
+          ws←∊∘(⎕UCS 9 10 13 32 160)                  ⍝ white-space?
+          ws⊃⍵:⍺ ∇ 1↓⍵                                ⍝ ignoring leading and
+          ws⊃⌽⍵:⍺ ∇ ¯1↓⍵                              ⍝ ... trailing blanks.
+          ∨/ws ⍵:⍺ ∇¨(1+ws ⍵)⊆⍵                       ⍝ white-space-separated:
+          v←16|'0123456789abcdef0123456789ABCDEF'⍳⍵   ⍝ hex digits.
+          11::'Too big'⎕SIGNAL 11                     ⍝ number too big.
+          (16⊥v)-⍺×(8≤⊃v)×16*≢v                       ⍝ (signed) decimal number.
+      }
 
 :EndClass
