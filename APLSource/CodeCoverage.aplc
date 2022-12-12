@@ -44,7 +44,7 @@
 ⍝   flaw of `⎕PROFILE`. Without changing `⎕PROFILE` this cannot be overcome.\\
 ⍝ This class is part of the APLTree Open Source project.\\
 ⍝ Home page: <https://github.com/aplteam/CodeCoverage>\\
-⍝ Kai Jaeger ⋄ APL Team Ltd
+⍝ Kai Jaeger
 
     ⎕IO←1 ⋄ ⎕ML←1
 
@@ -52,18 +52,20 @@
 
     ∇ r←Version
       :Access Public Shared
-      r←'CodeCoverage' '0.9.4+51' '2022-10-24'
+      r←'CodeCoverage' '0.9.4+51' '2022-12-12'
+
     ∇
 
     ∇ History
-      :Access Public Shared
-    ⍝ * 0.9.4 from 2022-10-06
-    ⍝   * reports which edition of the interpreter a test was run on
-    ⍝   * precaution  against code changing while accumulating test results (a warning is shown in the session if differences were found)
-    ⍝   * runs under classic
-    ⍝   * when filtering the table, the listings below the table are updated to only show code of functions matching the filter
+      :Access Public Shared    
+    ⍝ * 0.9.4 from 2022-12-12
+    ⍝   * Reports which edition of the interpreter a test was run on
+    ⍝   * Precaution against code changes while accumulating test results: a warning is shown in the session if differences were found
+    ⍝   * Runs under classic (no guarantees!)
+    ⍝   * When filtering the table the listings below the table are updated to only show code of functions matching the filter      
     ⍝ * 0.9.3 from 2022-10-06
-    ⍝   When Finalise was called without calling Stop the result appeared to be wrong. Is now called implicitly by Finalise
+    ⍝   * When `Finalise` was called without calling `Stop` the result appeared to be wrong. Is now called implicitly by `Finalise`.
+    ⍝   * Destructor added that executes `⎕PROFILE 'clear'`   
     ⍝ * 0.9.2 from 2022-09-19
     ⍝   * Couple of bug fixes
     ⍝     * Typo fixed (Finalyse => Finalise)
@@ -127,6 +129,11 @@
       watch←'⎕se'⎕R'⎕SE'⍠('IC' 1)⊣watch_
       _filename←(739⌶0),'/CodeCoverage-',' '~⍨⍕⎕TS
       _data←0 2⍴''
+    ∇
+
+    ∇ Close
+      :Implements destructor
+      ⎕PROFILE'clear'  
     ∇
 
     :Property data
@@ -469,7 +476,7 @@
                           t∆←{0::⍵ ⎕FCREATE 0 ⋄ ⍵ ⎕FTIE 0}fileM
                           (body bodyC)⎕FAPPEND t∆
                           ⎕FUNTIE t∆
-                          ⎕←'Current definition of function "',name,'" does not match the one we captured earlier - do not trust the results!'    ⍝ maybe this should be ⎕SIGNALed?
+                          ⎕←'Current definition of function "',name,'" does not match the one captured earlier - do not trust the results' ⍝ ⎕SIGNAL?!
                       :EndIf
                   :Else
                       ⎕←'Found new function "',name,'" that was not captured in previous runs - do not trust the results!'
