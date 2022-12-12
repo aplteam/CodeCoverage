@@ -52,20 +52,20 @@
 
     ∇ r←Version
       :Access Public Shared
-      r←'CodeCoverage' '0.9.4+51' '2022-12-12'
-
+      r←'CodeCoverage' '0.9.4+52' '2022-12-12'
+     
     ∇
 
     ∇ History
-      :Access Public Shared    
+      :Access Public Shared
     ⍝ * 0.9.4 from 2022-12-12
     ⍝   * Reports which edition of the interpreter a test was run on
     ⍝   * Precaution against code changes while accumulating test results: a warning is shown in the session if differences were found
     ⍝   * Runs under classic (no guarantees!)
-    ⍝   * When filtering the table the listings below the table are updated to only show code of functions matching the filter      
+    ⍝   * When filtering the table the listings below the table are updated to only show code of functions matching the filter
     ⍝ * 0.9.3 from 2022-10-06
     ⍝   * When `Finalise` was called without calling `Stop` the result appeared to be wrong. Is now called implicitly by `Finalise`.
-    ⍝   * Destructor added that executes `⎕PROFILE 'clear'`   
+    ⍝   * Destructor added that executes `⎕PROFILE 'clear'`
     ⍝ * 0.9.2 from 2022-09-19
     ⍝   * Couple of bug fixes
     ⍝     * Typo fixed (Finalyse => Finalise)
@@ -133,7 +133,7 @@
 
     ∇ Close
       :Implements destructor
-      ⎕PROFILE'clear'  
+      ⎕PROFILE'clear'
     ∇
 
     :Property data
@@ -413,8 +413,7 @@
           details,←data[where;3 4]
           details(RemoveToBeIgnored)←ignore
           b←details[;3]≠100
-          :If 0<≢b
-          :AndIf ∨/b
+          :If ∨/b
               (b/details[;3])←100⌊⌊0.5+100×÷/≢¨b⌿details[;2 4]         ⍝ Recalculate percentage
           :EndIf
           details ⎕FREPLACE tno 10
