@@ -1,4 +1,4 @@
- R←Test_001(stopFlag batchFlag);⎕TRAP;htmlFilename;tno;result;toc;b;row;name;could;did;buff
+ R←Test_Misc_001(stopFlag batchFlag);⎕TRAP;htmlFilename;tno;result;toc;b;row;name;could;did;buff
 ⍝ Just runs all sorts of functions and then checks the coverage results
  ⎕TRAP←(999 'C' '∘∘∘ ⍝ Deliberate error')(0 'N')
  R←T._Failed

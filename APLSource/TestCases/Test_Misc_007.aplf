@@ -1,4 +1,4 @@
- R←Test_007(stopFlag batchFlag);⎕TRAP;htmlFilename;html;TEMP;C
+ R←Test_Misc_007(stopFlag batchFlag);⎕TRAP;htmlFilename;html;TEMP;C
 ⍝ Derived functions are ignored but what's called as a side effect of calling them is reported
  ⎕TRAP←(999 'C' '∘∘∘ ⍝ Deliberate error')(0 'N')
 

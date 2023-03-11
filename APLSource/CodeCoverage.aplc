@@ -52,17 +52,18 @@
 
     ∇ r←Version
       :Access Public Shared
-      r←'CodeCoverage' '0.9.4+52' '2022-12-12'
+      r←'CodeCoverage' '0.9.3-beta-2+52' '2023-03-11'
      
     ∇
 
     ∇ History
       :Access Public Shared
-    ⍝ * 0.9.4 from 2022-12-12
+    ⍝ * 0.9.4 from 2023-03-11
     ⍝   * Reports which edition of the interpreter a test was run on
     ⍝   * Precaution against code changes while accumulating test results: a warning is shown in the session if differences were found
     ⍝   * Runs under classic (no guarantees!)
     ⍝   * When filtering the table the listings below the table are updated to only show code of functions matching the filter
+    ⍝   * ∆STOPPED caused a VALUE ERROR nothing wa actually executed
     ⍝ * 0.9.3 from 2022-10-06
     ⍝   * When `Finalise` was called without calling `Stop` the result appeared to be wrong. Is now called implicitly by `Finalise`.
     ⍝   * Destructor added that executes `⎕PROFILE 'clear'`
@@ -85,32 +86,6 @@
     ⍝     * "&" was transformed into "&amp" (missing ";")
     ⍝     * <thead> was not closed
     ⍝     * <tbody> was closed twice, but never opened
-    ⍝ * 0.7.3 from 2021-05-26
-    ⍝   * Bug fix: single report failed on a new file due to cnfusion about number of reserved components: 9 rather than 10.
-    ⍝   * Test cases added
-    ⍝   * Minor cosmetic changes
-    ⍝ * 0.7.2 from 2021-03-01
-    ⍝   * Package file corrected
-    ⍝ * 0.7.1 from 2020-12-20
-    ⍝   * Bug fix: `NamesInScript` might crash on an {each}-operation on an empty vector
-    ⍝ * 0.7.0 from 2020-12-17
-    ⍝   * For every test run a row is appended onto component number xx. It conains three pieces of information:
-    ⍝     1. Version of Dyalog and which OS
-    ⍝     2. Timestamp of execution
-    ⍝     3. `⎕WA` in MB
-    ⍝   * Function `Finalyze` renamed to `Finalise`
-    ⍝   * A function operand passed to an operator cause CodeCoverage to crash. This is caused by assigned (derived)
-    ⍝     function definitions
-    ⍝   * Documentation corrected and enhanced
-    ⍝ * 0.6.1 from 2020-09-16
-    ⍝   * Some minor bug fixes:
-    ⍝     * In case the directory supposed to hold the report does not exist `CodeCoverage` now attenpts to create it.
-    ⍝     * Creating the HTML report crashed under some circumstances (empty array).
-    ⍝ * 0.6.0 from 2020-09-04
-    ⍝   * This version requires at least version 18.0 of Dyalog
-    ⍝   * Property Getters and Setters are now reported (lifted restriction)
-    ⍝   * Bug fix: `ignore` did not work as expected on ordinary namespaces.
-    ⍝ * 0.5.0 from 2020-07-14
     ∇
 
     :Field Public Shared Readonly APL_Chars←'ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyzÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝßàáâãäåæçèéêëìíîïðñòóôõöøùúûüþ0123456789∆⍙',⎕ucs (80=⎕dr' ')/9397+⍳26
@@ -129,6 +104,7 @@
       watch←'⎕se'⎕R'⎕SE'⍠('IC' 1)⊣watch_
       _filename←(739⌶0),'/CodeCoverage-',' '~⍨⍕⎕TS
       _data←0 2⍴''
+      ∆STOPPED←0
     ∇
 
     ∇ Close
@@ -885,11 +861,8 @@
       ⍝    it will crash with errors because it can't deal with these characters...
       :If {0::1 ⋄ 0⊣⎕UCS ⍵}8838  ⍝ do not even attempt to execute this on Classic!
           z←1
-          →0
-      :EndIf
-      :If a≠⍥≢b   ⍝ no of lines must match
+      :ElseIf a≠⍥≢b   ⍝ no of lines must match
           z←0
-          →0
       :Else
           args←{1=≡⍵:↓⍵ ⋄ ⍵}¨a b
           :For i :In ⍳2

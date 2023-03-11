@@ -1,4 +1,4 @@
- R←Test_040(stopFlag batchFlag);⎕TRAP;C;html
+ R←Test_Misc_040(stopFlag batchFlag);⎕TRAP;C;html
 ⍝ Check on a function operand of an operator
  ⎕TRAP←(999 'C' '∘∘∘ ⍝ Deliberate error')(0 'N')
 

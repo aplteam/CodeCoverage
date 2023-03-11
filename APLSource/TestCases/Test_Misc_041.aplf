@@ -1,4 +1,4 @@
- R←Test_041(stopFlag batchFlag);⎕TRAP;htmlFilename;tno;result;toc;could;did;T2
+ R←Test_Misc_041(stopFlag batchFlag);⎕TRAP;htmlFilename;tno;result;toc;could;did;T2
 ⍝ Make sure that a field is not reported as "not executed" - was once a bug
  ⎕TRAP←(999 'C' '∘∘∘ ⍝ Deliberate error')(0 'N')
  R←T._Failed

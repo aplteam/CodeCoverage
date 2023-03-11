@@ -1,0 +1,20 @@
+ R←Test_Misc_009(stopFlag batchFlag);⎕TRAP;htmlFilename;tno
+⍝ Runs no function at all; caused once a VALUE ERROR on ∆STOPPED
+ ⎕TRAP←(999 'C' '∘∘∘ ⍝ Deliberate error')(0 'N')
+ R←T._Failed
+
+ Data.Prepare
+ Data.T.codeCoverage.filename←(739⌶0),'/CodeCoverage_',(⊃⎕SI),'.dcf'
+ {}Data.T.RunThese'Test_DoesNotExists_001'
+ htmlFilename←##.CodeCoverage.ProcessDataAndCreateReport Data.T.codeCoverage.filename
+ tno←Data.T.codeCoverage.filename ⎕FTIE 0
+ →T.GoToTidyUp 11≠2⊃⎕FSIZE tno                ⍝ First 9 are reserved, 10 holds data (we called the test suite twice!)
+
+ R←T._OK
+
+∆TidyUp:
+ ⎕FUNTIE tno
+ 1 ⎕NDELETE Data.T.codeCoverage.filename,'.dcf'
+ 1 ⎕NDELETE Data.T.codeCoverage.filename,'.html'
+ Data.⎕EX'T'
+⍝Done

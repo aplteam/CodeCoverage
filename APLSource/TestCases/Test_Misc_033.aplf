@@ -1,4 +1,4 @@
- R←Test_033(stopFlag batchFlag);⎕TRAP;ref;C;htmlFilename;html
+ R←Test_Misc_033(stopFlag batchFlag);⎕TRAP;ref;C;htmlFilename;html
 ⍝ Check on a multi-line dfn defined and called within a tfn
  ⎕TRAP←(999 'C' '∘∘∘ ⍝ Deliberate error')(0 'N')
 

@@ -1,4 +1,4 @@
- R←Test_004(stopFlag batchFlag);⎕TRAP;htmlFilename;html
+ R←Test_Misc_004(stopFlag batchFlag);⎕TRAP;htmlFilename;html
 ⍝ Checks on "filename" (default)
  ⎕TRAP←(999 'C' '∘∘∘ ⍝ Deliberate error')(0 'N')
  R←T._Failed

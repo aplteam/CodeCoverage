@@ -1,4 +1,4 @@
- R←Test_030(stopFlag batchFlag);⎕TRAP;htmlFilename;html;ref;C;body1;body2
+ R←Test_Misc_030(stopFlag batchFlag);⎕TRAP;htmlFilename;html;ref;C;body1;body2
 ⍝ Check on nested Classes
  ⎕TRAP←(999 'C' '∘∘∘ ⍝ Deliberate error')(0 'N')
 

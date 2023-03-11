@@ -1,27 +1,26 @@
- R←Test_020(stopFlag batchFlag);⎕TRAP;htmlFilename;html;ref;C;body1;body2
-⍝ Check on nested namespaces
+ R←Test_Misc_010(stopFlag batchFlag);⎕TRAP;htmlFilename;html;body;ref;C;filename
+⍝ Check on setter and getter functions
  ⎕TRAP←(999 'C' '∘∘∘ ⍝ Deliberate error')(0 'N')
 
- R←T.custom_1
- :Return
-
  R←T._Failed
+
+ filename←(739⌶0),'/CodeCoverage_Tests_',⊃⎕SI
 
  #.⎕SHADOW'TEMP'
  'TEMP'#.⎕NS''
 
- body1←':Namespace Foo' '∇r←Hello' 'r←''Hello world''' '→0' 'a←1' '∇' ':EndNamespace'
- body2←':Namespace Goo' '∇r←Hello' 'r←''Hello galaxy''' '→0' 'a←1' '∇',body1,⊂':EndNamespace'
- ref←#.TEMP.⎕FIX body2
+ body←,¨':Class Foo' '_Goo←⍬' ':Property Goo' ':Access Public Shared' '∇r←get' 'r←_Goo' '→0' 'a←1' '∇' '∇set arg' '_Goo←arg.NewValue' '→0' 'a←1' '∇' ':EndProperty' ':EndClass'
+ ref←#.TEMP.⎕FIX body
 
  C←⎕NEW ##.CodeCoverage(,⊂'#.TEMP')
-
+ C.filename←filename
  C.Start ⍬
- {}#.TEMP.Goo.Hello
- {}#.TEMP.Goo.Foo.Hello
+ ref.Goo←'Hello world'
+ {}ref.Goo
  C.Stop ⍬
  {}C.Finalise ⍬
- →T.PassesIf 2=≢C.data
+ →T.GoToTidyUp 2≠≢C.data
+
  {}1 ##.CodeCoverage.ProcessDataAndCreateReport C.filename
  html←⊃⎕NGET C.filename,'.html'
  →T.GoToTidyUp 0=+/'>→[3] '⍷html

@@ -1,4 +1,4 @@
- R←Test_005(stopFlag batchFlag);⎕TRAP;htmlFilename;html;TEMP;C
+ R←Test_Misc_005(stopFlag batchFlag);⎕TRAP;htmlFilename;html;TEMP;C
 ⍝ Checks what happens if nothing is reported at all
  ⎕TRAP←(999 'C' '∘∘∘ ⍝ Deliberate error')(0 'N')
 

@@ -1,4 +1,4 @@
- R←Test_051(stopFlag batchFlag);⎕TRAP;htmlFilename;tno;result
+ R←Test_Misc_051(stopFlag batchFlag);⎕TRAP;htmlFilename;tno;result
 ⍝ Simple case in ⎕Se (mixed case!); was once a bug
  ⎕TRAP←(999 'C' '∘∘∘ ⍝ Deliberate error')(0 'N')
  R←T._Failed

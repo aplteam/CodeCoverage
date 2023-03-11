@@ -1,4 +1,4 @@
- R←Test_031(stopFlag batchFlag);⎕TRAP;body;ref;C;htmlFilename;html
+ R←Test_Misc_031(stopFlag batchFlag);⎕TRAP;body;ref;C;htmlFilename;html
 ⍝ Check on the "Info" field
  ⎕TRAP←(999 'C' '∘∘∘ ⍝ Deliberate error')(0 'N')
 
