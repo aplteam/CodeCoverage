@@ -19,9 +19,10 @@
  {}C.Finalise ⍬
  {}C.ProcessDataAndCreateReport C.filename
  html←⊃⎕NGET C.filename,'.html'
- ⎕NDELETE C.filename,'.html'
- ⎕NDELETE C.filename,'.dcf'
- →T.PassesIf 1=+/'<p>3 of the fns/opr are 100% covered.</p>'⍷∊html
+ →T.GoToTidyUp 1≠+/'<p>3 of the fns/opr are 100% covered.</p>'⍷∊html
 
  R←T._OK
+
+∆TidyUp:
+ 1 T.codeCoverage.DeleteFiles C.filename
 ⍝Done

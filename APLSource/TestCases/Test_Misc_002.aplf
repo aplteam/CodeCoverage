@@ -4,11 +4,11 @@
  R←T._Failed
 
  Data.Prepare
- Data.T.codeCoverage.filename←(739⌶0),'/CodeCoverage_',(⊃⎕SI),'.dcf'
+ Data.T.codeCoverage.filename←(739⌶0),'/CodeCoverage_',(⊃⎕SI)
  {}Data.T.RunThese'Test_002'
  {}Data.T.RunThese'Test_002'
  htmlFilename←##.CodeCoverage.ProcessDataAndCreateReport Data.T.codeCoverage.filename
- tno←Data.T.codeCoverage.filename ⎕FTIE 0
+ tno←(Data.T.codeCoverage.filename,'.profile')⎕FTIE 0
  →T.GoToTidyUp 12≠2⊃⎕FSIZE tno                ⍝ First 9 are reserved, 10+11 hold data (two times!)
 
  result←⎕FREAD tno,10
@@ -29,7 +29,6 @@
 
 ∆TidyUp:
  ⎕FUNTIE tno
- ⎕NDELETE Data.T.codeCoverage.filename,'.dcf'
- ⎕NDELETE Data.T.codeCoverage.filename,'.html'
+ 1 T.codeCoverage.DeleteFiles Data.T.codeCoverage.filename
  Data.⎕EX'T'
 ⍝Done

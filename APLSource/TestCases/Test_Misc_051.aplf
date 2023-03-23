@@ -8,20 +8,19 @@
  ⎕SE.______Foo.⎕FX'r←Hello' 'r←''World'''
  Data.T←⎕NEW Tester2 Data
  Data.T.codeCoverage←⎕NEW ##.CodeCoverage(,⊂'⎕Se.______Foo')  ⍝ Mixed case: ⎕Se
- Data.T.codeCoverage.filename←(739⌶0),'/CodeCoverage_',(⊃⎕SI),'.dcf'
+ Data.T.codeCoverage.filename←(739⌶0),'/CodeCoverage_',(⊃⎕SI)
  {}Data.T.RunThese'Test_003'
  htmlFilename←##.CodeCoverage.ProcessDataAndCreateReport Data.T.codeCoverage.filename
- tno←Data.T.codeCoverage.filename ⎕FTIE 0
+ tno←(Data.T.codeCoverage.filename,'.profile')⎕FTIE 0
  →T.GoToTidyUp 11≠2⊃⎕FSIZE tno                ⍝ First 9 are reserved, 10 holds data
 
  result←⎕FREAD tno,10
- T.GoToTidyUp(,¨'⎕SE.______Foo.Hello' 1 100 1)≢,¨,result
+ →T.GoToTidyUp(,¨'⎕SE.______Foo.Hello' 1 100 1)≢,¨,result
 
  R←T._OK
 
 ∆TidyUp:
  ⎕FUNTIE tno
- 1 ⎕NDELETE Data.T.codeCoverage.filename,'.dcf'
- 1 ⎕NDELETE Data.T.codeCoverage.filename,'.html'
+ 1 T.codeCoverage.DeleteFiles Data.T.codeCoverage.filename
  Data.⎕EX'T'
 ⍝Done

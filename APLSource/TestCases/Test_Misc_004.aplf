@@ -14,7 +14,6 @@
  R←T._OK
 
 ∆TidyUp:
- ⎕NDELETE Data.T.codeCoverage.filename,'.dcf'
- ⎕NDELETE Data.T.codeCoverage.filename,'.html'
+1 T.codeCoverage.DeleteFiles Data.T.codeCoverage.filename
  Data.⎕EX'T'
 ⍝Done

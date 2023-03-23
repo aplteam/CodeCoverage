@@ -8,21 +8,20 @@
  #.TEMP.⎕FX'r←Test_01 y' '#.TEMP.ClassWithField.Hello' 'r←0'
  T2←⎕NEW Tester2 #.TEMP
  T2.codeCoverage←⎕NEW ##.CodeCoverage(,⊂'#.TEMP')
- T2.codeCoverage.filename←(739⌶0),'/CodeCoverage_',(⊃⎕SI),'.dcf'
+ T2.codeCoverage.filename←(739⌶0),'/CodeCoverage_',(⊃⎕SI)
  T2.RunThese'Test_01'
  htmlFilename←##.CodeCoverage.ProcessDataAndCreateReport T2.codeCoverage.filename
- tno←T2.codeCoverage.filename ⎕FTIE 0
+ tno←(T2.codeCoverage.filename,'.profile')⎕FTIE 0
  →T.GoToTidyUp 11≠2⊃⎕FSIZE tno                ⍝ First 9 are reserved, 10+11 hold data (we called the test suite once)
 
  result←⎕FREAD tno,10
  toc←↑result[;1]
- →T.PassesIf'#.TEMP.Test_01' '#.TEMP.ClassWithField.Hello'≡' '~⍨¨↓toc
- →T.PassesIf 2 100≡∊result[2;2 3]
+ →T.GoToTidyUp'#.TEMP.Test_01' '#.TEMP.ClassWithField.Hello'≢' '~⍨¨↓toc
+ →T.GoToTidyUp 2 100≢∊result[2;2 3]
 
  R←T._OK
 
 ∆TidyUp:
  ⎕FUNTIE tno
- 1 ⎕NDELETE T2.codeCoverage.filename,'.dcf'
- 1 ⎕NDELETE T2.codeCoverage.filename,'.html'
+ 1 T.codeCoverage.DeleteFiles T2.codeCoverage.filename
 ⍝Done

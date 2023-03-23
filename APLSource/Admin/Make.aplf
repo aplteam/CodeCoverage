@@ -1,8 +1,19 @@
- Make flag
+ {r}←{version}Make dummy;M;path;cfg;zipFilename
+⍝ Creates a new version in the Dist/ folder.\\
+⍝ `version` can be either a full-fledged version number or something like "+0.0.1".
+⍝ If no left argument is provided the user is questioned.\\
+⍝ Returns always ⍬
  :If 0=⎕SE.⎕NC'MakeHelpers'
      'The package https://github.com/aplteam/MakeHelpers is required in ⎕SE'⎕SIGNAL 6
- :Else
-     :If flag
-         ⎕SE.MakeHelpers.CreateTatinPackageFromSingleScript ##.CodeCoverage
-     :EndIf
  :EndIf
+ r←⍬
+ M←⎕SE.MakeHelpers ⋄ T←⎕SE.Tatin ⋄ C←##.CiderConfig
+ path←C.HOME,'/Dist/'
+ cfg←M.GetPackageCfg C.HOME
+ :If 0=⎕NC'version'
+     version←M.CompileVersionNumberPattern cfg
+ :EndIf
+ M.RecreateFolder path
+ zipFilename←T.BuildPackage C.HOME path version
+ ⎕←'*** New version build successfully:',(⎕UCS 13),'   ',zipFilename
+⍝Done

@@ -21,8 +21,10 @@
  {}#.TEMP.Goo.Foo.Hello
  C.Stop ⍬
  {}C.Finalise ⍬
- →T.PassesIf 2=≢C.data
- ∘∘∘ ⍝TODO⍝
+ →T.GoToTidyUp 2≠≢C.data
 
  R←T._OK
+
+∆TidyUp:
+ 1 T.codeCoverage.DeleteFiles C.filename
 ⍝Done

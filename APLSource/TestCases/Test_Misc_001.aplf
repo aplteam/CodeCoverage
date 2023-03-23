@@ -4,11 +4,11 @@
  R←T._Failed
 
  Data.Prepare
- Data.T.codeCoverage.filename←(739⌶0),'/CodeCoverage_',(⊃⎕SI),'.dcf'
+ Data.T.codeCoverage.filename←(739⌶0),'/CodeCoverage_',(⊃⎕SI)
  {}Data.T.RunThese'Test_001'                  ⍝ Twice in order to force CodeCoverage...
  {}Data.T.RunThese'Test_001'                  ⍝ ... to aggregate the data
  htmlFilename←##.CodeCoverage.ProcessDataAndCreateReport Data.T.codeCoverage.filename
- tno←Data.T.codeCoverage.filename ⎕FTIE 0
+ tno←(Data.T.codeCoverage.filename,'.profile')⎕FTIE 0
  →T.GoToTidyUp 12≠2⊃⎕FSIZE tno                ⍝ First 9 are reserved, 10+11 hold data (we called the test suite twice!)
 
  result←⎕FREAD tno,10
@@ -32,7 +32,6 @@
 
 ∆TidyUp:
  ⎕FUNTIE tno
- 1 ⎕NDELETE Data.T.codeCoverage.filename,'.dcf'
- 1 ⎕NDELETE Data.T.codeCoverage.filename,'.html'
+ 1 T.codeCoverage.DeleteFiles Data.T.codeCoverage.filename
  Data.⎕EX'T'
 ⍝Done

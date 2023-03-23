@@ -25,5 +25,5 @@
 
 ∆TidyUp:
  ##.CodeCoverage.Info←''
- ⎕NDELETE htmlFilename
+ 1 T.codeCoverage.DeleteFiles C.filename
 ⍝Done
