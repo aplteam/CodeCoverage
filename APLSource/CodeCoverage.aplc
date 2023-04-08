@@ -54,11 +54,13 @@
 
     ∇ r←Version
       :Access Public Shared
-      r←'CodeCoverage' '0.10.0+52' '2023-03-23'
+      r←'CodeCoverage' '0.10.1+52' '2023-04-08'
     ∇
 
     ∇ History
       :Access Public Shared
+    ⍝ * 0.10.1 from 2023-04-08
+    ⍝   The `CreateListingForFnsAndOpr` function deleted the "*.cr" file when it should not have
     ⍝ * 0.10.0 from 2023-03-23
     ⍝   * New function `DeleteFiles` added for getting rid of the two reporting files create/used by `CodeCoverage`, and 
     ⍝     optionally also of the HML file
@@ -622,7 +624,6 @@
       :EndFor
       ⎕FUNTIE cr.tno
       ⎕DL 0.1
-      ⎕NDELETE cr.filename
     ∇
 
       Shorten←{
