@@ -2,8 +2,8 @@
  Prepare
  T.Run 1
  :If 0<≢T.codeCoverage
- :AndIf 0 CommTools.YesOrNo'Put Code Coverage Report on display?'
-     verbose←0 CommTools.YesOrNo'Detailed report?'
-     htmlFilename←verbose CodeCoverage.ProcessDataAndCreateReport T.codeCoverage.filename
-     {}APLTreeUtils2.GoToWebPage htmlFilename
+     {}CodeCoverage.ProcessData T.codeCoverage.filename
+     verbose←2='Type of code coverage report' 0 1 CommTools.Select'Overview' 'Verbose'
+     htmlFilename←verbose CodeCoverage.CreateReport T.codeCoverage.filename
+     ⎕←']Open ',htmlFilename
  :EndIf

@@ -54,15 +54,17 @@
 
     ∇ r←Version
       :Access Public Shared
-      r←'CodeCoverage' '0.10.1+52' '2023-04-08'
+      r←'CodeCoverage' '0.10.2+52' '2023-04-09'
     ∇
 
     ∇ History
       :Access Public Shared
+    ⍝ * 0.10.2 from 2023-04-09
+    ⍝   * On non-Windows platforms the file access matrix needs setting to avoid problems
     ⍝ * 0.10.1 from 2023-04-08
     ⍝   The `CreateListingForFnsAndOpr` function deleted the "*.cr" file when it should not have
     ⍝ * 0.10.0 from 2023-03-23
-    ⍝   * New function `DeleteFiles` added for getting rid of the two reporting files create/used by `CodeCoverage`, and 
+    ⍝   * New function `DeleteFiles` added for getting rid of the two reporting files create/used by `CodeCoverage`, and
     ⍝     optionally also of the HML file
     ⍝   * Bug fix: ∆STOPPED caused a VALUE ERROR nothing wa actually executed
     ⍝ * 0.9.4 from 2022-12-12
@@ -455,6 +457,7 @@
           crN←⎕FREAD crT,1                                          ⍝ the list of names for which we have CRs in component 1+index
       :Else
           crT←crF ⎕FCREATE 0
+          (1 3⍴0 ¯1 0)⎕FSTAC crT                                    ⍝ Everybody everything; important for non-Windows platforms
           crN←⍬
           ⍬ ⎕FAPPEND crT
       :EndIf
@@ -521,6 +524,7 @@
       :Else
           3 ⎕MKDIR 1⊃⎕NPARTS filename
           tno←filename ⎕FCREATE 0
+          (1 3⍴0 ¯1 0)⎕FSTAC tno                                    ⍝ Everybody everything; important for non-Windows platforms
           d←''
           d,←⊂'Documentation regarding the contents of this file'
           d,←⊂(⍴1⊃d)⍴'-'
