@@ -58,6 +58,8 @@ Ideally test cases should cover 100% of the code, but this may not be feasible. 
 
 ### Limitations
 
+* Nested scripts (Classes within classes, namespaces within namespaces, or a mixture of them) are not supported: the inner objects are simply ignored.
+
 * At the time of writing Dyalog provides an `⌶` for retrieving the code of functions and operators, including private functions, from scripts, but it does not provide any help for analyzing a script to extract the names of all such functions and operators, so `CodeCoverage` does the analyzing itself.
 
   For this to work, `CodeCoverage` needs the code to be properly formatted. For example, to distinguish any `∇`  used for recursive calls in a dfn from a `∇` used as opening or closing tag for a traditional function, the number of leading spaces rules.
