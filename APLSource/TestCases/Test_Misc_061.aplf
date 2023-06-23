@@ -1,0 +1,21 @@
+ R←Test_Misc_061(stopFlag batchFlag);⎕TRAP;htmlFilename;row;name;could;did;html
+⍝ Calls ProcessData and CreateReport rather than ProcessDataAndCreateReport
+ ⎕TRAP←(999 'C' '∘∘∘ ⍝ Deliberate error')(0 'N')
+ R←T._Failed
+
+ Data.Prepare
+ Data.T.codeCoverage.filename←(739⌶0),'/CodeCoverage_',(⊃⎕SI)
+ Data.T.codeCoverage.ignore←'#.CodeCoverage.TestCases.Data.∆Script5.Hello2'
+ {}Data.T.RunThese'Test_002'
+ ##.CodeCoverage.ProcessData Data.T.codeCoverage.filename
+ htmlFilename←##.CodeCoverage.CreateReport Data.T.codeCoverage.filename
+ html←⊃⎕NGET htmlFilename
+ →T.GoToTidyUp 1≠+/'∆Script5.Hello1'⍷html
+ →T.GoToTidyUp 0≠+/'∆Script5.Hello2'⍷html
+
+ R←T._OK
+
+∆TidyUp:
+ 1 T.codeCoverage.DeleteFiles Data.T.codeCoverage.filename
+ Data.⎕EX'T'
+⍝Done

@@ -1,0 +1,1099 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Coverage</title>
+<meta charset="utf-8"/>
+<style>
+@media screen{
+    html {background-color: #FFFFF0;}
+body {
+    font-size: 16px;
+    font-family : Verdana, "Bitstream Vera Sans", "DejaVu Sans", Tahoma, Geneva, Arial, Sans-serif;
+    margin: 1em;
+}
+th, td {padding: 5px 10px;}
+th {text-align: left;}
+h1, h2, h3, h4, h5, h6 {color: #424242;}
+h1 {font-size: 22px;}
+h2 {font-size: 18px; margin-top: 2em; margin-bottom:0.3em;}
+tbody tr:nth-child(even) {background-color: #F0F0F0;}
+tbody tr:nth-child(odd) {background-color: #FAFAFA;}
+th {background-color: #E6E6E6;color: #424242;}
+table {border: silver 1px solid; font-size: 14px;font-family: APLFont, monospace;}
+code , code a {font-size: 14px; font-family: APLFont, monospace;}
+code.header {
+    font-size: 16px; 
+    font-family: APLFont, monospace; 
+    margin: 1.5em 0.5em 0 0.5em; 
+    padding:0;
+    display: block;
+}
+div.code-block {
+    border: 1px silver dashed;
+    background-color: #F2F2F2;
+    display: block;
+    margin: 0.5em 0.5em 0.5em 0.5em;
+    padding: 0.5em;
+}
+div.code-block.missing {
+    background-color: #fa605254;
+}
+div.code-block code {display: block; white-space: pre-wrap; margin:0; padding:0; word-wrap: break-word;}
+.emphasize { font-weight: 800;}
+ul li, ol li {margin: 0.7em 0.2em;}
+.float-right {float:right;}
+.no-underline {    text-decoration :none;}
+.top-links {font-size:20px; padding-left: 0.6em;}
+.align-right {text-align: right;}
+#footer hr {margin-top:1.5em;}
+#footer p {margin-top:5px; padding-top:0; font-size: 9px;}
+@font-face {
+        font-family: "APLFont";
+    src:
+        local("APL385 Unicode"),
+        url("https://misc.aplteam.com/apl385.ttf") format("truetype");
+}
+.info {border: 1px silver dashed; background-color: #F2F2F2;margin: 0.5em; padding: 0.5em;}
+}
+@media print{@page {size: portrait}
+@page {
+    margin: 1cm 1cm 1cm 1.75cm;
+    @bottom-right {
+        content: counter(page) " / " counter(pages);
+  }
+}
+body {
+    font: 12pt "Times New Roman", Times, serif;
+    line-height: 1.2;
+     /* CSS3 filter, at the moment Webkit only. Prefix it for future implementations */
+    -webkit-filter: grayscale(100%);
+    filter: grayscale(100%); /* future-proof */
+}
+h1 {font-size: 18pt;}
+h2 {font-size: 16pt; margin-top: 10pt; margin-bottom: 3pt;}
+th, td {padding: 2pt 3pt;}
+th {text-align: left;background-color: #DBDBDB;}
+tbody tr:nth-child(odd) {background-color: #EDEDED;}
+table {
+    color-adjust: exact !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    font-size: 8pt;
+    font-family: APLFont, monospace;
+}
+div.keep-together {break-inside: avoid; break-before:auto;}
+table {border: silver 1pt solid;}
+code , code a {font-size: 8pt; font-family: APLFont, monospace;}
+code.header {
+    font-size: 8pt;
+    font-family: APLFont, monospace;
+    margin: 7pt 3pt 0 10pt;
+    padding:0;
+    display: block;
+}
+div.code-block {
+    border: 1pt silver dashed;
+    background-color: #F2F2F2;
+    display: block;
+    margin: 4pt 4pt 4pt 4pt;
+    padding: 4pt;
+}
+div.code-block code {display: block; white-space: pre-wrap; margin:0; padding:0; word-wrap: break-word;}
+.emphasize { font-weight: 800;}
+a {text-decoration: none;color: black;}
+ul li, ol li {margin: 8pt 3pt;}
+.no-print {display:none;}
+.align-right {text-align: right;}
+#footer hr {margin-top:1.5em;}
+#footer p {margin-top:5pt; padding-top:0; font-size: 6pt;}
+@font-face {
+        font-family: "APLFont";
+    src:
+        local("APL385 Unicode"),
+        url("https://misc.aplteam.com/apl385.ttf") format("truetype");
+}
+.info {border: 1px silver dashed; background-color: #F2F2F2;margin: 8px; padding: 8px;}
+}
+</style>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/jq-3.6.0/dt-1.11.2/b-2.0.0/b-print-2.0.0/fh-3.1.9/r-2.2.9/datatables.min.css"/>
+<script type="text/javascript" src="https://cdn.datatables.net/v/dt/jq-3.6.0/dt-1.11.2/b-2.0.0/b-print-2.0.0/fh-3.1.9/r-2.2.9/datatables.min.js"></script>
+</head>
+<body>
+<h1 id="top">Coverage Report</h1>
+<p>Watched: 35 fns/opr within <code>#.CodeCoverage.CodeCoverage</code></p>
+<p>The test suite was executed once:</p>
+<table>
+<thead>
+<tr><th>Executed at</th><th>APLVersion</th><th>Memory (MB)</th></tr>
+</thead>
+<tbody>
+<tr><td>2023-06-23 20:44:20</td><td>Windows-64 ⋄ 18.2.46943.0 ⋄ W ⋄ Development ⋄ Unicode</td><td>53</td></tr>
+</tbody>
+</table>
+<p>Overall 0% of the testable code is covered.</p>
+<p>(Comment lines, empty lines, all <code>:End</code>* lines etc. are ignored)</p>
+<p>4 of the fns/opr are 100% covered.</p>
+<div id="partly-covered" class="keep-together">
+<table id="percent">
+<thead>
+<tr><th style="text-align:left;">Function/Operator</th><th style="text-align:left;">Lines not executed</th><th style="text-align:left;">Coverage</th><th style="text-align:right;">≢</th></tr>
+</thead>
+<tbody>
+<tr class="uncovered"><td><a href="#listing_1" title="Link to listing">#.CodeCoverage.CodeCoverage.get_data</a></td><td>1</td><td>0</td><td>1</td></tr>
+<tr class="uncovered"><td><a href="#listing_2" title="Link to listing">#.CodeCoverage.CodeCoverage.set_ignore</a></td><td>6←≢1-2,4,6-8</td><td>0</td><td>6</td></tr>
+<tr class="uncovered"><td><a href="#listing_3" title="Link to listing">#.CodeCoverage.CodeCoverage.get_ignore</a></td><td>1</td><td>0</td><td>1</td></tr>
+<tr class="uncovered"><td><a href="#listing_4" title="Link to listing">#.CodeCoverage.CodeCoverage.set_watch</a></td><td>7←≢1-6,8</td><td>0</td><td>7</td></tr>
+<tr class="uncovered"><td><a href="#listing_5" title="Link to listing">#.CodeCoverage.CodeCoverage.get_watch</a></td><td>1</td><td>0</td><td>1</td></tr>
+<tr class="uncovered"><td><a href="#listing_6" title="Link to listing">#.CodeCoverage.CodeCoverage.set_filename</a></td><td>4←≢1-4</td><td>0</td><td>4</td></tr>
+<tr class="uncovered"><td><a href="#listing_7" title="Link to listing">#.CodeCoverage.CodeCoverage.get_filename</a></td><td>1</td><td>0</td><td>1</td></tr>
+<tr class="uncovered"><td><a href="#listing_8" title="Link to listing">#.CodeCoverage.CodeCoverage.Version</a></td><td>2</td><td>0</td><td>1</td></tr>
+<tr class="uncovered"><td><a href="#listing_9" title="Link to listing">#.CodeCoverage.CodeCoverage.make1</a></td><td>10←≢4-8,10-14</td><td>0</td><td>10</td></tr>
+<tr class="uncovered"><td><a href="#listing_10" title="Link to listing">#.CodeCoverage.CodeCoverage.Close</a></td><td>2</td><td>0</td><td>1</td></tr>
+<tr class="uncovered"><td><a href="#listing_11" title="Link to listing">#.CodeCoverage.CodeCoverage.DeleteFiles</a></td><td>13←≢7-14,16-17,19-21</td><td>0</td><td>13</td></tr>
+<tr class="uncovered"><td><a href="#listing_12" title="Link to listing">#.CodeCoverage.CodeCoverage.ProcessDataAndCreateReport</a></td><td>5←≢16-20</td><td>0</td><td>5</td></tr>
+<tr class="uncovered"><td><a href="#listing_13" title="Link to listing">#.CodeCoverage.CodeCoverage.CreateReport</a></td><td>82←≢6-25,27-33,35-36,38-42,44,46-56,58-75,77,79,81-87,90-98</td><td>0</td><td>82</td></tr>
+<tr class="uncovered"><td><a href="#listing_14" title="Link to listing">#.CodeCoverage.CodeCoverage.AddJavaScript</a></td><td>43←≢1-10,12-44</td><td>0</td><td>43</td></tr>
+<tr class="uncovered"><td><a href="#listing_15" title="Link to listing">#.CodeCoverage.CodeCoverage.AddJavaScriptButton</a></td><td>15←≢1-15</td><td>0</td><td>15</td></tr>
+<tr class="uncovered"><td><a href="#listing_16" title="Link to listing">#.CodeCoverage.CodeCoverage.ProcessData</a></td><td>19←≢5-21,23,25</td><td>0</td><td>19</td></tr>
+<tr class="uncovered"><td><a href="#listing_17" title="Link to listing">#.CodeCoverage.CodeCoverage.Finalise</a></td><td>92←≢10-25,27-30,33-36,38,41-43,48-51,54,57-58,60-67,69-72,74-75,80-82,84-91,93-123,125</td><td>0</td><td>92</td></tr>
+<tr class="uncovered"><td><a href="#listing_18" title="Link to listing">#.CodeCoverage.CodeCoverage.Start</a></td><td>4←≢3-6</td><td>0</td><td>4</td></tr>
+<tr class="uncovered"><td><a href="#listing_19" title="Link to listing">#.CodeCoverage.CodeCoverage.Stop</a></td><td>6←≢3-8</td><td>0</td><td>6</td></tr>
+<tr class="uncovered"><td><a href="#listing_20" title="Link to listing">#.CodeCoverage.CodeCoverage.CreateListingForFnsAndOpr</a></td><td>37←≢1-9,11-12,14-17,19-20,22,25-31,33-39,41-43,46-47</td><td>0</td><td>37</td></tr>
+<tr class="uncovered"><td><a href="#listing_21" title="Link to listing">#.CodeCoverage.CodeCoverage.GetScreenCss</a></td><td>52←≢1-52</td><td>0</td><td>52</td></tr>
+<tr class="uncovered"><td><a href="#listing_22" title="Link to listing">#.CodeCoverage.CodeCoverage.GetPrintCss</a></td><td>60←≢1-60</td><td>0</td><td>60</td></tr>
+<tr class="uncovered"><td><a href="#listing_23" title="Link to listing">#.CodeCoverage.CodeCoverage.CollectDataForCoverageReport</a></td><td>16←≢2-6,8-15,18-20</td><td>0</td><td>16</td></tr>
+<tr class="uncovered"><td><a href="#listing_24" title="Link to listing">#.CodeCoverage.CodeCoverage.NamesInScript</a></td><td>31←≢7-29,31-33,35-37,39-40</td><td>0</td><td>31</td></tr>
+<tr class="uncovered"><td><a href="#listing_25" title="Link to listing">#.CodeCoverage.CodeCoverage.GeterAndSetterNames</a></td><td>4←≢1-4</td><td>0</td><td>4</td></tr>
+<tr class="uncovered"><td><a href="#listing_26" title="Link to listing">#.CodeCoverage.CodeCoverage.RemoveToBeIgnored</a></td><td>4←≢5-8</td><td>0</td><td>4</td></tr>
+<tr class="uncovered"><td><a href="#listing_27" title="Link to listing">#.CodeCoverage.CodeCoverage.FormatDateTime</a></td><td>1</td><td>0</td><td>1</td></tr>
+<tr class="uncovered"><td><a href="#listing_28" title="Link to listing">#.CodeCoverage.CodeCoverage.CollectInformation</a></td><td>4←≢2-5</td><td>0</td><td>4</td></tr>
+<tr class="uncovered"><td><a href="#listing_29" title="Link to listing">#.CodeCoverage.CodeCoverage.ExchangeHtmlSpecialChars</a></td><td>2</td><td>0</td><td>1</td></tr>
+<tr class="uncovered"><td><a href="#listing_30" title="Link to listing">#.CodeCoverage.CodeCoverage.CompareCR</a></td><td>12←≢5-8,10-16,20</td><td>0</td><td>12</td></tr>
+<tr class="uncovered"><td><a href="#listing_31" title="Link to listing">#.CodeCoverage.CodeCoverage.IsFile</a></td><td>1, 2, 3</td><td>0</td><td>3</td></tr>
+<tr class="fullyCovered"><td><a href="#listing_32" title="Link to listing">#.CodeCoverage.CodeCoverage.set_data</a></td><td></td><td>100</td><td>0</td></tr>
+<tr class="fullyCovered"><td><a href="#listing_33" title="Link to listing">#.CodeCoverage.CodeCoverage.History</a></td><td></td><td>100</td><td>0</td></tr>
+<tr class="fullyCovered"><td><a href="#listing_34" title="Link to listing">#.CodeCoverage.CodeCoverage.htmlFile</a></td><td></td><td>100</td><td>0</td></tr>
+<tr class="fullyCovered"><td><a href="#listing_35" title="Link to listing">#.CodeCoverage.CodeCoverage.verbose</a></td><td></td><td>100</td><td>0</td></tr>
+</tbody>
+</table>
+</div>
+<script>
+$(document).ready(function() {
+    var oTable;
+    oTable = $("#percent").DataTable( {
+        paging:   false,
+        ordering: true,
+        info:     true,
+        fixedHeader: true,
+        order: [2,"asc"],
+        dom: "Bft",
+        drawCallback: function( settings ) {
+             var api = this.api();
+             $('.header[id^="listing_"]').next().addBack().css("display","none");
+             api.rows( {page:"current"} ).data().each(function(data){
+              id = data[0];
+              id = id.match(/"(\#.*?)"/);
+              if (id){$(id[1]).next().addBack().css("display","block");}
+             })
+        },      
+        buttons: [
+        {
+            text: "Partly covered (0)",
+            titleAttr: "50%",
+            className: "active",
+            action: function ( e, dt, node, config ) {
+                var text = this.text();
+                var search = "^(?!(0%|100%)).*";
+                oTable.column(2)
+                    .search(search,true,false,false)
+                    .draw();
+                $(".dt-buttons button").removeClass("active");
+                this.active( true );
+            }
+        },
+        {
+            text: "Uncovered (31)",
+            titleAttr: "0%",
+            className: "active",
+            action: function ( e, dt, node, config ) {
+                var text = this.text();
+                var search = "^0%";
+                oTable.column(2)
+                    .search(search,true,false,false)
+                    .draw();
+                $(".dt-buttons button").removeClass("active");
+                this.active( true );
+            }
+        },
+        {
+            text: "Fully covered (4)",
+            titleAttr: "100%",
+            className: "active",
+            action: function ( e, dt, node, config ) {
+                var text = this.text();
+                var search = "100%";
+                oTable.column(2)
+                    .search(search,true,false,false)
+                    .draw();
+                $(".dt-buttons button").removeClass("active");
+                this.active( true );
+            }
+        },
+        {
+            text: "All (35)",
+            titleAttr: "all",
+            className: "active",
+            action: function ( e, dt, node, config ) {
+                var text = this.text();
+                var search = ".";
+                oTable.column(2)
+                    .search(search,true,false,false)
+                    .draw();
+                $(".dt-buttons button").removeClass("active");
+                this.active( true );
+            }
+        },
+    ],
+ 
+        columnDefs: [
+            {className: "align-right", targets: [2,3]
+            },
+            {
+                render: function ( data, type, row, meta ) {
+                            return data+"%" ;        
+                        },
+                targets: 2
+            }
+        ]             
+    } );
+    oTable.button(0).trigger();
+
+} );    
+</script>
+<h2>Listings</h2>
+<code class="header" id="listing_1">#.CodeCoverage.CodeCoverage.get_data &mdash; 0%<a class="float-right no-print no-underline top-links" href="#top" title="Go to the top of the document">&#8607;</a><a  class="float-right no-print no-underline top-links" href="#partly-covered" title="Go to the beginning of 'Partly-covered'">↑</a></code>
+<div class="code-block"><code> r←get_data</code>
+<code class="emphasize">→[1]  r←_data</code>
+</div>
+<code class="header" id="listing_2">#.CodeCoverage.CodeCoverage.set_ignore &mdash; 0%<a class="float-right no-print no-underline top-links" href="#top" title="Go to the top of the document">&#8607;</a><a  class="float-right no-print no-underline top-links" href="#partly-covered" title="Go to the beginning of 'Partly-covered'">↑</a></code>
+<div class="code-block"><code> set_ignore value</code>
+<code class="emphasize">→[1]  :If 0=noOf←+/∧\1=≡¨value.NewValue</code>
+<code class="emphasize">→[2]      v←∊value.NewValue</code>
+<code> [3]  :Else</code>
+<code class="emphasize">→[4]      v←(⊃{⍺,',',⍵}/noOf↑value.NewValue),noOf↓value.NewValue</code>
+<code> [5]  :EndIf</code>
+<code class="emphasize">→[6]  'Must be character vector'⎕SIGNAL 11/⍨' '≠1↑0⍴v</code>
+<code class="emphasize">→[7]  ('Has invalid characters',b/v)⎕SIGNAL 11/⍨∨/b←~v∊APL_Chars,',⎕#.'</code>
+<code class="emphasize">→[8]  _ignore←v</code>
+</div>
+<code class="header" id="listing_3">#.CodeCoverage.CodeCoverage.get_ignore &mdash; 0%<a class="float-right no-print no-underline top-links" href="#top" title="Go to the top of the document">&#8607;</a><a  class="float-right no-print no-underline top-links" href="#partly-covered" title="Go to the beginning of 'Partly-covered'">↑</a></code>
+<div class="code-block"><code> r←get_ignore</code>
+<code class="emphasize">→[1]  r←','(≠⊆⊢),_ignore</code>
+</div>
+<code class="header" id="listing_4">#.CodeCoverage.CodeCoverage.set_watch &mdash; 0%<a class="float-right no-print no-underline top-links" href="#top" title="Go to the top of the document">&#8607;</a><a  class="float-right no-print no-underline top-links" href="#partly-covered" title="Go to the beginning of 'Partly-covered'">↑</a></code>
+<div class="code-block"><code> set_watch value</code>
+<code class="emphasize">→[1]  v←∊value.NewValue</code>
+<code class="emphasize">→[2]  'Must be character vector'⎕SIGNAL 11/⍨' '≠1↑0⍴v</code>
+<code class="emphasize">→[3]  ('Has invalid characters',b/v)⎕SIGNAL 11/⍨∨/b←~v∊APL_Chars,',⎕#.'</code>
+<code class="emphasize">→[4]  v2←','(≠⊆⊢),v</code>
+<code class="emphasize">→[5]  :If ∨/~b←0&lt;⎕NC↑v2</code>
+<code class="emphasize">→[6]      11 ⎕SIGNAL⍨'Unknown names: ',⊃{⍺,',',⍵}/(~b)/v2</code>
+<code> [7]  :EndIf</code>
+<code class="emphasize">→[8]  _watch←v2</code>
+</div>
+<code class="header" id="listing_5">#.CodeCoverage.CodeCoverage.get_watch &mdash; 0%<a class="float-right no-print no-underline top-links" href="#top" title="Go to the top of the document">&#8607;</a><a  class="float-right no-print no-underline top-links" href="#partly-covered" title="Go to the beginning of 'Partly-covered'">↑</a></code>
+<div class="code-block"><code> r←get_watch</code>
+<code class="emphasize">→[1]  r←_watch</code>
+</div>
+<code class="header" id="listing_6">#.CodeCoverage.CodeCoverage.set_filename &mdash; 0%<a class="float-right no-print no-underline top-links" href="#top" title="Go to the top of the document">&#8607;</a><a  class="float-right no-print no-underline top-links" href="#partly-covered" title="Go to the beginning of 'Partly-covered'">↑</a></code>
+<div class="code-block"><code> set_filename value</code>
+<code class="emphasize">→[1]  v←value.NewValue</code>
+<code class="emphasize">→[2]  'Invalid depth'⎕SIGNAL 11/⍨~(≡v)∊0 1</code>
+<code class="emphasize">→[3]  'Must be a character vector'⎕SIGNAL 11/⍨' '≠1↑0⍴∊v</code>
+<code class="emphasize">→[4]  _filename←⊃,/2↑⎕NPARTS v</code>
+</div>
+<code class="header" id="listing_7">#.CodeCoverage.CodeCoverage.get_filename &mdash; 0%<a class="float-right no-print no-underline top-links" href="#top" title="Go to the top of the document">&#8607;</a><a  class="float-right no-print no-underline top-links" href="#partly-covered" title="Go to the beginning of 'Partly-covered'">↑</a></code>
+<div class="code-block"><code> r←get_filename</code>
+<code class="emphasize">→[1]  r←_filename</code>
+</div>
+<code class="header" id="listing_8">#.CodeCoverage.CodeCoverage.Version &mdash; 0%<a class="float-right no-print no-underline top-links" href="#top" title="Go to the top of the document">&#8607;</a><a  class="float-right no-print no-underline top-links" href="#partly-covered" title="Go to the beginning of 'Partly-covered'">↑</a></code>
+<div class="code-block"><code> r←Version</code>
+<code> [1]  :Access Public Shared</code>
+<code class="emphasize">→[2]  r←'CodeCoverage' '0.10.3+52' '2023-06-23'</code>
+</div>
+<code class="header" id="listing_9">#.CodeCoverage.CodeCoverage.make1 &mdash; 0%<a class="float-right no-print no-underline top-links" href="#top" title="Go to the top of the document">&#8607;</a><a  class="float-right no-print no-underline top-links" href="#partly-covered" title="Go to the beginning of 'Partly-covered'">↑</a></code>
+<div class="code-block"><code>  make1(watch_)</code>
+<code> [1]   :Access Public Instance</code>
+<code> [2]   :Implements Constructor</code>
+<code> [3]   :Access Public</code>
+<code class="emphasize">→[4]   _ignore←''</code>
+<code class="emphasize">→[5]   :If ~(⊃watch_)∊'#⎕'</code>
+<code class="emphasize">→[6]   :AndIf 0&lt;≢1↓⎕RSI</code>
+<code class="emphasize">→[7]   :AndIf 0&lt;(⊃1↓⎕RSI).⎕NC watch_</code>
+<code class="emphasize">→[8]       watch_←(⊃1↓⎕NSI),'.',watch_</code>
+<code> [9]   :EndIf</code>
+<code class="emphasize">→[10]  ⎕SIGNAL/{0∧.≠⍵:''⍬ ⋄ ('Not found: ',watch_)6}⎕NC watch_</code>
+<code class="emphasize">→[11]  watch←'⎕se'⎕R'⎕SE'⍠('IC' 1)⊣watch_</code>
+<code class="emphasize">→[12]  _filename←(739⌶0),'/CodeCoverage-',' '~⍨⍕⎕TS</code>
+<code class="emphasize">→[13]  _data←0 2⍴''</code>
+<code class="emphasize">→[14]  ∆STOPPED←0</code>
+</div>
+<code class="header" id="listing_10">#.CodeCoverage.CodeCoverage.Close &mdash; 0%<a class="float-right no-print no-underline top-links" href="#top" title="Go to the top of the document">&#8607;</a><a  class="float-right no-print no-underline top-links" href="#partly-covered" title="Go to the beginning of 'Partly-covered'">↑</a></code>
+<div class="code-block"><code> Close</code>
+<code> [1]  :Implements destructor</code>
+<code class="emphasize">→[2]  ⎕PROFILE'clear'</code>
+</div>
+<code class="header" id="listing_11">#.CodeCoverage.CodeCoverage.DeleteFiles &mdash; 0%<a class="float-right no-print no-underline top-links" href="#top" title="Go to the top of the document">&#8607;</a><a  class="float-right no-print no-underline top-links" href="#partly-covered" title="Go to the beginning of 'Partly-covered'">↑</a></code>
+<div class="code-block"><code>  {r}←{htmlFile}DeleteFiles filename</code>
+<code> [1]      ⍝ Delete both files created by `CodeCoverage` with the extensions `.profile` and `.cr`.\\</code>
+<code> [2]      ⍝ `filename` must be a single filename with path but without extension.\\</code>
+<code> [3]      ⍝ `htmlFile` defaults to 0, meaning that `filename` with an extension `.html` will not be deleted.</code>
+<code> [4]      ⍝ By specifying a 1 as left argument you can enforce it to be deleted.\\</code>
+<code> [5]      ⍝ `R` is an integer with the number of files deleted.</code>
+<code> [6]   :Access Public Shared</code>
+<code class="emphasize">→[7]   'Right argument must be a simple character vector'Assert(≡filename)∊0 1</code>
+<code class="emphasize">→[8]   'Right argument must be a simple character vector'Assert' '=1↑0⍴filename</code>
+<code class="emphasize">→[9]   'You MUST not specify a file extension'Assert~'.'∊3⊃⎕NPARTS filename</code>
+<code class="emphasize">→[10]  r←0</code>
+<code class="emphasize">→[11]  htmlFile←{0&lt;⎕NC ⍵:⍎⍵ ⋄ 0}'htmlFile'</code>
+<code class="emphasize">→[12]  'The optional left argument must be 0 (default) or 1'Assert(⊂htmlFile)∊0 1</code>
+<code class="emphasize">→[13]  :If IsFile filename,'.profile'</code>
+<code class="emphasize">→[14]      r+←⎕NDELETE filename,'.profile'</code>
+<code> [15]  :EndIf</code>
+<code class="emphasize">→[16]  :If IsFile filename,'.cr'</code>
+<code class="emphasize">→[17]      r+←⎕NDELETE filename,'.cr'</code>
+<code> [18]  :EndIf</code>
+<code class="emphasize">→[19]  :If htmlFile</code>
+<code class="emphasize">→[20]  :AndIf IsFile filename,'.html'</code>
+<code class="emphasize">→[21]      r+←⎕NDELETE filename,'.html'</code>
+<code> [22]  :EndIf</code>
+</div>
+<code class="header" id="listing_12">#.CodeCoverage.CodeCoverage.ProcessDataAndCreateReport &mdash; 0%<a class="float-right no-print no-underline top-links" href="#top" title="Go to the top of the document">&#8607;</a><a  class="float-right no-print no-underline top-links" href="#partly-covered" title="Go to the beginning of 'Partly-covered'">↑</a></code>
+<div class="code-block"><code>  htmlFilename←{verbose}ProcessDataAndCreateReport filename</code>
+<code> [1]       ⍝ Takes the name of a component file created by first instantiating `CodeCoverage` and then calling</code>
+<code> [2]       ⍝ the instance methods `Start`, `Stop` and `Finalise`.\\</code>
+<code> [3]       ⍝ The components containing the `⎕PROFILE` data (11 and running) are then read, aggregated, massaged and</code>
+<code> [4]       ⍝ finally stored in the tenth component.\\</code>
+<code> [5]       ⍝ A report is then generated from the aggregated data and saved on disk.</code>
+<code> [6]       ⍝ `filename` is used for both, identifying the DCF file and the HTML, only the extensions are different.\\</code>
+<code> [7]       ⍝ The optional left argument `verbose` defaults to 0, which means that the code of the functions and operators</code>
+<code> [8]       ⍝ that are only partially covered will to be listed.\\</code>
+<code> [9]       ⍝ However, by specifying a 1 as left argument you can force the canonical representations of these functions</code>
+<code> [10]      ⍝ and operators to become part of the report with any lines that were not executed highlighted.\\</code>
+<code> [11]      ⍝ Note that this function can be called more than once on the same component file. It just wastes some resources</code>
+<code> [12]      ⍝ calculating the result again, which is not necessary. However, as long as the number of functions and operators</code>
+<code> [13]      ⍝ is not very large that does not matter much. If it does matter then call `ProcessData` and `CreateReport` instead:</code>
+<code> [14]      ⍝ that is all this function does anyway.</code>
+<code> [15]  :Access Public Shared</code>
+<code class="emphasize">→[16]  dcfFilename←(⊃,/2↑⎕NPARTS filename),'.profile'</code>
+<code class="emphasize">→[17]  'File not found'⎕SIGNAL 11/⍨0=⎕NEXISTS dcfFilename</code>
+<code class="emphasize">→[18]  verbose←{0=⎕NC ⍵:0 ⋄ ⍎⍵}'verbose'</code>
+<code class="emphasize">→[19]  {}ProcessData dcfFilename</code>
+<code class="emphasize">→[20]  htmlFilename←verbose CreateReport filename</code>
+</div>
+<code class="header" id="listing_13">#.CodeCoverage.CodeCoverage.CreateReport &mdash; 0%<a class="float-right no-print no-underline top-links" href="#top" title="Go to the top of the document">&#8607;</a><a  class="float-right no-print no-underline top-links" href="#partly-covered" title="Go to the beginning of 'Partly-covered'">↑</a></code>
+<div class="code-block"><code>  filename←{verbose}CreateReport filename</code>
+<code> [1]      ⍝ This function creates an HTML file containing a coverage report from the data collected during the execution of an application.\\</code>
+<code> [2]      ⍝ You must call `ProcessData` first: this function relies on the data being aggregated.\\</code>
+<code> [3]      ⍝ If the file extension of `filename` is not ".html" this will be enforced.\\</code>
+<code> [4]      ⍝ The optional ⍺ (`verbose`) defaults to 0, meaning that no code listings are part of the report.</code>
+<code> [5]   :Access Public Shared</code>
+<code class="emphasize">→[6]   dcfFilename←(⊃,/2↑⎕NPARTS filename),'.profile'</code>
+<code class="emphasize">→[7]   'File not found'⎕SIGNAL 11/⍨0=⎕NEXISTS dcfFilename</code>
+<code class="emphasize">→[8]   tno←dcfFilename ⎕FSTIE 0</code>
+<code class="emphasize">→[9]   watched←⎕FREAD tno,2</code>
+<code class="emphasize">→[10]  data←⎕FREAD tno 10</code>
+<code class="emphasize">→[11]  watch←⎕FREAD tno 2</code>
+<code class="emphasize">→[12]  ignore←⎕FREAD tno 3</code>
+<code class="emphasize">→[13]  runs←⎕FREAD tno 4</code>
+<code class="emphasize">→[14]  ⎕FUNTIE tno</code>
+<code class="emphasize">→[15]  verbose←{0&lt;⎕NC ⍵:⍎⍵ ⋄ 0}'verbose'</code>
+<code class="emphasize">→[16]  html←''</code>
+<code class="emphasize">→[17]  html,←⊂'&lt;!DOCTYPE html&gt;'</code>
+<code class="emphasize">→[18]  html,←⊂'&lt;html lang="en"&gt;'</code>
+<code class="emphasize">→[19]  html,←⊂'&lt;head&gt;'</code>
+<code class="emphasize">→[20]  html,←⊂'&lt;title&gt;Coverage&lt;/title&gt;'</code>
+<code class="emphasize">→[21]  html,←⊂'&lt;meta charset="utf-8"/&gt;'</code>
+<code class="emphasize">→[22]  html,←⊂'&lt;style&gt;'</code>
+<code class="emphasize">→[23]  html,←GetScreenCss</code>
+<code class="emphasize">→[24]  html,←GetPrintCss</code>
+<code class="emphasize">→[25]  html,←⊂'&lt;/style&gt;'</code>
+<code> [26]       ⍝ Download package with all needed components from DataTables CDN</code>
+<code class="emphasize">→[27]  html,←⊂'&lt;link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/jq-3.6.0/dt-1.11.2/b-2.0.0/b-print-2.0.0/fh-3.1.9/r-2.2.9/datatables.min.css"/&gt;'</code>
+<code class="emphasize">→[28]  html,←⊂'&lt;script type="text/javascript" src="https://cdn.datatables.net/v/dt/jq-3.6.0/dt-1.11.2/b-2.0.0/b-print-2.0.0/fh-3.1.9/r-2.2.9/datatables.min.js"&gt;&lt;/script&gt;'</code>
+<code class="emphasize">→[29]  html,←⊂'&lt;/head&gt;'</code>
+<code class="emphasize">→[30]  html,←⊂'&lt;body&gt;'</code>
+<code class="emphasize">→[31]  html,←⊂'&lt;h1 id="top"&gt;Coverage Report&lt;/h1&gt;'</code>
+<code class="emphasize">→[32]  :If 0&lt;≢Info</code>
+<code class="emphasize">→[33]      html,←⊂'&lt;p class="info"&gt;',(ExchangeHtmlSpecialChars Info),'&lt;/p&gt;'</code>
+<code> [34]  :EndIf</code>
+<code class="emphasize">→[35]  :If 0=≢data</code>
+<code class="emphasize">→[36]      html,←⊂'&lt;p&gt;Nothing to report at all&lt;/p&gt;'</code>
+<code> [37]  :Else</code>
+<code class="emphasize">→[38]      tally←≢data[;4]</code>
+<code class="emphasize">→[39]      caption←⊃,/{⍺,', ',⍵}/watched</code>
+<code class="emphasize">→[40]      html,←⊂'&lt;p&gt;Watched: ',(⍕tally),' fns/opr within &lt;code&gt;',caption,'&lt;/code&gt;&lt;/p&gt;'</code>
+<code class="emphasize">→[41]      :If 1=≢runs</code>
+<code class="emphasize">→[42]          html,←⊂'&lt;p&gt;The test suite was executed once:&lt;/p&gt;'</code>
+<code> [43]      :Else</code>
+<code class="emphasize">→[44]          html,←⊂'&lt;p&gt;The test suite was executed ',(⍕≢runs),' times:&lt;/p&gt;'</code>
+<code> [45]      :EndIf</code>
+<code class="emphasize">→[46]      html,←⊂'&lt;table&gt;'</code>
+<code class="emphasize">→[47]      html,←⊂'&lt;thead&gt;'</code>
+<code class="emphasize">→[48]      html,←⊂{'&lt;tr&gt;',(⊃,/{'&lt;th&gt;',⍵,'&lt;/th&gt;'}¨⍵),'&lt;/tr&gt;'}'Executed at' 'APLVersion' 'Memory (MB)'</code>
+<code class="emphasize">→[49]      html,←⊂'&lt;/thead&gt;'</code>
+<code class="emphasize">→[50]      html,←⊂'&lt;tbody&gt;'</code>
+<code class="emphasize">→[51]      html,←{'&lt;tr&gt;',(⊃,/{'&lt;td&gt;',⍵,'&lt;/td&gt;'}¨⍵),'&lt;/tr&gt;'}¨↓runs</code>
+<code class="emphasize">→[52]      html,←⊂'&lt;/tbody&gt;'</code>
+<code class="emphasize">→[53]      html,←⊂'&lt;/table&gt;'</code>
+<code class="emphasize">→[54]      :If 0&lt;≢∊data[;2 4]</code>
+<code class="emphasize">→[55]          html,←⊂'&lt;p&gt;Overall ',(⍕⌊0.5+100×÷/+⌿≢¨data[;2 4]),'% of the testable code is covered.&lt;/p&gt;'</code>
+<code class="emphasize">→[56]          html,←⊂'&lt;p&gt;(Comment lines, empty lines, all &lt;code&gt;:End&lt;/code&gt;* lines etc. are ignored)&lt;/p&gt;'</code>
+<code> [57]      :EndIf</code>
+<code class="emphasize">→[58]      html,←⊂'&lt;p&gt;',(⍕data[;3]+.=100),' of the fns/opr are 100% covered.&lt;/p&gt;'</code>
+<code class="emphasize">→[59]      b←~data[;3]∊0 100</code>
+<code class="emphasize">→[60]      data←{⍵[⍋⍵[;3];]}data</code>
+<code class="emphasize">→[61]      html,←⊂'&lt;div id="partly-covered" class="keep-together"&gt;'</code>
+<code class="emphasize">→[62]      html,←⊂'&lt;table id="percent"&gt;'</code>
+<code class="emphasize">→[63]      html,←⊂'&lt;thead&gt;'</code>
+<code class="emphasize">→[64]      align←'left' 'left' 'left' 'right'</code>
+<code class="emphasize">→[65]      html,←⊂{'&lt;tr&gt;',⍵,'&lt;/tr&gt;'}⊃,/align{'&lt;th style="text-align:',⍺,';"&gt;',⍵,'&lt;/th&gt;'}¨'Function/Operator' 'Lines not executed' 'Coverage' '≢'</code>
+<code class="emphasize">→[66]      html,←⊂'&lt;/thead&gt;'</code>
+<code class="emphasize">→[67]      html,←⊂'&lt;tbody&gt;'</code>
+<code class="emphasize">→[68]      :If 0&lt;≢buff←((≢data),3)⍴0</code>
+<code class="emphasize">→[69]          data[;2]←data[;4]~¨data[;2]   ⍝ From "executed" to "not executed"</code>
+<code class="emphasize">→[70]          buff[;1]←{4&gt;≢⍵:{0=≢⍵:⍵ ⋄ ⊃{⍺,', ',⍵}/⍵}⍕¨⍵ ⋄ (⍕≢⍵),'←≢',Shorten ⍵}¨data[;2]</code>
+<code class="emphasize">→[71]          buff[;2]←data[;3]</code>
+<code class="emphasize">→[72]          buff[;3]←⍕∘≢¨data[;4]</code>
+<code class="emphasize">→[73]          :If verbose</code>
+<code class="emphasize">→[74]              linkAndName←data[;1]{'&lt;a href="#listing_',⍵,'" title="Link to listing"&gt;',⍺,'&lt;/a&gt;'}∘⍕¨⍳≢data</code>
+<code class="emphasize">→[75]              buff3←linkAndName{'&lt;td&gt;',⍺,'&lt;/td&gt;&lt;td&gt;',(1⊃⍵),'&lt;/td&gt;&lt;td&gt;',(⍕2⊃⍵),'&lt;/td&gt;&lt;td&gt;',(3⊃⍵),'&lt;/td&gt;'}¨↓buff</code>
+<code> [76]          :Else</code>
+<code class="emphasize">→[77]              buff3←data[;1]{'&lt;td&gt;',⍺,'&lt;/td&gt;&lt;td&gt;',(1⊃⍵),'&lt;/td&gt;&lt;td&gt;',(⍕2⊃⍵),'&lt;/td&gt;&lt;td&gt;',(3⊃⍵),'&lt;/td&gt;'}¨↓buff</code>
+<code> [78]          :EndIf</code>
+<code class="emphasize">→[79]          html,←(↓buff){'&lt;tr',({⍵=3:'' ⋄ ' class="',(⍵⊃'unc' 'fullyC'),'overed"' ⋄ }0 100⍳2⊃⍺),'&gt;',⍵,'&lt;/tr&gt;'}¨buff3</code>
+<code> [80]      :EndIf</code>
+<code class="emphasize">→[81]      html,←⊂'&lt;/tbody&gt;'</code>
+<code class="emphasize">→[82]      html,←⊂'&lt;/table&gt;'</code>
+<code class="emphasize">→[83]      html,←⊂'&lt;/div&gt;'</code>
+<code class="emphasize">→[84]      html,←AddJavaScript buff</code>
+<code class="emphasize">→[85]      :If verbose</code>
+<code class="emphasize">→[86]          html,←⊂'&lt;h2&gt;Listings&lt;/h2&gt;'</code>
+<code class="emphasize">→[87]          html,←CreateListingForFnsAndOpr data</code>
+<code> [88]      :EndIf</code>
+<code> [89]  :EndIf</code>
+<code class="emphasize">→[90]  html,←⊂'&lt;div id="footer"&gt;'</code>
+<code class="emphasize">→[91]  html,←⊂'&lt;hr&gt;'</code>
+<code class="emphasize">→[92]  html,←⊂'&lt;p&gt;Created by "CodeCoverage" version ',(2⊃Version),' from ',(3⊃Version),'&lt;/p&gt;'</code>
+<code class="emphasize">→[93]  html,←⊂'&lt;/div&gt;'</code>
+<code class="emphasize">→[94]  html,←⊂''</code>
+<code class="emphasize">→[95]  html,←⊂'&lt;/body&gt;'</code>
+<code class="emphasize">→[96]  html,←⊂'&lt;/html&gt;'</code>
+<code class="emphasize">→[97]  filename←(⊃,/2↑⎕NPARTS filename),'.html'</code>
+<code class="emphasize">→[98]  (⊂html)⎕NPUT filename 1</code>
+</div>
+<code class="header" id="listing_14">#.CodeCoverage.CodeCoverage.AddJavaScript &mdash; 0%<a class="float-right no-print no-underline top-links" href="#top" title="Go to the top of the document">&#8607;</a><a  class="float-right no-print no-underline top-links" href="#partly-covered" title="Go to the beginning of 'Partly-covered'">↑</a></code>
+<div class="code-block"><code>  html←AddJavaScript data</code>
+<code class="emphasize">→[1]   html←''</code>
+<code class="emphasize">→[2]   →(0=≢data)/0</code>
+<code class="emphasize">→[3]   html,←⊂'&lt;script&gt;'</code>
+<code class="emphasize">→[4]   html,←⊂'$(document).ready(function() {'</code>
+<code class="emphasize">→[5]   html,←⊂'    var oTable;'</code>
+<code class="emphasize">→[6]   html,←⊂'    oTable = $("#percent").DataTable( {'</code>
+<code class="emphasize">→[7]   html,←⊂'        paging:   false,'</code>
+<code class="emphasize">→[8]   html,←⊂'        ordering: true,'</code>
+<code class="emphasize">→[9]   html,←⊂'        info:     true,'</code>
+<code class="emphasize">→[10]  html,←⊂'        fixedHeader: true,'</code>
+<code> [11] ⍝     html,←⊂'        order: [2,"desc"],'</code>
+<code class="emphasize">→[12]  html,←⊂'        order: [2,"asc"],'</code>
+<code class="emphasize">→[13]  html,←⊂'        dom: "Bft",'</code>
+<code class="emphasize">→[14]  html,←⊂'        drawCallback: function( settings ) {'</code>
+<code class="emphasize">→[15]  html,←⊂'             var api = this.api();'</code>
+<code class="emphasize">→[16]  html,←⊂'             $(''.header[id^="listing_"]'').next().addBack().css("display","none");'  ⍝ hide all lines</code>
+<code class="emphasize">→[17]  html,←⊂'             api.rows( {page:"current"} ).data().each(function(data){'</code>
+<code class="emphasize">→[18]  html,←⊂'              id = data[0];'</code>
+<code class="emphasize">→[19]  html,←⊂'              id = id.match(/"(\#.*?)"/);'</code>
+<code class="emphasize">→[20]  html,←⊂'              if (id){$(id[1]).next().addBack().css("display","block");}'  ⍝ show header and following code</code>
+<code class="emphasize">→[21]  html,←⊂'             })'</code>
+<code class="emphasize">→[22]  html,←⊂'        },      '</code>
+<code class="emphasize">→[23]  html,←⊂'        buttons: ['</code>
+<code class="emphasize">→[24]  html,←AddJavaScriptButton('Partly covered' '50%'(+/~data[;2]∊0 100)'^(?!(0%|100%)).*')</code>
+<code class="emphasize">→[25]  html,←AddJavaScriptButton('Uncovered' '0%'(+/data[;2]=0)'^0%')</code>
+<code class="emphasize">→[26]  html,←AddJavaScriptButton('Fully covered' '100%'(+/data[;2]=100)'100%')</code>
+<code class="emphasize">→[27]  html,←AddJavaScriptButton('All' 'all'(≢data)'.')</code>
+<code class="emphasize">→[28]  html,←⊂'    ],'</code>
+<code class="emphasize">→[29]  html,←⊂' '</code>
+<code class="emphasize">→[30]  html,←⊂'        columnDefs: ['</code>
+<code class="emphasize">→[31]  html,←⊂'            {className: "align-right", targets: [2,3]'</code>
+<code class="emphasize">→[32]  html,←⊂'            },'</code>
+<code class="emphasize">→[33]  html,←⊂'            {'</code>
+<code class="emphasize">→[34]  html,←⊂'                render: function ( data, type, row, meta ) {'</code>
+<code class="emphasize">→[35]  html,←⊂'                            return data+"%" ;        '</code>
+<code class="emphasize">→[36]  html,←⊂'                        },'</code>
+<code class="emphasize">→[37]  html,←⊂'                targets: 2'</code>
+<code class="emphasize">→[38]  html,←⊂'            }'</code>
+<code class="emphasize">→[39]  html,←⊂'        ]             '</code>
+<code class="emphasize">→[40]  html,←⊂'    } );'</code>
+<code class="emphasize">→[41]  html,←⊂'    oTable.button(0).trigger();'</code>
+<code class="emphasize">→[42]  html,←⊂''</code>
+<code class="emphasize">→[43]  html,←⊂'} );    '</code>
+<code class="emphasize">→[44]  html,←⊂'&lt;/script&gt;'</code>
+</div>
+<code class="header" id="listing_15">#.CodeCoverage.CodeCoverage.AddJavaScriptButton &mdash; 0%<a class="float-right no-print no-underline top-links" href="#top" title="Go to the top of the document">&#8607;</a><a  class="float-right no-print no-underline top-links" href="#partly-covered" title="Go to the beginning of 'Partly-covered'">↑</a></code>
+<div class="code-block"><code>  html←AddJavaScriptButton(caption percent noOf search)</code>
+<code class="emphasize">→[1]   html←''</code>
+<code class="emphasize">→[2]   html,←⊂'        {'</code>
+<code class="emphasize">→[3]   html,←⊂'            text: "',caption,' (',(⍕noOf),')",'</code>
+<code class="emphasize">→[4]   html,←⊂'            titleAttr: "',percent,'",'</code>
+<code class="emphasize">→[5]   html,←⊂'            className: "active",'</code>
+<code class="emphasize">→[6]   html,←⊂'            action: function ( e, dt, node, config ) {'</code>
+<code class="emphasize">→[7]   html,←⊂'                var text = this.text();'</code>
+<code class="emphasize">→[8]   html,←⊂'                var search = "',search,'";'</code>
+<code class="emphasize">→[9]   html,←⊂'                oTable.column(2)'</code>
+<code class="emphasize">→[10]  html,←⊂'                    .search(search,true,false,false)'</code>
+<code class="emphasize">→[11]  html,←⊂'                    .draw();'</code>
+<code class="emphasize">→[12]  html,←⊂'                $(".dt-buttons button").removeClass("active");'</code>
+<code class="emphasize">→[13]  html,←⊂'                this.active( true );'</code>
+<code class="emphasize">→[14]  html,←⊂'            }'</code>
+<code class="emphasize">→[15]  html,←⊂'        },'</code>
+</div>
+<code class="header" id="listing_16">#.CodeCoverage.CodeCoverage.ProcessData &mdash; 0%<a class="float-right no-print no-underline top-links" href="#top" title="Go to the top of the document">&#8607;</a><a  class="float-right no-print no-underline top-links" href="#partly-covered" title="Go to the beginning of 'Partly-covered'">↑</a></code>
+<div class="code-block"><code>  {(details watch)}←ProcessData filename</code>
+<code> [1]       ⍝ Takes the name of a component file created by calling `Start`, `Stop` and `Finalise`.\\</code>
+<code> [2]       ⍝ The components are read, aggregated and massaged and finally stored in the tenth component,</code>
+<code> [3]       ⍝ but the aggregated data is also returned as a shy result along with the watched data.</code>
+<code> [4]   :Access Public Shared</code>
+<code class="emphasize">→[5]   dcfFilename←(⊃,/2↑⎕NPARTS filename),'.profile'</code>
+<code class="emphasize">→[6]   'File not found'⎕SIGNAL 11/⍨0=⎕NEXISTS dcfFilename</code>
+<code class="emphasize">→[7]   tno←dcfFilename ⎕FSTIE 0</code>
+<code class="emphasize">→[8]   watched←⎕FREAD tno,2</code>
+<code class="emphasize">→[9]   details←watch←⍬</code>
+<code class="emphasize">→[10]  :If 0&lt;≢∊data←tno{⎕FREAD ⍺,⍵}¨9↓⍳-/⌽2↑⎕FSIZE tno</code>
+<code class="emphasize">→[11]      watch←⎕FREAD tno 2</code>
+<code class="emphasize">→[12]      ignore←⎕FREAD tno 3</code>
+<code class="emphasize">→[13]      data←⊃⍪/data</code>
+<code class="emphasize">→[14]      data[;2]←(data[;2]∊¨data[;4])/¨data[;2]</code>
+<code class="emphasize">→[15]      details←data[;1]{(⊃⍺)(∪⊃,/⍵)}⌸data[;2]</code>
+<code class="emphasize">→[16]      where←data[;1]⍳details[;1]</code>
+<code class="emphasize">→[17]      details,←data[where;3 4]</code>
+<code class="emphasize">→[18]      details(RemoveToBeIgnored)←ignore</code>
+<code class="emphasize">→[19]      b←details[;3]≠100</code>
+<code class="emphasize">→[20]      :If ∨/b</code>
+<code class="emphasize">→[21]          (b/details[;3])←100⌊⌊0.5+100×÷/≢¨b⌿details[;2 4]         ⍝ Recalculate percentage</code>
+<code> [22]      :EndIf</code>
+<code class="emphasize">→[23]      details ⎕FREPLACE tno 10</code>
+<code> [24]  :EndIf</code>
+<code class="emphasize">→[25]  ⎕FUNTIE tno</code>
+</div>
+<code class="header" id="listing_17">#.CodeCoverage.CodeCoverage.Finalise &mdash; 0%<a class="float-right no-print no-underline top-links" href="#top" title="Go to the top of the document">&#8607;</a><a  class="float-right no-print no-underline top-links" href="#partly-covered" title="Go to the beginning of 'Partly-covered'">↑</a></code>
+<div class="code-block"><code>   r←Finalise dummy</code>
+<code> [1]       ⍝ Call this when all the code you want to check on has been executed`.\\</code>
+<code> [2]       ⍝ It examines all functions and operators that are only partially covered, and saves the lines that</code>
+<code> [3]       ⍝ were executed as well as the lines that could have been executed.\\</code>
+<code> [4]       ⍝ For the latter, a number of lines are ignored, such as empty lines, comment lines and all lines</code>
+<code> [5]       ⍝ that contain meaningless code (in terms of being executed), such as all `:End*` lines etc.\\</code>
+<code> [6]       ⍝ Note that the collected data is appended to the DCF file associated with the instance. Therefore</code>
+<code> [7]       ⍝ you can move the DCF file to another platform and re-run the code under the supervision of `CodeCoverage`</code>
+<code> [8]       ⍝ again, for example.</code>
+<code> [9]    :Access Public Instance</code>
+<code class="emphasize">→[10]   r←⍬</code>
+<code class="emphasize">→[11]   {Stop ⍵}⍣(~⊃∆STOPPED)⊣⍬</code>
+<code class="emphasize">→[12]   _data←_data[;1]{(⊃⍺)(∪⊃,/⍵)}⌸_data[;2]</code>
+<code class="emphasize">→[13]   names←CollectDataForCoverageReport _watch</code>
+<code class="emphasize">→[14]   details←0 4⍴⍬</code>
+<code class="emphasize">→[15]   regExPattern←'^ *:else$' '^ *:section$'                       ⍝ Lines that contain just these patterns...</code>
+<code class="emphasize">→[16]   regExPattern,←'^ *:access ' '^ *:field ' '^ *:attribute'      ⍝ ... or these are to be ignored.</code>
+<code class="emphasize">→[17]   regExPattern,←⊂'^ *:end[a-zA-Z]*$'                            ⍝ All sorts of :End* statements are not of interest either</code>
+<code class="emphasize">→[18]   regExPattern,←⊂'^ *:implements'</code>
+<code class="emphasize">→[19]   regExPattern,←⊂'^ *:signature'</code>
+<code class="emphasize">→[20]   regExPattern,←⊂'^ *:section'</code>
+<code class="emphasize">→[21]   filename←(⊃,/2↑⎕NPARTS _filename),'.profile'</code>
+<code class="emphasize">→[22]   crF←(∊2↑⎕NPARTS filename),'.cr'                               ⍝ this file has the CRs of everything we watched</code>
+<code class="emphasize">→[23]   :If crX←⎕NEXISTS crF</code>
+<code class="emphasize">→[24]       crT←crF ⎕FTIE 0</code>
+<code class="emphasize">→[25]       crN←⎕FREAD crT,1                                          ⍝ the list of names for which we have CRs in component 1+index</code>
+<code> [26]   :Else</code>
+<code class="emphasize">→[27]       crT←crF ⎕FCREATE 0</code>
+<code class="emphasize">→[28]       (1 3⍴0 ¯1 0)⎕FSTAC crT                                    ⍝ Everybody everything; important for non-Windows platforms</code>
+<code class="emphasize">→[29]       crN←⍬</code>
+<code class="emphasize">→[30]       ⍬ ⎕FAPPEND crT</code>
+<code> [31]   :EndIf</code>
+<code> [32]  </code>
+<code class="emphasize">→[33]   :For i :In ⍳≢names</code>
+<code class="emphasize">→[34]       name←i⊃names</code>
+<code class="emphasize">→[35]       :If (≢_data)≥row←_data[;1]⍳⊂name</code>
+<code class="emphasize">→[36]           linesCovered←2⊃_data[row;]</code>
+<code> [37]       :Else</code>
+<code class="emphasize">→[38]           linesCovered←⍬</code>
+<code> [39]       :EndIf</code>
+<code> [40]  </code>
+<code class="emphasize">→[41]       :If {~3 4∊⍨10×⍵-⌊⍵}⎕NC⊆name                               ⍝ Ignore derived functions and derived operators</code>
+<code class="emphasize">→[42]       :AndIf 2≠|≡buff←180⌶name                                  ⍝ For weird staff (like function operands of an operator) we need to check</code>
+<code class="emphasize">→[43]           :If 0=≢body←{⍵↓⍨-+/∧\' '=⌽⍵}¨↓buff                    ⍝ True for localized dfns</code>
+<code> [44]              ⍝ ---------- TODO</code>
+<code> [45]              ⍝     ∘∘∘                                               ⍝TODO⍝ We cannot get the body of that dfn with ⎕CR or 180⌶, so we need to take other measures</code>
+<code> [46]              ⍝ ----------</code>
+<code> [47]           :EndIf</code>
+<code class="emphasize">→[48]           :If crX</code>
+<code class="emphasize">→[49]               :If (⊂name)∊crN</code>
+<code class="emphasize">→[50]                   :If ~body CompareCR bodyC←⎕FREAD crT,1+crN⍳⊂name</code>
+<code class="emphasize">→[51]                       ⎕←'Current definition of function "',name,'" does not match the one captured earlier - do not trust the results' ⍝ ⎕SIGNAL?!</code>
+<code> [52]                   :EndIf</code>
+<code> [53]               :Else</code>
+<code class="emphasize">→[54]                   ⎕←'Found new function "',name,'" that was not captured in previous runs - do not trust the results!'</code>
+<code> [55]               :EndIf</code>
+<code> [56]           :Else</code>
+<code class="emphasize">→[57]               crN,←⊂name</code>
+<code class="emphasize">→[58]               body ⎕FAPPEND crT</code>
+<code> [59]           :EndIf</code>
+<code class="emphasize">→[60]           body←'''[^'']*'''⎕R''⍠('Greedy' 0)⊣body               ⍝ Remove text</code>
+<code class="emphasize">→[61]           body←'⍝.*$'⎕R''⍠('Greedy' 0)⊣body                     ⍝ Remove comments</code>
+<code class="emphasize">→[62]           lines←¯1+⍳≢body</code>
+<code class="emphasize">→[63]           :If '}'=⊃{⍵↓⍨+/∧\' '=⍵}⊃¯1↑body                       ⍝ Is it possibly a dfn? (⎕NC does only work on stuff that's not part of a class!)</code>
+<code class="emphasize">→[64]           :AndIf ∨/(({⍵↑⍨1+-{⍵⍳'.'}⌽⍵}name),'←{')⍷1⊃body        ⍝ First line carries &lt;name&gt;←{   - then it must be a dfn</code>
+<code class="emphasize">→[65]           :AndIf (,'}')≡¯1↑' '~⍨⊃¯1↑body</code>
+<code class="emphasize">→[66]               (body lines)←(0=≢{⍵↓⍨⍵⍳'{'}⊃body)↓¨body lines     ⍝ Drop first line if it is nothing but &lt;name&gt;←{</code>
+<code class="emphasize">→[67]               (body lines)←(-(,'}')≡' '~⍨⊃¯1↑body)↓¨body lines  ⍝ Drop last line if it is nothing but a closing "`}`</code>
+<code> [68]           :Else</code>
+<code class="emphasize">→[69]               (body lines)←1↓¨body lines                        ⍝ Always drop first line in case of a tfn</code>
+<code class="emphasize">→[70]               bool←regExPattern∘{0=≢⍺ ⎕S 0⍠('IC' 1)('Greedy' 0)⊣⍵}¨body</code>
+<code class="emphasize">→[71]               bool∧←'}'≠⊃∘{⍵↓⍨+/∧\' '=⍵}¨body                   ⍝ Get rid of closing lines of local dfns - otherwise they will be reported</code>
+<code class="emphasize">→[72]               (body lines)←bool∘/¨body lines</code>
+<code> [73]           :EndIf</code>
+<code class="emphasize">→[74]           (body lines)←(0&lt;≢¨body~¨' ')∘/¨body lines             ⍝ Remove empty lines</code>
+<code class="emphasize">→[75]           details⍪←name linesCovered(100-⌊0.5+100×(≢lines~linesCovered)÷≢lines)lines</code>
+<code> [76]       :EndIf</code>
+<code> [77]  </code>
+<code> [78]   :EndFor</code>
+<code> [79]  </code>
+<code class="emphasize">→[80]   details←('.'≠⊃¨¯1↑¨details[;1])⌿details</code>
+<code class="emphasize">→[81]   :If ~crX</code>
+<code class="emphasize">→[82]       crN ⎕FREPLACE crT,1</code>
+<code> [83]   :EndIf</code>
+<code class="emphasize">→[84]   ⎕FUNTIE crT</code>
+<code class="emphasize">→[85]   :If ⎕NEXISTS filename</code>
+<code class="emphasize">→[86]       tno←filename ⎕FSTIE 0</code>
+<code class="emphasize">→[87]       (∪watch,⎕FREAD tno 2)⎕FREPLACE tno 2</code>
+<code class="emphasize">→[88]       (∪ignore,⎕FREAD tno 3)⎕FREPLACE tno 3</code>
+<code class="emphasize">→[89]       (({0=≢d←⎕FREAD tno 4:0 3⍴'' ⋄ d}⍬)⍪CollectInformation ⍬)⎕FREPLACE tno 4 ⍝ Old versions might still carry an empty forth component</code>
+<code class="emphasize">→[90]       details ⎕FAPPEND tno</code>
+<code class="emphasize">→[91]       ⎕FUNTIE tno</code>
+<code> [92]   :Else</code>
+<code class="emphasize">→[93]       3 ⎕MKDIR 1⊃⎕NPARTS filename</code>
+<code class="emphasize">→[94]       tno←filename ⎕FCREATE 0</code>
+<code class="emphasize">→[95]       (1 3⍴0 ¯1 0)⎕FSTAC tno                                    ⍝ Everybody everything; important for non-Windows platforms</code>
+<code class="emphasize">→[96]       d←''</code>
+<code class="emphasize">→[97]       d,←⊂'Documentation regarding the contents of this file'</code>
+<code class="emphasize">→[98]       d,←⊂(⍴1⊃d)⍴'-'</code>
+<code class="emphasize">→[99]       d,←⊂'* The first component contains this documentation'</code>
+<code class="emphasize">→[100]      d,←⊂'* The second one contains what has been watched; this will eventually be used to'</code>
+<code class="emphasize">→[101]      d,←⊂'  compile the caption for the coverage report.'</code>
+<code class="emphasize">→[102]      d,←⊂'* The third component holds the names of functions and operators to be ignored.'</code>
+<code class="emphasize">→[103]      d,←⊂'* The fourth component holds a matrix with as many rows as test runs have been performed:'</code>
+<code class="emphasize">→[104]      d,←⊂'  [;1] Timestamp ("YYYY-MM-DD hh:mm:ss")'</code>
+<code class="emphasize">→[105]      d,←⊂'  [;2] The result of the "APLVersion" property + info about the edition'</code>
+<code class="emphasize">→[106]      d,←⊂'  [;3] ⎕WA in KB'</code>
+<code class="emphasize">→[107]      d,←⊂'* Components five to nine are reserved'</code>
+<code class="emphasize">→[108]      d,←⊂'* The tenth one is originally empty. when "ProcessData" or "ProcessDataAndCreateReport"'</code>
+<code class="emphasize">→[109]      d,←⊂'  is called the resulting data is written to this component.'</code>
+<code class="emphasize">→[110]      d,←⊂'After the tenth one all components carry a matrix with n rows and 4 columns. n is'</code>
+<code class="emphasize">→[111]      d,←⊂'determined by the number of fns/oprs involved. The columns:'</code>
+<code class="emphasize">→[112]      d,←⊂'[;1] The name of the function or operator'</code>
+<code class="emphasize">→[113]      d,←⊂'[;2] Either empty or a vector of line numbers there were *not* executed.'</code>
+<code class="emphasize">→[114]      d,←⊂'     Empty in case none or all lines were executed.'</code>
+<code class="emphasize">→[115]      d,←⊂'[;3] Coverage percentage.'</code>
+<code class="emphasize">→[116]      d,←⊂'[;4] Total number of lines that can be expected to be tested.'</code>
+<code class="emphasize">→[117]      d ⎕FAPPEND tno</code>
+<code class="emphasize">→[118]      watch ⎕FAPPEND tno</code>
+<code class="emphasize">→[119]      ignore ⎕FAPPEND tno</code>
+<code class="emphasize">→[120]      (CollectInformation ⍬)⎕FAPPEND tno</code>
+<code class="emphasize">→[121]      tno{⍵ ⎕FAPPEND ⍺}¨(9-¯1+2⊃⎕FSIZE tno)⍴⊂''                 ⍝ Fill up to the tenth component</code>
+<code class="emphasize">→[122]      details ⎕FAPPEND tno</code>
+<code class="emphasize">→[123]      ⎕FUNTIE tno</code>
+<code> [124]  :EndIf</code>
+<code class="emphasize">→[125]  r←filename</code>
+<code> [126]       ⍝Done</code>
+</div>
+<code class="header" id="listing_18">#.CodeCoverage.CodeCoverage.Start &mdash; 0%<a class="float-right no-print no-underline top-links" href="#top" title="Go to the top of the document">&#8607;</a><a  class="float-right no-print no-underline top-links" href="#partly-covered" title="Go to the beginning of 'Partly-covered'">↑</a></code>
+<div class="code-block"><code> {r}←Start dummy</code>
+<code> [1]       ⍝ Execute `⎕PROFILE'start' 'coverage'`</code>
+<code> [2]  :Access Public Instance</code>
+<code class="emphasize">→[3]  r←⍬</code>
+<code class="emphasize">→[4]  ⎕PROFILE'clear'</code>
+<code class="emphasize">→[5]  ⎕PROFILE'start' 'coverage'</code>
+<code class="emphasize">→[6]  ∆STOPPED←0</code>
+</div>
+<code class="header" id="listing_19">#.CodeCoverage.CodeCoverage.Stop &mdash; 0%<a class="float-right no-print no-underline top-links" href="#top" title="Go to the top of the document">&#8607;</a><a  class="float-right no-print no-underline top-links" href="#partly-covered" title="Go to the beginning of 'Partly-covered'">↑</a></code>
+<div class="code-block"><code> {r}←Stop dummy</code>
+<code> [1]     ⍝ Stores all the data collected since `Start` was invoked, and then executes `⎕PROFILE'clear'`</code>
+<code> [2]  :Access Public Instance</code>
+<code class="emphasize">→[3]  r←⍬</code>
+<code class="emphasize">→[4]  buff←(⎕PROFILE'data')[;1 2]</code>
+<code class="emphasize">→[5]  ⎕PROFILE'clear'</code>
+<code class="emphasize">→[6]  buff←(buff[;2]≢¨⊂⍬)⌿buff                                 ⍝ Fns as such are not of any interest, only lines</code>
+<code class="emphasize">→[7]  _data⍪←(⊃∨/watch{((1+≢¨⍺)↑¨¨⊂⍵)∊¨⊂¨⍺,¨'.'}buff[;1])⌿buff ⍝ Drop everthing that's not watched</code>
+<code class="emphasize">→[8]  ∆STOPPED←1</code>
+</div>
+<code class="header" id="listing_20">#.CodeCoverage.CodeCoverage.CreateListingForFnsAndOpr &mdash; 0%<a class="float-right no-print no-underline top-links" href="#top" title="Go to the top of the document">&#8607;</a><a  class="float-right no-print no-underline top-links" href="#partly-covered" title="Go to the beginning of 'Partly-covered'">↑</a></code>
+<div class="code-block"><code>  html←CreateListingForFnsAndOpr partlyCovered</code>
+<code class="emphasize">→[1]   cr←⎕NS''</code>
+<code class="emphasize">→[2]   html←''</code>
+<code class="emphasize">→[3]   links←'&lt;a class="float-right no-print no-underline top-links" href="#top" title="Go to the top of the document"&gt;&amp;#8607;&lt;/a&gt;'</code>
+<code class="emphasize">→[4]   links,←'&lt;a  class="float-right no-print no-underline top-links" href="#partly-covered" title="Go to the beginning of ''Partly-covered''"&gt;↑&lt;/a&gt;'</code>
+<code class="emphasize">→[5]   cr.filename←(⊃,/2↑⎕NPARTS filename),'.cr'             ⍝ this file has the CRs of everything we watched</code>
+<code class="emphasize">→[6]   :If ⎕NEXISTS cr.filename</code>
+<code class="emphasize">→[7]       cr.tno←cr.filename ⎕FTIE 0</code>
+<code class="emphasize">→[8]       cr.names←⎕FREAD cr.tno,1</code>
+<code class="emphasize">→[9]       ⎕←'tied ',cr.filename,' for listings'</code>
+<code> [10]  :Else</code>
+<code class="emphasize">→[11]      ⎕←'Did not find file "',cr.filename,'" with CRs collected by fn "Finalize" - will try to work without it'</code>
+<code class="emphasize">→[12]      cr.tno←0</code>
+<code> [13]  :EndIf</code>
+<code class="emphasize">→[14]  :For i :In ⍳≢partlyCovered</code>
+<code class="emphasize">→[15]      (name lines percent testable)←partlyCovered[i;1 2 3 4]</code>
+<code class="emphasize">→[16]      :If (cr.tno=0)∨~(⊂name)∊cr.names</code>
+<code class="emphasize">→[17]          body←{⍵↓⍨-+/∧\' '=⌽⍵}¨↓180⌶name</code>
+<code> [18]      :Else</code>
+<code class="emphasize">→[19]          :If cr.tno∊⎕FNUMS</code>
+<code class="emphasize">→[20]              body←⎕FREAD cr.tno,1+cr.names⍳⊂name</code>
+<code> [21]          :Else</code>
+<code class="emphasize">→[22]              body←⍬</code>
+<code> [23]          :EndIf</code>
+<code> [24]      :EndIf</code>
+<code class="emphasize">→[25]      :If 0&lt;≢body</code>
+<code class="emphasize">→[26]          body←ExchangeHtmlSpecialChars body</code>
+<code class="emphasize">→[27]          (1⊃body)←{⍵↑⍨¯1+⌊/⍵⍳'⍝;'}1⊃body</code>
+<code class="emphasize">→[28]          width←≢⍕≢body</code>
+<code class="emphasize">→[29]          html2←((⊂(width-1)⍴' '),(width+4){⍺↑' [',(⍕⍵),']'}¨¯1↓⍳≢body),¨body,¨⊂'&lt;/code&gt;'</code>
+<code class="emphasize">→[30]          :If 0&lt;≢lines</code>
+<code class="emphasize">→[31]              (⊃¨html2[lines+1])←'→'   ⍝TODO⍝ Check!</code>
+<code> [32]          :EndIf</code>
+<code class="emphasize">→[33]          buff←(≢body)⍴⊂'&lt;code&gt;'</code>
+<code class="emphasize">→[34]          buff[lines+1]←⊂'&lt;code class="emphasize"&gt;'</code>
+<code class="emphasize">→[35]          html2←buff,¨html2</code>
+<code class="emphasize">→[36]          (1⊃html2)←'&lt;div class="code-block"&gt;',1⊃html2</code>
+<code class="emphasize">→[37]          html2,←⊂'&lt;/div&gt;'</code>
+<code class="emphasize">→[38]          html2←(⊂'&lt;code class="header" id="listing_',(⍕i),'"&gt;',name,(' &amp;mdash; ',(⍕percent),'%'),links,'&lt;/code&gt;'),html2</code>
+<code class="emphasize">→[39]          html,←html2</code>
+<code> [40]      :Else</code>
+<code class="emphasize">→[41]          html2←⊂'&lt;div class="code-block missing"&gt;Could not get canonical representation.&lt;/div&gt;'</code>
+<code class="emphasize">→[42]          html2←(⊂'&lt;code class="header" id="listing_',(⍕i),'"&gt;',name,(' &amp;mdash; ',(⍕percent),'%'),links,'&lt;/code&gt;'),html2</code>
+<code class="emphasize">→[43]          html,←html2</code>
+<code> [44]      :EndIf</code>
+<code> [45]  :EndFor</code>
+<code class="emphasize">→[46]  ⎕FUNTIE cr.tno</code>
+<code class="emphasize">→[47]  ⎕DL 0.1</code>
+</div>
+<code class="header" id="listing_21">#.CodeCoverage.CodeCoverage.GetScreenCss &mdash; 0%<a class="float-right no-print no-underline top-links" href="#top" title="Go to the top of the document">&#8607;</a><a  class="float-right no-print no-underline top-links" href="#partly-covered" title="Go to the beginning of 'Partly-covered'">↑</a></code>
+<div class="code-block"><code>  r←GetScreenCss</code>
+<code class="emphasize">→[1]   r←''</code>
+<code class="emphasize">→[2]   r,←⊂'@media screen{'</code>
+<code class="emphasize">→[3]   r,←⊂'    html {background-color: #FFFFF0;}'</code>
+<code class="emphasize">→[4]   r,←⊂'body {'</code>
+<code class="emphasize">→[5]   r,←⊂'    font-size: 16px;'</code>
+<code class="emphasize">→[6]   r,←⊂'    font-family : Verdana, "Bitstream Vera Sans", "DejaVu Sans", Tahoma, Geneva, Arial, Sans-serif;'</code>
+<code class="emphasize">→[7]   r,←⊂'    margin: 1em;'</code>
+<code class="emphasize">→[8]   r,←⊂'}'</code>
+<code class="emphasize">→[9]   r,←⊂'th, td {padding: 5px 10px;}'</code>
+<code class="emphasize">→[10]  r,←⊂'th {text-align: left;}'</code>
+<code class="emphasize">→[11]  r,←⊂'h1, h2, h3, h4, h5, h6 {color: #424242;}'</code>
+<code class="emphasize">→[12]  r,←⊂'h1 {font-size: 22px;}'</code>
+<code class="emphasize">→[13]  r,←⊂'h2 {font-size: 18px; margin-top: 2em; margin-bottom:0.3em;}'</code>
+<code class="emphasize">→[14]  r,←⊂'tbody tr:nth-child(even) {background-color: #F0F0F0;}'</code>
+<code class="emphasize">→[15]  r,←⊂'tbody tr:nth-child(odd) {background-color: #FAFAFA;}'</code>
+<code class="emphasize">→[16]  r,←⊂'th {background-color: #E6E6E6;color: #424242;}'</code>
+<code class="emphasize">→[17]  r,←⊂'table {border: silver 1px solid; font-size: 14px;font-family: APLFont, monospace;}'</code>
+<code class="emphasize">→[18]  r,←⊂'code , code a {font-size: 14px; font-family: APLFont, monospace;}'</code>
+<code class="emphasize">→[19]  r,←⊂'code.header {'</code>
+<code class="emphasize">→[20]  r,←⊂'    font-size: 16px; '</code>
+<code class="emphasize">→[21]  r,←⊂'    font-family: APLFont, monospace; '</code>
+<code class="emphasize">→[22]  r,←⊂'    margin: 1.5em 0.5em 0 0.5em; '</code>
+<code class="emphasize">→[23]  r,←⊂'    padding:0;'</code>
+<code class="emphasize">→[24]  r,←⊂'    display: block;'</code>
+<code class="emphasize">→[25]  r,←⊂'}'</code>
+<code class="emphasize">→[26]  r,←⊂'div.code-block {'</code>
+<code class="emphasize">→[27]  r,←⊂'    border: 1px silver dashed;'</code>
+<code class="emphasize">→[28]  r,←⊂'    background-color: #F2F2F2;'</code>
+<code class="emphasize">→[29]  r,←⊂'    display: block;'</code>
+<code class="emphasize">→[30]  r,←⊂'    margin: 0.5em 0.5em 0.5em 0.5em;'</code>
+<code class="emphasize">→[31]  r,←⊂'    padding: 0.5em;'</code>
+<code class="emphasize">→[32]  r,←⊂'}'</code>
+<code class="emphasize">→[33]  r,←⊂'div.code-block.missing {'</code>
+<code class="emphasize">→[34]  r,←⊂'    background-color: #fa605254;'</code>
+<code class="emphasize">→[35]  r,←⊂'}'</code>
+<code class="emphasize">→[36]  r,←⊂'div.code-block code {display: block; white-space: pre-wrap; margin:0; padding:0; word-wrap: break-word;}'</code>
+<code class="emphasize">→[37]  r,←⊂'.emphasize { font-weight: 800;}'</code>
+<code class="emphasize">→[38]  r,←⊂'ul li, ol li {margin: 0.7em 0.2em;}'</code>
+<code class="emphasize">→[39]  r,←⊂'.float-right {float:right;}'</code>
+<code class="emphasize">→[40]  r,←⊂'.no-underline {    text-decoration :none;}'</code>
+<code class="emphasize">→[41]  r,←⊂'.top-links {font-size:20px; padding-left: 0.6em;}'</code>
+<code class="emphasize">→[42]  r,←⊂'.align-right {text-align: right;}'</code>
+<code class="emphasize">→[43]  r,←⊂'#footer hr {margin-top:1.5em;}'</code>
+<code class="emphasize">→[44]  r,←⊂'#footer p {margin-top:5px; padding-top:0; font-size: 9px;}'</code>
+<code class="emphasize">→[45]  r,←⊂'@font-face {'</code>
+<code class="emphasize">→[46]  r,←⊂'        font-family: "APLFont";'</code>
+<code class="emphasize">→[47]  r,←⊂'    src:'</code>
+<code class="emphasize">→[48]  r,←⊂'        local("APL385 Unicode"),'</code>
+<code class="emphasize">→[49]  r,←⊂'        url("https://misc.aplteam.com/apl385.ttf") format("truetype");'</code>
+<code class="emphasize">→[50]  r,←⊂'}'</code>
+<code class="emphasize">→[51]  r,←⊂'.info {border: 1px silver dashed; background-color: #F2F2F2;margin: 0.5em; padding: 0.5em;}'</code>
+<code class="emphasize">→[52]  r,←⊂'}'</code>
+</div>
+<code class="header" id="listing_22">#.CodeCoverage.CodeCoverage.GetPrintCss &mdash; 0%<a class="float-right no-print no-underline top-links" href="#top" title="Go to the top of the document">&#8607;</a><a  class="float-right no-print no-underline top-links" href="#partly-covered" title="Go to the beginning of 'Partly-covered'">↑</a></code>
+<div class="code-block"><code>  r←GetPrintCss</code>
+<code class="emphasize">→[1]   r←''</code>
+<code class="emphasize">→[2]   r,←⊂'@media print{@page {size: portrait}'</code>
+<code class="emphasize">→[3]   r,←⊂'@page {'</code>
+<code class="emphasize">→[4]   r,←⊂'    margin: 1cm 1cm 1cm 1.75cm;'</code>
+<code class="emphasize">→[5]   r,←⊂'    @bottom-right {'</code>
+<code class="emphasize">→[6]   r,←⊂'        content: counter(page) " / " counter(pages);'</code>
+<code class="emphasize">→[7]   r,←⊂'  }'</code>
+<code class="emphasize">→[8]   r,←⊂'}'</code>
+<code class="emphasize">→[9]   r,←⊂'body {'</code>
+<code class="emphasize">→[10]  r,←⊂'    font: 12pt "Times New Roman", Times, serif;'</code>
+<code class="emphasize">→[11]  r,←⊂'    line-height: 1.2;'</code>
+<code class="emphasize">→[12]  r,←⊂'     /* CSS3 filter, at the moment Webkit only. Prefix it for future implementations */'</code>
+<code class="emphasize">→[13]  r,←⊂'    -webkit-filter: grayscale(100%);'</code>
+<code class="emphasize">→[14]  r,←⊂'    filter: grayscale(100%); /* future-proof */'</code>
+<code class="emphasize">→[15]  r,←⊂'}'</code>
+<code class="emphasize">→[16]  r,←⊂'h1 {font-size: 18pt;}'</code>
+<code class="emphasize">→[17]  r,←⊂'h2 {font-size: 16pt; margin-top: 10pt; margin-bottom: 3pt;}'</code>
+<code class="emphasize">→[18]  r,←⊂'th, td {padding: 2pt 3pt;}'</code>
+<code class="emphasize">→[19]  r,←⊂'th {text-align: left;background-color: #DBDBDB;}'</code>
+<code class="emphasize">→[20]  r,←⊂'tbody tr:nth-child(odd) {background-color: #EDEDED;}'</code>
+<code class="emphasize">→[21]  r,←⊂'table {'</code>
+<code class="emphasize">→[22]  r,←⊂'    color-adjust: exact !important;'</code>
+<code class="emphasize">→[23]  r,←⊂'    -webkit-print-color-adjust: exact !important;'</code>
+<code class="emphasize">→[24]  r,←⊂'    print-color-adjust: exact !important;'</code>
+<code class="emphasize">→[25]  r,←⊂'    font-size: 8pt;'</code>
+<code class="emphasize">→[26]  r,←⊂'    font-family: APLFont, monospace;'</code>
+<code class="emphasize">→[27]  r,←⊂'}'</code>
+<code class="emphasize">→[28]  r,←⊂'div.keep-together {break-inside: avoid; break-before:auto;}'</code>
+<code class="emphasize">→[29]  r,←⊂'table {border: silver 1pt solid;}'</code>
+<code class="emphasize">→[30]  r,←⊂'code , code a {font-size: 8pt; font-family: APLFont, monospace;}'</code>
+<code class="emphasize">→[31]  r,←⊂'code.header {'</code>
+<code class="emphasize">→[32]  r,←⊂'    font-size: 8pt;'</code>
+<code class="emphasize">→[33]  r,←⊂'    font-family: APLFont, monospace;'</code>
+<code class="emphasize">→[34]  r,←⊂'    margin: 7pt 3pt 0 10pt;'</code>
+<code class="emphasize">→[35]  r,←⊂'    padding:0;'</code>
+<code class="emphasize">→[36]  r,←⊂'    display: block;'</code>
+<code class="emphasize">→[37]  r,←⊂'}'</code>
+<code class="emphasize">→[38]  r,←⊂'div.code-block {'</code>
+<code class="emphasize">→[39]  r,←⊂'    border: 1pt silver dashed;'</code>
+<code class="emphasize">→[40]  r,←⊂'    background-color: #F2F2F2;'</code>
+<code class="emphasize">→[41]  r,←⊂'    display: block;'</code>
+<code class="emphasize">→[42]  r,←⊂'    margin: 4pt 4pt 4pt 4pt;'</code>
+<code class="emphasize">→[43]  r,←⊂'    padding: 4pt;'</code>
+<code class="emphasize">→[44]  r,←⊂'}'</code>
+<code class="emphasize">→[45]  r,←⊂'div.code-block code {display: block; white-space: pre-wrap; margin:0; padding:0; word-wrap: break-word;}'</code>
+<code class="emphasize">→[46]  r,←⊂'.emphasize { font-weight: 800;}'</code>
+<code class="emphasize">→[47]  r,←⊂'a {text-decoration: none;color: black;}'</code>
+<code class="emphasize">→[48]  r,←⊂'ul li, ol li {margin: 8pt 3pt;}'</code>
+<code class="emphasize">→[49]  r,←⊂'.no-print {display:none;}'</code>
+<code class="emphasize">→[50]  r,←⊂'.align-right {text-align: right;}'</code>
+<code class="emphasize">→[51]  r,←⊂'#footer hr {margin-top:1.5em;}'</code>
+<code class="emphasize">→[52]  r,←⊂'#footer p {margin-top:5pt; padding-top:0; font-size: 6pt;}'</code>
+<code class="emphasize">→[53]  r,←⊂'@font-face {'</code>
+<code class="emphasize">→[54]  r,←⊂'        font-family: "APLFont";'</code>
+<code class="emphasize">→[55]  r,←⊂'    src:'</code>
+<code class="emphasize">→[56]  r,←⊂'        local("APL385 Unicode"),'</code>
+<code class="emphasize">→[57]  r,←⊂'        url("https://misc.aplteam.com/apl385.ttf") format("truetype");'</code>
+<code class="emphasize">→[58]  r,←⊂'}'</code>
+<code class="emphasize">→[59]  r,←⊂'.info {border: 1px silver dashed; background-color: #F2F2F2;margin: 8px; padding: 8px;}'</code>
+<code class="emphasize">→[60]  r,←⊂'}'</code>
+</div>
+<code class="header" id="listing_23">#.CodeCoverage.CodeCoverage.CollectDataForCoverageReport &mdash; 0%<a class="float-right no-print no-underline top-links" href="#top" title="Go to the top of the document">&#8607;</a><a  class="float-right no-print no-underline top-links" href="#partly-covered" title="Go to the beginning of 'Partly-covered'">↑</a></code>
+<div class="code-block"><code>  names←CollectDataForCoverageReport watch</code>
+<code> [1]      ⍝ Determins all objects to be observed together with the number of lines.</code>
+<code class="emphasize">→[2]   names←''</code>
+<code class="emphasize">→[3]   :For this :In ,⊆watch</code>
+<code class="emphasize">→[4]       ref←⍎this</code>
+<code class="emphasize">→[5]       :If IsScripted ref</code>
+<code class="emphasize">→[6]           names,←(⊂this,'.'),¨NamesInScript ref</code>
+<code> [7]       :Else</code>
+<code class="emphasize">→[8]           names,←(⊂this,'.'),¨' '~¨⍨↓ref.⎕NL 3 4</code>
+<code class="emphasize">→[9]           :If 0&lt;≢list←ref.⎕NL 9</code>
+<code class="emphasize">→[10]              list←' '~¨⍨↓list</code>
+<code class="emphasize">→[11]              isScripted←IsScripted¨ref⍎¨list</code>
+<code class="emphasize">→[12]              :For this2 :In isScripted/list</code>
+<code class="emphasize">→[13]                  ref2←ref⍎this2</code>
+<code class="emphasize">→[14]                  :If (⍕ref2)≡this,'.',this2                            ⍝ Ignore references</code>
+<code class="emphasize">→[15]                      names,←(⊂this,'.',this2,'.'),¨NamesInScript ref2</code>
+<code> [16]                  :EndIf</code>
+<code> [17]              :EndFor</code>
+<code class="emphasize">→[18]              :If 0&lt;≢list←(~isScripted)/list</code>
+<code class="emphasize">→[19]              :AndIf 0&lt;≢list←({⍵≡⍕⍎⍵}¨(⊂this,'.'),¨list)/list           ⍝ Ignore references</code>
+<code class="emphasize">→[20]                  names,←⊃,/CollectDataForCoverageReport¨(⊂this,'.'),¨list</code>
+<code> [21]              :EndIf</code>
+<code> [22]          :EndIf</code>
+<code> [23]      :EndIf</code>
+<code> [24]  :EndFor</code>
+</div>
+<code class="header" id="listing_24">#.CodeCoverage.CodeCoverage.NamesInScript &mdash; 0%<a class="float-right no-print no-underline top-links" href="#top" title="Go to the top of the document">&#8607;</a><a  class="float-right no-print no-underline top-links" href="#partly-covered" title="Go to the beginning of 'Partly-covered'">↑</a></code>
+<div class="code-block"><code>  r←NamesInScript ref</code>
+<code> [1]   :Access Public Shared</code>
+<code> [2]      ⍝ Takes a ref pointing to a class or interface script and returns the names of all functions and operators</code>
+<code> [3]      ⍝ within that script.\\</code>
+<code> [4]      ⍝ Has two limitations:</code>
+<code> [5]      ⍝ * Cannot handle nested classes and nested namespaces.</code>
+<code> [6]      ⍝ * May well mistake a variable name for the name of a dfn.\\</code>
+<code class="emphasize">→[7]   r←''</code>
+<code class="emphasize">→[8]   body←⎕SRC ref</code>
+<code class="emphasize">→[9]   body←'''[^'']*'''⎕R''⊣body                                     ⍝ Get rid of everything between quotes</code>
+<code class="emphasize">→[10]  body←'⍝.*$'⎕R''⊣body                                           ⍝ Get rid of comments</code>
+<code class="emphasize">→[11]  options←('IC' 1)('Greedy' 0)('DotAll' 1)('Mode' 'D')</code>
+<code class="emphasize">→[12]  r,←options GeterAndSetterNames body                            ⍝ Extract the names of all getters and setters (if any)</code>
+<code class="emphasize">→[13]  body←':Property .*:EndProperty'⎕R''⍠options⊣body               ⍝ Remove Properties (because they carry `∇`!)</code>
+<code class="emphasize">→[14]  body←¯1↓1↓(~body∧.=¨' ')/body                                  ⍝ Remove first, last and all empty lines</code>
+<code class="emphasize">→[15]  body←'^ {5,}∇.*$'⎕R''⊣body                                     ⍝ Remove recursive ∇ calls that stand on their own</code>
+<code class="emphasize">→[16]  b←'∇'∊¨body                                                    ⍝ Which lines carry a ∇?</code>
+<code class="emphasize">→[17]  ((b\{{1=≢⍵:0 ⋄ '∇'≠⊃⍵}⍵~' '}¨b/body)/body)←' '                 ⍝ Remove all other recursive ∇ calls</code>
+<code class="emphasize">→[18]  body↓¨⍨←{+/∧\' '=⍵}¨body                                       ⍝ Drop all leading spaces</code>
+<code class="emphasize">→[19]  b←'∇'=⊃¨body                                                   ⍝ All lines that start with a nabla</code>
+<code class="emphasize">→[20]  tfns←b/body                                                    ⍝ Trad fns headers</code>
+<code class="emphasize">→[21]  tfns←1↓¨tfns                                                   ⍝ Remove the nablas</code>
+<code class="emphasize">→[22]  tfns←((≢tfns)⍴1 0)/tfns                                        ⍝ Remove every second line: those are the closing ones</code>
+<code class="emphasize">→[23]  tfns←{'←'∊⍵:⍵↓⍨⍵⍳'←' ⋄ ⍵}¨tfns                                 ⍝ Remove all explicit results</code>
+<code class="emphasize">→[24]  tfns←{'{'∊⍵:⍵↓⍨⍵⍳'}' ⋄ ⍵}¨tfns                                 ⍝ Remove optional left argument</code>
+<code class="emphasize">→[25]  tfns←{⍵↓⍨+/∧\' '=⍵}¨tfns                                       ⍝ Remove all leading spaces</code>
+<code class="emphasize">→[26]  tfns←{⍵/⍨~'  '⍷⍵}¨tfns                                         ⍝ Remove all multiple spaces</code>
+<code class="emphasize">→[27]  tfns←{⍵↓⍨{-+/∧\' '=⍵}⌽⍵}¨tfns                                  ⍝ Remove all trailing spaces</code>
+<code class="emphasize">→[28]  :If ∨/b←'('=⊃¨tfns                                             ⍝ These must be operators</code>
+<code class="emphasize">→[29]      (b/tfns)←{{⍵↑⍨¯1+⍵⍳')'}⍵↓⍨⍵⍳' '}¨b/tfns                    ⍝ Extract the operator names</code>
+<code> [30]  :EndIf</code>
+<code class="emphasize">→[31]  tfns←'\([^)]+\)'⎕R' foo'⊣tfns                                  ⍝ Replace anything betwen () by ` foo` = impersonate a simple ⍵</code>
+<code class="emphasize">→[32]  :If 0&lt;≢tfns←{2=' '+.=⍵:⍵↓⍨⍵⍳' ' ⋄ ⍵}¨tfns                      ⍝ Remove left arguments</code>
+<code class="emphasize">→[33]      r,←{⍵↑⍨¯1+⌊/⍵⍳' ;'}¨tfns                                   ⍝ Name of all trad fns</code>
+<code> [34]  :EndIf</code>
+<code class="emphasize">→[35]  :If 0&lt;≢bodies←'∇[^∇]*∇'⎕S{⍵.Match}⍠options⊣body                ⍝ Every trad fn must be investigated for any local dfns.</code>
+<code class="emphasize">→[36]  :AndIf 0&lt;≢bodies←{(⎕UCS 10)~¨⍨(~(⎕UCS 13 10)⍷⍵)⊆⍵}¨bodies      ⍝ Split them one-by-one</code>
+<code class="emphasize">→[37]      r,←{0=≢⍵:⍵ ⋄ ⊃,/⍵}EstablishDfns¨bodies                     ⍝ All dfns defined within tradfns</code>
+<code> [38]  :EndIf</code>
+<code class="emphasize">→[39]  body←'∇[^∇]*∇'⎕R''⍠options⊣body                                ⍝ Wipe out all trad fns</code>
+<code class="emphasize">→[40]  body←(0&lt;≢¨body~¨' ')/body                                      ⍝ No empty lines</code>
+<code> [41]       ⍝ --- Next two lines are future stuff</code>
+<code> [42]       ⍝ dfns←EstablishDfns body                                      ⍝ Extract the dfns (and dops of course)</code>
+<code> [43]       ⍝ r,←∪dfns                                                     ⍝ Those might well be variable assignment, therefore ∪!</code>
+</div>
+<code class="header" id="listing_25">#.CodeCoverage.CodeCoverage.GeterAndSetterNames &mdash; 0%<a class="float-right no-print no-underline top-links" href="#top" title="Go to the top of the document">&#8607;</a><a  class="float-right no-print no-underline top-links" href="#partly-covered" title="Go to the beginning of 'Partly-covered'">↑</a></code>
+<div class="code-block"><code> r←options GeterAndSetterNames body</code>
+<code class="emphasize">→[1]  r←''</code>
+<code class="emphasize">→[2]  body←1↓⊃,/(⎕UCS 10),¨body</code>
+<code class="emphasize">→[3]  :If ∨/bool←':property'⍷⎕C body</code>
+<code class="emphasize">→[4]      r,←⊃,/body∘{'set_' 'get_',¨⊂(1+≢':propert')↓{⍵↑⍨¯1+⍵⍳⎕UCS 10}⍵↓⍺}¨{⍵/⍳≢⍵}bool</code>
+<code> [5]  :EndIf</code>
+</div>
+<code class="header" id="listing_26">#.CodeCoverage.CodeCoverage.RemoveToBeIgnored &mdash; 0%<a class="float-right no-print no-underline top-links" href="#top" title="Go to the top of the document">&#8607;</a><a  class="float-right no-print no-underline top-links" href="#partly-covered" title="Go to the beginning of 'Partly-covered'">↑</a></code>
+<div class="code-block"><code>  data←data RemoveToBeIgnored ignore</code>
+<code> [1]        ⍝ `ignore` is a nested vector with nanes. In case such a name identifies any APL object it is removed.\\</code>
+<code> [2]        ⍝ However, if an ordinary namespace is part of `ignore` then it won't appear in `data`.</code>
+<code> [3]        ⍝ Therefore we identify container names in a second step and remove everything that belongs to such a container.</code>
+<code> [4]        ⍝ That means it works recursively.</code>
+<code class="emphasize">→[5]   :If 0&lt;≢ignore</code>
+<code class="emphasize">→[6]   :AndIf 0&lt;≢data←(~data[;1]∊ignore)⌿data</code>
+<code class="emphasize">→[7]       bool←9=⊃∘⎕NC¨ignore</code>
+<code class="emphasize">→[8]       data←(⊃∧/data∘{⍵∘≢¨(≢⍵)↑¨⍺[;1]}¨((bool/ignore),¨'.'))⌿data</code>
+<code> [9]   :EndIf</code>
+</div>
+<code class="header" id="listing_27">#.CodeCoverage.CodeCoverage.FormatDateTime &mdash; 0%<a class="float-right no-print no-underline top-links" href="#top" title="Go to the top of the document">&#8607;</a><a  class="float-right no-print no-underline top-links" href="#partly-covered" title="Go to the beginning of 'Partly-covered'">↑</a></code>
+<div class="code-block"><code> r←FormatDateTime ts</code>
+<code class="emphasize">→[1]  r←⊃'YYYY-MM-DD hh:mm:ss'(1200⌶)¯1 1 ⎕DT⊂ts</code>
+</div>
+<code class="header" id="listing_28">#.CodeCoverage.CodeCoverage.CollectInformation &mdash; 0%<a class="float-right no-print no-underline top-links" href="#top" title="Go to the top of the document">&#8607;</a><a  class="float-right no-print no-underline top-links" href="#partly-covered" title="Go to the beginning of 'Partly-covered'">↑</a></code>
+<div class="code-block"><code> r←CollectInformation dummy</code>
+<code> [1]     ⍝ Collects information about the current test run.</code>
+<code class="emphasize">→[2]  ts←FormatDateTime ⎕TS</code>
+<code class="emphasize">→[3]  version←⊃{⍺,' ⋄ ',⍵}/# ⎕WG'APLVersion'</code>
+<code class="emphasize">→[4]  version,←' ⋄ ','Classic' 'Unicode'⊃⍨1+80=⎕DR' '</code>
+<code class="emphasize">→[5]  r←1 3⍴ts version(' '~⍨,'K0G⊂ZZZ.ZZZ.ZZZ.ZZZ.ZZ9⊃'⎕FMT⌊⎕WA÷1024×1024) ⍝ MBs</code>
+</div>
+<code class="header" id="listing_29">#.CodeCoverage.CodeCoverage.ExchangeHtmlSpecialChars &mdash; 0%<a class="float-right no-print no-underline top-links" href="#top" title="Go to the top of the document">&#8607;</a><a  class="float-right no-print no-underline top-links" href="#partly-covered" title="Go to the beginning of 'Partly-covered'">↑</a></code>
+<div class="code-block"><code> txt←ExchangeHtmlSpecialChars txt</code>
+<code> [1]     ⍝ &lt; =&gt; &amp;lt; ⋄ &gt; =&gt; &amp;gt; ⋄ &amp; =&gt; &amp;amp;</code>
+<code class="emphasize">→[2]  txt←(,¨'&amp;&lt;&gt;')⎕R'\&amp;amp;' '\&amp;lt;' '\&amp;gt;'⊣txt</code>
+</div>
+<code class="header" id="listing_30">#.CodeCoverage.CodeCoverage.CompareCR &mdash; 0%<a class="float-right no-print no-underline top-links" href="#top" title="Go to the top of the document">&#8607;</a><a  class="float-right no-print no-underline top-links" href="#partly-covered" title="Go to the beginning of 'Partly-covered'">↑</a></code>
+<div class="code-block"><code>  z←a CompareCR b</code>
+<code> [1]        ⍝ compare two CRs taking into account that some symbols are replaced with ⎕Uxxxx when loaded into classic</code>
+<code> [2]        ⍝ z=1: match, 0: did not match</code>
+<code> [3]        ⍝--&gt; this means that the final run which creates the report must be run on a Unicode interpreter, otherwise</code>
+<code> [4]        ⍝    it will crash with errors because it can't deal with these characters...</code>
+<code class="emphasize">→[5]   :If {0::1 ⋄ 0⊣⎕UCS ⍵}8838  ⍝ do not even attempt to execute this on Classic!</code>
+<code class="emphasize">→[6]       z←1</code>
+<code class="emphasize">→[7]   :ElseIf a≠⍥≢b   ⍝ no of lines must match</code>
+<code class="emphasize">→[8]       z←0</code>
+<code> [9]   :Else</code>
+<code class="emphasize">→[10]      args←{1=≡⍵:↓⍵ ⋄ ⍵}¨a b</code>
+<code class="emphasize">→[11]      :For i :In ⍳2</code>
+<code class="emphasize">→[12]          :For m :In ('(⎕u\d*)'⎕S 2⍠'IC' 1)i⊃args</code>
+<code class="emphasize">→[13]              :If m≢0</code>
+<code class="emphasize">→[14]                  l←(⎕IO+m)⊃i⊃args</code>
+<code class="emphasize">→[15]                  l←('⎕u(\d*.)'⎕R{{(⎕UCS dec ¯1↓⍵),(' '≢⍥,¯1↑⍵)/¯1↑⍵}2↓⍵.Match}⍠'IC' 1)l</code>
+<code class="emphasize">→[16]                  ((⎕IO+m)⊃i⊃args)←l</code>
+<code> [17]              :EndIf</code>
+<code> [18]          :EndFor</code>
+<code> [19]      :EndFor</code>
+<code class="emphasize">→[20]      z←≡/args</code>
+<code> [21]  :EndIf</code>
+</div>
+<code class="header" id="listing_31">#.CodeCoverage.CodeCoverage.IsFile &mdash; 0%<a class="float-right no-print no-underline top-links" href="#top" title="Go to the top of the document">&#8607;</a><a  class="float-right no-print no-underline top-links" href="#partly-covered" title="Go to the beginning of 'Partly-covered'">↑</a></code>
+<div class="code-block"><code> r←IsFile filename</code>
+<code class="emphasize">→[1]  r←0</code>
+<code class="emphasize">→[2]  :Trap 22</code>
+<code class="emphasize">→[3]      r←2=1 ⎕NINFO filename</code>
+<code> [4]  :EndTrap</code>
+</div>
+<code class="header" id="listing_32">#.CodeCoverage.CodeCoverage.set_data &mdash; 100%<a class="float-right no-print no-underline top-links" href="#top" title="Go to the top of the document">&#8607;</a><a  class="float-right no-print no-underline top-links" href="#partly-covered" title="Go to the beginning of 'Partly-covered'">↑</a></code>
+<div class="code-block missing">Could not get canonical representation.</div>
+<code class="header" id="listing_33">#.CodeCoverage.CodeCoverage.History &mdash; 100%<a class="float-right no-print no-underline top-links" href="#top" title="Go to the top of the document">&#8607;</a><a  class="float-right no-print no-underline top-links" href="#partly-covered" title="Go to the beginning of 'Partly-covered'">↑</a></code>
+<div class="code-block"><code>  History</code>
+<code> [1]   :Access Public Shared</code>
+<code> [2]      ⍝ * 0.10.3 from 2023-04-23</code>
+<code> [3]      ⍝   * Bug fix: Instance names could not be assigned to "ignore"</code>
+<code> [4]      ⍝ * 0.10.2 from 2023-04-09</code>
+<code> [5]      ⍝   * On non-Windows platforms the file access matrix needs setting to avoid problems</code>
+<code> [6]      ⍝ * 0.10.1 from 2023-04-08</code>
+<code> [7]      ⍝   The `CreateListingForFnsAndOpr` function deleted the "*.cr" file when it should not have</code>
+<code> [8]      ⍝ * 0.10.0 from 2023-03-23</code>
+<code> [9]      ⍝   * New function `DeleteFiles` added for getting rid of the two reporting files create/used by `CodeCoverage`, and</code>
+<code> [10]     ⍝     optionally also of the HML file</code>
+<code> [11]     ⍝   * Bug fix: ∆STOPPED caused a VALUE ERROR nothing wa actually executed</code>
+<code> [12]     ⍝ * 0.9.4 from 2022-12-12</code>
+<code> [13]     ⍝   * Reports which edition of the interpreter a test was run on</code>
+<code> [14]     ⍝   * Precaution against code changes while accumulating test results: a warning is shown in the session if differences were found</code>
+<code> [15]     ⍝   * Might run under classic at your own risk</code>
+<code> [16]     ⍝   * When filtering the table the listings below the table are updated to only show code of functions matching the filter</code>
+<code> [17]     ⍝ * 0.9.3 from 2022-10-06</code>
+<code> [18]     ⍝   * When `Finalise` was called without calling `Stop` the result appeared to be wrong. Is now called implicitly by `Finalise`.</code>
+<code> [19]     ⍝   * Destructor added that executes `⎕PROFILE 'clear'`</code>
+<code> [20]     ⍝ * 0.9.2 from 2022-09-19</code>
+<code> [21]     ⍝   * Couple of bug fixes</code>
+<code> [22]     ⍝     * Typo fixed (Finalyse =&gt; Finalise)</code>
+<code> [23]     ⍝     * Rearranged a few lines to avoid VALUE ERROR in CreateReport if no data was gathered</code>
+<code> [24]     ⍝     * Start: ⎕PROFILE'clear' added</code>
+<code> [25]     ⍝ * 0.9.1 from 2021-10-28</code>
+<code> [26]     ⍝   * Sort order of first column of the "Partly covered" category reversed.</code>
+<code> [27]     ⍝ * 0.9.0 from 2021-10-06</code>
+<code> [28]     ⍝   * The table on coverage reports now on ALL fns (including 0% and 100%). Dedicated buttons allow selection of a category.</code>
+<code> [29]     ⍝     a search field helps to navigate the table. re-ordering (click a col-header) is also supported.</code>
+<code> [30]     ⍝ * 0.8.0 from 2021-05-27</code>
+<code> [31]     ⍝   * In the extended report the coverage percentage is now shown for each function</code>
+<code> [32]     ⍝   * Field `Info` added. If not empty the text is added to the HTML right after the &lt;h1&gt;</code>
+<code> [33]     ⍝   * Bug fixes:</code>
+<code> [34]     ⍝     * ⎕SE in mixed case and lowercase lead to wrong reports</code>
+<code> [35]     ⍝     * Typo in message fixed</code>
+<code> [36]     ⍝     * "&amp;" was transformed into "&amp;amp" (missing ";")</code>
+<code> [37]     ⍝     * &lt;thead&gt; was not closed</code>
+<code> [38]     ⍝     * &lt;tbody&gt; was closed twice, but never opened</code>
+</div>
+<code class="header" id="listing_34">#.CodeCoverage.CodeCoverage.htmlFile &mdash; 100%<a class="float-right no-print no-underline top-links" href="#top" title="Go to the top of the document">&#8607;</a><a  class="float-right no-print no-underline top-links" href="#partly-covered" title="Go to the beginning of 'Partly-covered'">↑</a></code>
+<div class="code-block missing">Could not get canonical representation.</div>
+<code class="header" id="listing_35">#.CodeCoverage.CodeCoverage.verbose &mdash; 100%<a class="float-right no-print no-underline top-links" href="#top" title="Go to the top of the document">&#8607;</a><a  class="float-right no-print no-underline top-links" href="#partly-covered" title="Go to the beginning of 'Partly-covered'">↑</a></code>
+<div class="code-block missing">Could not get canonical representation.</div>
+<div id="footer">
+<hr>
+<p>Created by "CodeCoverage" version 0.10.2+52 from 2023-04-09</p>
+</div>
+
+</body>
+</html>

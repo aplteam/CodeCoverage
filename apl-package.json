@@ -19,5 +19,5 @@
   source: "APLSource/CodeCoverage.aplc",
   tags: "code-coverage,test-framework,unit-tests",
   userCommandScript: "",
-  version: "0.10.2+62",
+  version: "0.10.3+63",
 }

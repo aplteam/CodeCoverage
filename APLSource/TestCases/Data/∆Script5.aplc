@@ -1,0 +1,16 @@
+:Class ∆Script5
+⍝ Useful to check on instance methods
+    ∇ make
+      :Access Public Instance
+      :Implements Constructor
+      ⎕RL←+/⎕ts
+    ∇
+    ∇ r←Hello1
+      :Access Public Instance
+      r←'Galaxy'
+    ∇
+    ∇ r←Hello2
+      :Access Public Instance
+      r←'World'
+    ∇
+:EndClass
