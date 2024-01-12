@@ -54,12 +54,12 @@
 
     ∇ r←Version
       :Access Public Shared
-      r←'CodeCoverage' '0.10.4+52' '2024-01-??'
+      r←'CodeCoverage' '0.10.4+52' '2024-01-12'
     ∇
 
     ∇ History
       :Access Public Shared
-    ⍝ * 0.10.4 from 2024-01-??
+    ⍝ * 0.10.4 from 2024-01-12
     ⍝   * Link to `Tester2` in the documentation corrected
     ⍝ * 0.10.3 from 2023-04-23
     ⍝   * Bug fix: Instance names could not be assigned to "ignore"
