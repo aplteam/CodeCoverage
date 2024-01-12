@@ -3,7 +3,7 @@
 ## Overview
 
 This class provides methods to watch certain parts of the workspace for being executed, probably as part of running
-a test framework like [https://github.com/aplteam/Tester2](`Tester2` "Link to Tester2 on GitHub"), although checking
+a test framework like [`Tester2`](https://github.com/aplteam/Tester2 "Link to Tester2 on GitHub"), although checking
 on code coverage by just running an application can also be useful, especially for legacy code.
 
 **Note:** `CodeCoverage` releases are published as [Tatin](https://tatin.dev "Link to the principal Tatin Registry") packages, see there.
@@ -109,3 +109,4 @@ After you have done this, it is advisable to run the tests again with the covera
 This is a text vector that is empty by default. You can add fully qualified comma-separated names of functions and operators that you want to be ignored when reporting on code coverage.
 
 Note that `ignore` is an instance property.
+
