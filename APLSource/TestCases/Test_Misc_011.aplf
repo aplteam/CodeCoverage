@@ -1,0 +1,31 @@
+ R←Test_Misc_011(stopFlag batchFlag);⎕TRAP;filename;C;a;b;c;d;html
+⍝ Specify # as source
+ ⎕TRAP←(999 'C' '∘∘∘ ⍝ Deliberate error')(0 'N')
+
+ R←T._Failed
+
+ filename←(739⌶0),'/CodeCoverage_Tests_',⊃⎕SI
+
+ C←⎕NEW ##.CodeCoverage(,⊂,'#')
+ C.filename←filename
+ C.Start ⍬
+
+ a←1
+ b←2
+ c←3
+ d←a+b+c
+
+ C.Stop ⍬
+ {}C.Finalise ⍬
+ →T.GoToTidyUp 3≠≢C.data
+
+ {}1 ##.CodeCoverage.ProcessDataAndCreateReport C.filename
+ html←⊃⎕NGET C.filename,'.html'
+ →T.GoToTidyUp 0=+/'>→[3] '⍷html
+
+ R←T._OK
+
+∆TidyUp:
+ ⎕ndelete C.filename,'.html'
+ Data.⎕EX'T'
+⍝Done

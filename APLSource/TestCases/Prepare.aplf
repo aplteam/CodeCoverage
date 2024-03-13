@@ -25,6 +25,7 @@
  :EndIf
  :If flag
      3 ⎕MKDIR testPath  ⍝
-     T.codeCoverage←⎕NEW CodeCoverage(,⊂'#.',{⍵,'.',⍵}2↓⍕⎕THIS.##)
+      ⍝TODO⍝ T.codeCoverage←⎕NEW CodeCoverage(,⊂'#.',{⍵,'.',⍵}2↓⍕⎕THIS.##)
+     T.codeCoverage←⎕NEW ##.CodeCoverage(,⊂'#')
      T.codeCoverage.filename←testFilename
  :EndIf
