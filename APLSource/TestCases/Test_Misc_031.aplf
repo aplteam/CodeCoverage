@@ -25,5 +25,5 @@
 
 ∆TidyUp:
  ##.CodeCoverage.Info←''
- 1 T.codeCoverage.DeleteFiles C.filename
+ 1 C.DeleteFiles C.filename
 ⍝Done

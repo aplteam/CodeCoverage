@@ -23,5 +23,5 @@
 
 ∆TidyUp:
  ⎕FUNTIE tno
- 1 T.codeCoverage.DeleteFiles T2.codeCoverage.filename
+ 1 T2.codeCoverage.DeleteFiles T2.codeCoverage.filename
 ⍝Done

@@ -29,6 +29,6 @@
  R←T._OK
 
 ∆TidyUp:
- 1 T.codeCoverage.DeleteFiles C.filename
+ 1 C.DeleteFiles C.filename
  Data.⎕EX'T'
 ⍝Done

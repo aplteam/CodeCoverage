@@ -1,0 +1,35 @@
+ R←Test_Misc_021(stopFlag batchFlag);⎕TRAP;htmlFilename;html;ref;C;body1;body2
+⍝ Spcify comma-separated list to watch
+ ⎕TRAP←(999 'C' '∘∘∘ ⍝ Deliberate error')(0 'N')
+
+ R←T._Failed
+
+ #.⎕SHADOW'TEMP1' ⋄ 'TEMP1'#.⎕NS''
+ #.⎕SHADOW'TEMP2' ⋄ 'TEMP2'#.⎕NS''
+
+ body1←':Namespace Foo' '∇r←Hello' 'r←''Hello world''' '→0' 'a←1' '∇' ':EndNamespace'
+ ref←#.TEMP1.⎕FIX body1
+
+ body2←':Namespace Goo' '∇r←Hello' 'r←''Hello galaxy''' '→0' 'b←1' '∇' ':EndNamespace'
+ ref←#.TEMP2.⎕FIX body2
+
+ C←⎕NEW ##.CodeCoverage(,⊂'#.TEMP1,#.TEMP2')
+
+ C.Start ⍬
+ Assert'Hello world'≡#.TEMP1.Foo.Hello
+ Assert'Hello galaxy'≡#.TEMP2.Goo.Hello
+
+ C.Stop ⍬
+ {}C.Finalise ⍬
+ →T.PassesIf 2=≢C.data
+ {}1 ##.CodeCoverage.ProcessDataAndCreateReport C.filename
+ html←⊃⎕NGET C.filename,'.html'
+ →T.GoToTidyUp 0=+/'>→[3] '⍷html
+ →T.GoToTidyUp 2≠≢'>→\[[0-9]+] '⎕S 0⊣html
+
+ R←T._OK
+
+∆TidyUp:
+ 1 C.DeleteFiles C.filename
+ Data.⎕EX'T'
+⍝Done

@@ -8,24 +8,29 @@
  T←⎕NEW Tester2 ⎕THIS
  testPath←##.CiderConfig.HOME,'/TestResults'
  testFilename←testPath,'/CodeCoverage'
- flag←0
- :If ⎕NEXISTS testPath
-     :If ⎕NEXISTS testFilename,'.profile'
-         ind←('Code Coverage' 0 1)CommTools.Select'Append' 'Replace' 'Neither'
-         →(3=ind)/0
-         flag←1
-         :If 2=ind
-             1 CodeCoverage.DeleteFiles testFilename
+ :If 0
+ ⍝ We cannot use CodeCoverage on its own test cases yet, because the tests would overwrite
+ ⍝ ⎕PROFILE data over and over again, leaving hardly anything useful at the end. For that to
+ ⍝ work every single test case that is using ⎕PROIFLE data needs to be executed in its own
+ ⍝ APL thread.
+     flag←0
+     :If ⎕NEXISTS testPath
+         :If ⎕NEXISTS testFilename,'.profile'
+             ind←('Code Coverage' 0 1)CommTools.Select'Append' 'Replace' 'Neither'
+             →(3=ind)/0
+             flag←1
+             :If 2=ind
+                 1 CodeCoverage.DeleteFiles testFilename
+             :EndIf
+         :Else
+             flag←0 CommTools.YesOrNo'Code coverage?'
          :EndIf
      :Else
          flag←0 CommTools.YesOrNo'Code coverage?'
      :EndIf
- :Else
-     flag←0 CommTools.YesOrNo'Code coverage?'
- :EndIf
- :If flag
-     3 ⎕MKDIR testPath  ⍝
-      ⍝TODO⍝ T.codeCoverage←⎕NEW CodeCoverage(,⊂'#.',{⍵,'.',⍵}2↓⍕⎕THIS.##)
-     T.codeCoverage←⎕NEW ##.CodeCoverage(,⊂'#')
-     T.codeCoverage.filename←testFilename
+     :If flag
+         3 ⎕MKDIR testPath  ⍝
+         T.codeCoverage←⎕NEW ##.CodeCoverage(,⊂'#')
+         T.codeCoverage.filename←testFilename
+     :EndIf
  :EndIf
