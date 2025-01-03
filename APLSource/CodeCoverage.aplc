@@ -195,6 +195,54 @@
       :EndIf
     ∇
 
+    ∇ mdFilename←ProcessDataAndCreateSummary filename;dcfFilename
+      :Access Public Shared
+      dcfFilename←(⊃,/2↑⎕NPARTS filename),'.profile'
+      'File not found'⎕SIGNAL 11/⍨0=⎕NEXISTS dcfFilename
+      {}ProcessData dcfFilename
+      mdFilename←CreateSummary filename
+    ∇
+
+    ∇ filename←CreateSummary filename;dcfFilename;tno;watched;data;runs;md;tally;caption;table
+      :Access Public Shared
+      dcfFilename←(⊃,/2↑⎕NPARTS filename),'.profile'
+      'File not found'⎕SIGNAL 11/⍨0=⎕NEXISTS dcfFilename
+      tno←dcfFilename ⎕FSTIE 0
+      watched←⎕FREAD tno,2
+      data←⎕FREAD tno 10
+      runs←⎕FREAD tno 4
+      ⎕FUNTIE tno
+      md←⊂'# Coverage Summary'
+      :If 0=≢data
+          md,←⊂'Nothing to report at all'
+      :Else
+          tally←≢data[;4]
+          caption←⊃,/{⍺,', ',⍵}/watched
+          md,←⊂'Watched: ',(⍕tally),' fns/opr within `',caption,'`'
+          md,←⊂''
+          :If 1=≢runs
+              md,←⊂'The test suite was executed once:'
+          :Else
+              md,←⊂'The test suite was executed ',(⍕≢runs),' times:'
+          :EndIf
+          md,←⊂''
+          table←('Executed at' 'APLVersion' 'Memory (MB)'),[0.5]⊂'---'
+          md,←{,/('|',¨⍵),'|'}table⍪runs
+          :If 0<≢∊data[;2 4]
+              md,←⊂''
+              md,←⊂'Overall ',(⍕⌊0.5+100×÷/+⌿≢¨data[;2 4]),'% of the testable code is covered.'
+              md,←⊂''
+              md,←⊂'(Comment lines, empty lines, all `:End`* lines etc. are ignored)'
+          :EndIf
+          md,←⊂''
+          md,←⊂(⍕data[;3]+.=100),' of the fns/opr are 100% covered.'
+          b←~data[;3]∊0 100
+          data←{⍵[⍋⍵[;3];]}data
+      :EndIf
+      filename←(⊃,/2↑⎕NPARTS filename),'.md'
+      (⊂md)⎕NPUT filename 1
+    ∇
+
     ∇ htmlFilename←{verbose}ProcessDataAndCreateReport filename;details;watch;dcfFilename
      ⍝ Takes the name of a component file created by first instantiating `CodeCoverage` and then calling
      ⍝ the instance methods `Start`, `Stop` and `Finalise`.\\
