@@ -36,10 +36,11 @@
 ⍝ executed are reported together with the lines not executed and the total number of lines.\\
 ⍝ This is a good place to start. Usually this leads to extending the list of things to ignore, adding more
 ⍝ test cases, deleting blocks of code that have become obsolete etc.\\
-⍝ At one point, however, or may want the full details: to do this, add a 1 as the left argument when calling
+⍝ At one point, however, one might want the full details: to do this, add a 1 as the left argument when calling
 ⍝ `CodeCoverage.ProcessDataAndCreateReport`. Now the canonical representations of all functions and operators that are
 ⍝ only partially covered will become part of the report. The lines that weren't executed are highlighted (bold) and have
 ⍝ a right-pointing arrow on the left.\\
+⍝ You may also create just a summary report by calling `ProcessDataAndCreateSummary`.\\
 ⍝ ## Limitations and flaws
 ⍝ * Nested namespaces/classes are currently not processed. This restriction may be lifted in a future release.
 ⍝ * Named dfns kept local within a traditional function are not processed correctly. This is a consequence of a
@@ -58,7 +59,10 @@
     ∇
 
     ∇ History
-      :Access Public Shared
+      :Access Public Shared   
+    ⍝ * 0.11.0 from 2025-06-01
+    ⍝   * New method `ProcessDataAndCreateSummary` introduced
+    ⍝   * Several tests added
     ⍝ * 0.10.7 from 2024-06-05
     ⍝   * Bug fixes
     ⍝     * A comma-separated list as argument to ⎕NEW caused a LENGTH ERROR
