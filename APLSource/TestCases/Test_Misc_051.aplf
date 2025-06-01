@@ -8,7 +8,8 @@
  ⎕SE.______Foo.⎕FX'r←Hello' 'r←''World'''
  Data.T←⎕NEW Tester2 Data
  Data.T.codeCoverage←⎕NEW ##.CodeCoverage(,⊂'⎕Se.______Foo')  ⍝ Mixed case: ⎕Se
- Data.T.codeCoverage.filename←(739⌶0),'/CodeCoverage_',(⊃⎕SI)
+ Data.T.codeCoverage.filename←(739⌶0),'/CodeCoverage/',(⊃⎕SI)
+ 3 ⎕MKDIR⊃⎕NPARTS Data.T.codeCoverage.filename
  {}Data.T.RunThese'Test_003'
  htmlFilename←##.CodeCoverage.ProcessDataAndCreateReport Data.T.codeCoverage.filename
  tno←(Data.T.codeCoverage.filename,'.profile')⎕FTIE 0
@@ -22,5 +23,6 @@
 ∆TidyUp:
  ⎕FUNTIE tno
  1 Data.T.codeCoverage.DeleteFiles Data.T.codeCoverage.filename
+ {}FilesAndDirs.RmDirByForce⊃⎕NPARTS Data.T.codeCoverage.filename
  Data.⎕EX'T'
 ⍝Done

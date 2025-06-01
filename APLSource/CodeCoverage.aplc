@@ -59,7 +59,7 @@
 
     ∇ History
       :Access Public Shared
-    ⍝ * 0.10.7 from 2024-06-05 
+    ⍝ * 0.10.7 from 2024-06-05
     ⍝   * Bug fixes
     ⍝     * A comma-separated list as argument to ⎕NEW caused a LENGTH ERROR
     ⍝     * CodeCoverage tests attempted to act on itself - that cannot work properly because the tests overwrite ⎕PROFILE
@@ -196,6 +196,7 @@
     ∇
 
     ∇ mdFilename←ProcessDataAndCreateSummary filename;dcfFilename
+    ⍝ Compiles a summary file that can be used as a job in a GitHub workflow
       :Access Public Shared
       dcfFilename←(⊃,/2↑⎕NPARTS filename),'.profile'
       'File not found'⎕SIGNAL 11/⍨0=⎕NEXISTS dcfFilename
@@ -554,40 +555,48 @@
           details ⎕FAPPEND tno
           ⎕FUNTIE tno
       :Else
-          3 ⎕MKDIR 1⊃⎕NPARTS filename
-          tno←filename ⎕FCREATE 0
-          (1 3⍴0 ¯1 0)⎕FSTAC tno                                    ⍝ Everybody everything; important for non-Windows platforms
-          d←''
-          d,←⊂'Documentation regarding the contents of this file'
-          d,←⊂(⍴1⊃d)⍴'-'
-          d,←⊂'* The first component contains this documentation'
-          d,←⊂'* The second one contains what has been watched; this will eventually be used to'
-          d,←⊂'  compile the caption for the coverage report.'
-          d,←⊂'* The third component holds the names of functions and operators to be ignored.'
-          d,←⊂'* The fourth component holds a matrix with as many rows as test runs have been performed:'
-          d,←⊂'  [;1] Timestamp ("YYYY-MM-DD hh:mm:ss")'
-          d,←⊂'  [;2] The result of the "APLVersion" property + info about the edition'
-          d,←⊂'  [;3] ⎕WA in KB'
-          d,←⊂'* Components five to nine are reserved'
-          d,←⊂'* The tenth one is originally empty. when "ProcessData" or "ProcessDataAndCreateReport"'
-          d,←⊂'  is called the resulting data is written to this component.'
-          d,←⊂'After the tenth one all components carry a matrix with n rows and 4 columns. n is'
-          d,←⊂'determined by the number of fns/oprs involved. The columns:'
-          d,←⊂'[;1] The name of the function or operator'
-          d,←⊂'[;2] Either empty or a vector of line numbers there were *not* executed.'
-          d,←⊂'     Empty in case none or all lines were executed.'
-          d,←⊂'[;3] Coverage percentage.'
-          d,←⊂'[;4] Total number of lines that can be expected to be tested.'
-          d ⎕FAPPEND tno
-          watch ⎕FAPPEND tno
-          ignore ⎕FAPPEND tno
-          (CollectInformation ⍬)⎕FAPPEND tno
-          tno{⍵ ⎕FAPPEND ⍺}¨(9-¯1+2⊃⎕FSIZE tno)⍴⊂''                 ⍝ Fill up to the tenth component
-          details ⎕FAPPEND tno
-          ⎕FUNTIE tno
+          (watch ignore details)CreateFile filename
       :EndIf
       r←filename
       ⍝Done
+    ∇
+
+    ∇ {r}←{y}CreateFile filename;tno;d;watch;ignore;details
+      :Access public Shared
+      y←⊆{0<⎕NC ⍵:⍎⍵ ⋄ ''}'y'
+      (watch ignore details)←3↑y,(≢y)↓'' '' ''
+      r←0
+      3 ⎕MKDIR 1⊃⎕NPARTS filename
+      tno←filename ⎕FCREATE 0
+      (1 3⍴0 ¯1 0)⎕FSTAC tno                                    ⍝ Everybody everything; important for non-Windows platforms
+      d←''
+      d,←⊂'Documentation regarding the contents of this file'
+      d,←⊂(⍴1⊃d)⍴'-'
+      d,←⊂'* The first component contains this documentation'
+      d,←⊂'* The second one contains what has been watched; this will eventually be used to'
+      d,←⊂'  compile the caption for the coverage report.'
+      d,←⊂'* The third component holds the names of functions and operators to be ignored.'
+      d,←⊂'* The fourth component holds a matrix with as many rows as test runs have been performed:'
+      d,←⊂'  [;1] Timestamp ("YYYY-MM-DD hh:mm:ss")'
+      d,←⊂'  [;2] The result of the "APLVersion" property + info about the edition'
+      d,←⊂'  [;3] ⎕WA in KB'
+      d,←⊂'* Components five to nine are reserved'
+      d,←⊂'* The tenth one is originally empty. when "ProcessData" or "ProcessDataAndCreateReport"'
+      d,←⊂'  is called the resulting data is written to this component.'
+      d,←⊂'After the tenth one all components carry a matrix with n rows and 4 columns. n is'
+      d,←⊂'determined by the number of fns/oprs involved. The columns:'
+      d,←⊂'[;1] The name of the function or operator'
+      d,←⊂'[;2] Either empty or a vector of line numbers there were *not* executed.'
+      d,←⊂'     Empty in case none or all lines were executed.'
+      d,←⊂'[;3] Coverage percentage.'
+      d,←⊂'[;4] Total number of lines that can be expected to be tested.'
+      d ⎕FAPPEND tno
+      watch ⎕FAPPEND tno
+      ignore ⎕FAPPEND tno
+      (CollectInformation ⍬)⎕FAPPEND tno
+      tno{⍵ ⎕FAPPEND ⍺}¨(9-¯1+2⊃⎕FSIZE tno)⍴⊂''                 ⍝ Fill up to the tenth component
+      details ⎕FAPPEND tno
+      ⎕FUNTIE tno
     ∇
 
     ∇ {r}←Start dummy
@@ -623,7 +632,7 @@
           cr.names←⎕FREAD cr.tno,1
           ⎕←'Tied ',cr.filename,' for listings'
       :Else
-          ⎕←'Did not find file "',cr.filename,'" with CRs collected by fn "Finalize" - will try to work without it'
+          ⎕←'Did not find file "',cr.filename,'" with CRs collected by fn "Finalise" - will try to work without it'
           cr.tno←0
       :EndIf
       :For i :In ⍳≢partlyCovered

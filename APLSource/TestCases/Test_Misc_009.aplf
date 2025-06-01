@@ -4,7 +4,8 @@
  R←T._Failed
 
  Data.Prepare
- Data.T.codeCoverage.filename←(739⌶0),'/CodeCoverage_',(⊃⎕SI)
+ Data.T.codeCoverage.filename←(739⌶0),'/CodeCoverage/',(⊃⎕SI)
+ 3 ⎕MKDIR⊃⎕NPARTS Data.T.codeCoverage.filename
  {}Data.T.RunThese'Test_DoesNotExists_001'
  htmlFilename←##.CodeCoverage.ProcessDataAndCreateReport Data.T.codeCoverage.filename
  tno←(Data.T.codeCoverage.filename,'.profile')⎕FTIE 0
@@ -15,5 +16,6 @@
 ∆TidyUp:
  ⎕FUNTIE tno
  1 Data.T.codeCoverage.DeleteFiles Data.T.codeCoverage.filename
+ {}FilesAndDirs.RmDirByForce⊃⎕NPARTS Data.T.codeCoverage.filename
  Data.⎕EX'T'
 ⍝Done

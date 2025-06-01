@@ -4,7 +4,8 @@
 
  R←T._Failed
 
- filename←(739⌶0),'/CodeCoverage_Tests_',⊃⎕SI
+ filename←(739⌶0),'/CodeCoverage_Tests/',⊃⎕SI
+ 3 ⎕MKDIR⊃⎕NPARTS filename
 
  C←⎕NEW ##.CodeCoverage(,⊂,'#')
  C.filename←filename
@@ -26,6 +27,7 @@
  R←T._OK
 
 ∆TidyUp:
- ⎕ndelete C.filename,'.html'
+ ⎕NDELETE C.filename,'.html'
+ {}FilesAndDirs.RmDirByForce⊃⎕NPARTS filename
  Data.⎕EX'T'
 ⍝Done

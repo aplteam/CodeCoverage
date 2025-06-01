@@ -4,7 +4,8 @@
  R←T._Failed
 
  Data.Prepare
- Data.T.codeCoverage.filename←(739⌶0),'/CodeCoverage_',(⊃⎕SI)
+ Data.T.codeCoverage.filename←(739⌶0),'/CodeCoverage/',(⊃⎕SI)
+ 3 ⎕MKDIR⊃⎕NPARTS Data.T.codeCoverage.filename
  {}Data.T.RunThese'Test_001'                  ⍝ Twice in order to force CodeCoverage...
  {}Data.T.RunThese'Test_001'                  ⍝ ... to aggregate the data
  htmlFilename←##.CodeCoverage.ProcessDataAndCreateReport Data.T.codeCoverage.filename
@@ -33,5 +34,6 @@
 ∆TidyUp:
  ⎕FUNTIE tno
  1 Data.T.codeCoverage.DeleteFiles Data.T.codeCoverage.filename
+ {}FilesAndDirs.RmDirByForce⊃⎕NPARTS Data.T.codeCoverage.filename
  Data.⎕EX'T'
 ⍝Done

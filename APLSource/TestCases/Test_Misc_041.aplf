@@ -8,7 +8,8 @@
  #.TEMP.⎕FX'r←Test_01 y' '#.TEMP.ClassWithField.Hello' 'r←0'
  T2←⎕NEW Tester2 #.TEMP
  T2.codeCoverage←⎕NEW ##.CodeCoverage(,⊂'#.TEMP')
- T2.codeCoverage.filename←(739⌶0),'/CodeCoverage_',(⊃⎕SI)
+ T2.codeCoverage.filename←(739⌶0),'/CodeCoverage/',(⊃⎕SI)
+ 3 ⎕MKDIR⊃⎕NPARTS T2.codeCoverage.filename
  T2.RunThese'Test_01'
  htmlFilename←##.CodeCoverage.ProcessDataAndCreateReport T2.codeCoverage.filename
  tno←(T2.codeCoverage.filename,'.profile')⎕FTIE 0
@@ -24,4 +25,5 @@
 ∆TidyUp:
  ⎕FUNTIE tno
  1 T2.codeCoverage.DeleteFiles T2.codeCoverage.filename
+ {}FilesAndDirs.RmDirByForce⊃⎕NPARTS T2.codeCoverage.filename
 ⍝Done

@@ -1,0 +1,36 @@
+ R←Test_Misc_080(stopFlag batchFlag);⎕TRAP;htmlFilename;html;body;ref;C;filename
+⍝ Check on setter and getter functions (shared)
+ ⎕TRAP←(999 'C' '∘∘∘ ⍝ Deliberate error')(0 'N')
+
+ R←T._Failed
+
+ filename←(739⌶0),'/CodeCoverage_Tests/',⊃⎕SI
+ 3 ⎕MKDIR⊃⎕NPARTS filename
+
+ #.⎕SHADOW'TEMP'
+ 'TEMP'#.⎕NS''
+
+ body←,¨':Class Foo' '_Goo←⍬' ':Property Goo' ':Access Public Shared' '∇r←get' 'r←_Goo' '→0' 'a←1' '∇' '∇set arg' '_Goo←arg.NewValue' '→0' 'a←1' '∇' ':EndProperty' ':EndClass'
+ ref←#.TEMP.⎕FIX body
+
+ C←⎕NEW ##.CodeCoverage(,⊂'#.TEMP')
+ C.filename←filename
+ C.Start ⍬
+ ref.Goo←'Hello world'
+ {}ref.Goo
+ C.Stop ⍬
+ {}C.Finalise ⍬
+ →T.GoToTidyUp 2≠≢C.data
+
+ {}1 ##.CodeCoverage.ProcessDataAndCreateReport C.filename
+ html←⊃⎕NGET C.filename,'.html'
+ →T.GoToTidyUp 0=+/'>→[3] '⍷html
+ →T.GoToTidyUp 2≠≢'>→\[[0-9]+] '⎕S 0⊣html
+
+ R←T._OK
+
+∆TidyUp:
+ 1 C.DeleteFiles C.filename
+ Data.⎕EX'T'
+ {}FilesAndDirs.RmDirByForce⊃⎕NPARTS C.filename
+⍝Done

@@ -1,0 +1,18 @@
+ R←Test_Misc_070(stopFlag batchFlag);⎕TRAP;row;name;could;did;html
+⍝ Calls ProcessData and CreateReport when no data was collected at all
+ ⎕TRAP←(999 'C' '∘∘∘ ⍝ Deliberate error')(0 'N')
+ R←T._Failed
+
+ Data.Prepare
+ Data.T.codeCoverage.filename←(739⌶0),'/CodeCoverage/',(⊃⎕SI)
+ 3 ⎕MKDIR⊃⎕NPARTS Data.T.codeCoverage.filename
+ ##.CodeCoverage.CreateFile Data.T.codeCoverage.filename,'.profile'
+ {}##.CodeCoverage.ProcessData Data.T.codeCoverage.filename
+
+ R←T._OK
+
+∆TidyUp:
+ 1 Data.T.codeCoverage.DeleteFiles Data.T.codeCoverage.filename
+ {}FilesAndDirs.RmDirByForce⊃⎕NPARTS Data.T.codeCoverage.filename
+ Data.⎕EX'T'
+⍝Done
