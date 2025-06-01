@@ -2,7 +2,7 @@
 ⍝ # The class `CodeCoverage`
 ⍝ This class provides methods to watch certain parts of the workspace being executed, presumably as part of running
 ⍝ a test framework such as [`Tester2`](https://github.com/aplteam/Tester2 "Link to Tester2 on GitHub"), although checking
-⍝ on code coverage by simply running an application can also be useful, especially for legacy code.\\
+⍝ code coverage by simply running an application can also be useful, especially for legacy code.\\
 ⍝ To do this, the following steps need to be performed:
 ⍝ ## Prepare
 ⍝ * Instantiate `CodeCoverage` and pass a comma-separated list of namespaces and/or classes to monitor as an argument
@@ -17,8 +17,8 @@
 ⍝     The collected data and the list of namespaces/classes to watch can be referenced as `data` and
 ⍝     `watch` but _not_ set: they are read-only instance properties.\\
 ⍝ ## Running the code
-⍝ You must call the `Start` method before executing any code that is to be be watched for coverage. Assuming that
-⍝ the instance has been assigned to `C` then call `C.Start ⍬`.\\
+⍝ You must call the `Start` method before executing any code that is to be watched for coverage. Assuming that
+⍝ the instance has been assigned to `C`, call `C.Start ⍬`.\\
 ⍝ Once all the code you are interested in has been executed call `C.Stop ⍬`.\\
 ⍝ When the test framework is finished, run `C.Finalise ⍬`.\\
 ⍝ **Notes:**
@@ -37,15 +37,14 @@
 ⍝ This is a good place to start. Usually this leads to extending the list of things to ignore, adding more
 ⍝ test cases, deleting blocks of code that have become obsolete etc.\\
 ⍝ At one point, however, one might want the full details: to do this, add a 1 as the left argument when calling
-⍝ `CodeCoverage.ProcessDataAndCreateReport`. Now the canonical representations of all functions and operators that are
+⍝ `CodeCoverage.ProcessDataAndCreateReport`. The canonical representations of all functions and operators that are
 ⍝ only partially covered will become part of the report. The lines that weren't executed are highlighted (bold) and have
 ⍝ a right-pointing arrow on the left.\\
 ⍝ You may also create just a summary report by calling `ProcessDataAndCreateSummary`.\\
 ⍝ ## Limitations and flaws
 ⍝ * Nested namespaces/classes are currently not processed. This restriction may be lifted in a future release.
 ⍝ * Named dfns kept local within a traditional function are not processed correctly. This is a consequence of a
-⍝   flaw of `⎕PROFILE`. This cannot be overcome without changing `⎕PROFILE`.\\
-⍝ This class is part of the APLTree Open Source project.\\
+⍝   flaw in `⎕PROFILE`. This cannot be overcome without changing `⎕PROFILE`.\\
 ⍝ Home page: <https://github.com/aplteam/CodeCoverage>\\
 ⍝ Kai Jaeger
 
@@ -55,11 +54,19 @@
 
     ∇ r←Version
       :Access Public Shared
-      r←'CodeCoverage' '0.10.7+52' '2024-06-05'
+    ⍝ Returns the version number from `TatinVars` if possible.
+    ⍝ See also `History`
+      :If 0<##.⎕NC'TatinVars.CONFIG'
+          r←(⎕JSON⍠('Dialect' 'JSON5')⊢##.TatinVars.CONFIG).version
+      :Else
+    ⍝ When a script was not loaded with Tatin, there will be no namespace `TatinVars`.
+    ⍝ In such cases we cannot provide a version number, so we return just ''.
+          r←''
+      :EndIf
     ∇
 
     ∇ History
-      :Access Public Shared   
+      :Access Public Shared
     ⍝ * 0.11.0 from 2025-06-01
     ⍝   * New method `ProcessDataAndCreateSummary` introduced
     ⍝   * Several tests added
