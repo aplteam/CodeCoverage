@@ -67,7 +67,7 @@
 
     ∇ History
       :Access Public Shared
-    ⍝ * 0.11.0 from 2025-06-01
+    ⍝ * 0.11.0 from 2025-06-03
     ⍝   * New method `ProcessDataAndCreateSummary` introduced
     ⍝   * Several tests added
     ⍝ * 0.10.7 from 2024-06-05
