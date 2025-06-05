@@ -1,0 +1,38 @@
+ R←Test_Misc_091(stopFlag batchFlag);⎕TRAP;filename;body;ref;ref2;C;html;htmlFilename
+⍝ Pass a ref poinnting to a package; was once a bug.
+ ⎕TRAP←(999 'C' '∘∘∘ ⍝ Deliberate error')(0 'N')
+
+ R←T._Failed
+
+ filename←(739⌶0),'/CodeCoverage_Tests/',⊃⎕SI
+ 3 ⎕MKDIR⊃⎕NPARTS filename
+
+ #.⎕SHADOW'TEMP'
+ 'TEMP'#.⎕NS''
+ #.TEMP2←#.TEMP
+
+ body←,¨':Class Foo' '_Goo←⍬' ':Property Goo' ':Access Public Instance' '∇r←get' 'r←_Goo' '∇' '∇set arg' '_Goo←arg.NewValue' '∇' ':EndProperty' ':EndClass'
+ ref←#.TEMP.⎕FIX body
+ ref2←⎕NEW ref
+
+ C←⎕NEW ##.CodeCoverage(,⊂'#.TEMP2')
+ C.filename←filename
+ C.Start ⍬
+ ref2.Goo←'Hello world'
+ {}ref2.Goo
+ C.Stop ⍬
+ {}C.Finalise ⍬
+ →T.GoToTidyUp 2≠≢C.data
+
+ htmlFilename←1 ##.CodeCoverage.ProcessDataAndCreateReport C.filename
+ html←⊃⎕NGET htmlFilename
+ →T.GoToTidyUp~∨/'Overall 100% of the testable code is covered.'⍷∊html
+
+ R←T._OK
+
+∆TidyUp:
+ 1 C.DeleteFiles C.filename
+ Data.⎕EX'T'
+ #.⎕EX'TEMP2'
+ {}FilesAndDirs.RmDirByForce⊃⎕NPARTS C.filename
+⍝Done

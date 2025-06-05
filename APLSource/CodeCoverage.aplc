@@ -67,6 +67,8 @@
 
     ∇ History
       :Access Public Shared
+    ⍝ * 0.11.1 from 2025-06-04
+    ⍝   * When a reference to a namespace or class was passed as argument to `⎕NEW`, `CoderCoverage` reported zero code coverage.
     ⍝ * 0.11.0 from 2025-06-03
     ⍝   * New method `ProcessDataAndCreateSummary` introduced
     ⍝   * Several tests added
@@ -156,6 +158,7 @@
           'Must be character vector'⎕SIGNAL 11/⍨' '≠1↑0⍴v
           ('Has invalid characters',b/v)⎕SIGNAL 11/⍨∨/b←~v∊APL_Chars,',⎕#.'
           v2←','(≠⊆⊢),v
+          v2←{(,'#')≡,⍵:⍵ ⋄ '⎕SE'≡⍵:⍵ ⋄ ~9.1 9.2∊⍨⎕NC⊂⍵:⍵ ⋄ ⍵≡ref←⍎⍵:w ⋄ ⍕ref}¨v2 ⍝ Convert any refs to their targets
           :If ~∧/v2∊,¨'#' '⎕SE'
               :If ∨/~b←0<⎕NC↑v2
                   11 ⎕SIGNAL⍨'Unknown names: ',⊃{⍺,',',⍵}/(~b)/v2
@@ -371,7 +374,7 @@
       :EndIf
       html,←⊂'<div id="footer">'
       html,←⊂'<hr>'
-      html,←⊂'<p>Created by "CodeCoverage" version ',(2⊃Version),' from ',(3⊃Version),'</p>'
+      html,←⊂'<p>Created by "CodeCoverage" version ',(Version),'</p>'
       html,←⊂'</div>'
       html,←⊂''
       html,←⊂'</body>'
